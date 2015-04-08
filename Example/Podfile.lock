@@ -1,0 +1,20 @@
+PODS:
+  - Expecta (0.3.2)
+  - HealthKitIO (0.1.0)
+  - Specta (0.5.0)
+
+DEPENDENCIES:
+  - Expecta
+  - HealthKitIO (from `../`)
+  - Specta
+
+EXTERNAL SOURCES:
+  HealthKitIO:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  Expecta: 8c507baf13211207b1e9d0a741480600e6b4ed15
+  HealthKitIO: 48448763d48b399351c6d98936df4e343201a63d
+  Specta: eb90708ed77569bbda089f8ead10bb99b8e9489e
+
+COCOAPODS: 0.36.3
