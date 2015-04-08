@@ -11,7 +11,10 @@
 		6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
-		6003F5BC195388D20070C39A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* Tests.m */; };
+		6003F5BC195388D20070C39A /* OMHSerializerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* OMHSerializerTests.m */; };
+		9E272AB11ADEFF1B007DE4ED /* OMHSampleFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E272AB01ADEFF1B007DE4ED /* OMHSampleFactory.m */; };
+		9E272AB41ADF523F007DE4ED /* OMHSchemaStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E272AB31ADF523F007DE4ED /* OMHSchemaStore.m */; };
+		9ECA505C1AD60A3000E367CA /* schema in Resources */ = {isa = PBXBuildFile; fileRef = 9ECA505B1AD60A3000E367CA /* schema */; };
 		F8FEF4241A43B7BFE271ADD7 /* libPods-HealthKitIO.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CABD26178AD457AEB783167 /* libPods-HealthKitIO.a */; };
 /* End PBXBuildFile section */
 
@@ -23,12 +26,18 @@
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		6003F591195388D20070C39A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		6003F5AE195388D20070C39A /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = Tests.xctest; path = HealthKitIO.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6003F5AE195388D20070C39A /* HealthKitIO.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HealthKitIO.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F5AF195388D20070C39A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		6003F5B7195388D20070C39A /* Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
 		6003F5B9195388D20070C39A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		6003F5BB195388D20070C39A /* Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tests.m; sourceTree = "<group>"; };
+		6003F5BB195388D20070C39A /* OMHSerializerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OMHSerializerTests.m; sourceTree = "<group>"; };
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
+		9E272AAF1ADEFF1B007DE4ED /* OMHSampleFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OMHSampleFactory.h; sourceTree = "<group>"; };
+		9E272AB01ADEFF1B007DE4ED /* OMHSampleFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OMHSampleFactory.m; sourceTree = "<group>"; };
+		9E272AB21ADF523F007DE4ED /* OMHSchemaStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OMHSchemaStore.h; sourceTree = "<group>"; };
+		9E272AB31ADF523F007DE4ED /* OMHSchemaStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OMHSchemaStore.m; sourceTree = "<group>"; };
+		9ECA505B1AD60A3000E367CA /* schema */ = {isa = PBXFileReference; lastKnownFileType = folder; name = schema; path = "omh-schemas/schema"; sourceTree = "<group>"; };
+		9EDEA5811ADB0B5200D3F174 /* HKObject+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HKObject+Private.h"; sourceTree = "<group>"; };
 		AD7D73655EC87F9772FA4779 /* Pods-HealthKitIO.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HealthKitIO.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HealthKitIO/Pods-HealthKitIO.debug.xcconfig"; sourceTree = "<group>"; };
 		EF857A4BFD07184BC663D020 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		F9F510F403C68D61B5084DE9 /* Pods-HealthKitIO.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HealthKitIO.release.xcconfig"; path = "Pods/Target Support Files/Pods-HealthKitIO/Pods-HealthKitIO.release.xcconfig"; sourceTree = "<group>"; };
@@ -73,7 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				6003F58A195388D20070C39A /* HealthKitIO.app */,
-				6003F5AE195388D20070C39A /* Tests.xctest */,
+				6003F5AE195388D20070C39A /* HealthKitIO.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -93,7 +102,12 @@
 		6003F5B5195388D20070C39A /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				6003F5BB195388D20070C39A /* Tests.m */,
+				6003F5BB195388D20070C39A /* OMHSerializerTests.m */,
+				9EDEA5811ADB0B5200D3F174 /* HKObject+Private.h */,
+				9E272AAF1ADEFF1B007DE4ED /* OMHSampleFactory.h */,
+				9E272AB01ADEFF1B007DE4ED /* OMHSampleFactory.m */,
+				9E272AB21ADF523F007DE4ED /* OMHSchemaStore.h */,
+				9E272AB31ADF523F007DE4ED /* OMHSchemaStore.m */,
 				6003F5B6195388D20070C39A /* Supporting Files */,
 			);
 			path = Tests;
@@ -102,6 +116,7 @@
 		6003F5B6195388D20070C39A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				9ECA505B1AD60A3000E367CA /* schema */,
 				6003F5B7195388D20070C39A /* Tests-Info.plist */,
 				6003F5B8195388D20070C39A /* InfoPlist.strings */,
 				606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */,
@@ -138,7 +153,7 @@
 			);
 			name = HealthKitIO;
 			productName = HealthKitIOTests;
-			productReference = 6003F5AE195388D20070C39A /* Tests.xctest */;
+			productReference = 6003F5AE195388D20070C39A /* HealthKitIO.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -180,6 +195,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */,
+				9ECA505C1AD60A3000E367CA /* schema in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -223,7 +239,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6003F5BC195388D20070C39A /* Tests.m in Sources */,
+				6003F5BC195388D20070C39A /* OMHSerializerTests.m in Sources */,
+				9E272AB11ADEFF1B007DE4ED /* OMHSampleFactory.m in Sources */,
+				9E272AB41ADF523F007DE4ED /* OMHSchemaStore.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

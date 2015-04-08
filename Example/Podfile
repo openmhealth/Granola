@@ -6,4 +6,6 @@ target 'HealthKitIO', :exclusive => true do
 
   pod 'Specta'
   pod 'Expecta'
+  pod 'NSObject-Tap'
+  pod 'VVJSONSchemaValidation'
 end

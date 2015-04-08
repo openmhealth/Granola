@@ -1,0 +1,86 @@
+## HKObjectType Coverage
+
+|HKObject type|HealthKitIO|
+|-------------|:---------:|
+|*__Nutrition Identifiers__*||
+|HKQuantityTypeIdentifierDietaryBiotin|  |
+|HKQuantityTypeIdentifierDietaryCaffeine|  |
+|HKQuantityTypeIdentifierDietaryCalcium|  |
+|HKQuantityTypeIdentifierDietaryCarbohydrates|  |
+|HKQuantityTypeIdentifierDietaryChloride|  |
+|HKQuantityTypeIdentifierDietaryCholesterol|  |
+|HKQuantityTypeIdentifierDietaryChromium|  |
+|HKQuantityTypeIdentifierDietaryCopper|  |
+|HKQuantityTypeIdentifierDietaryEnergyConsumed|  |
+|HKQuantityTypeIdentifierDietaryFatMonounsaturated|  |
+|HKQuantityTypeIdentifierDietaryFatPolyunsaturated|  |
+|HKQuantityTypeIdentifierDietaryFatSaturated|  |
+|HKQuantityTypeIdentifierDietaryFatTotal|  |
+|HKQuantityTypeIdentifierDietaryFiber|  |
+|HKQuantityTypeIdentifierDietaryFolate|  |
+|HKQuantityTypeIdentifierDietaryIodine|  |
+|HKQuantityTypeIdentifierDietaryIron|  |
+|HKQuantityTypeIdentifierDietaryMagnesium|  |
+|HKQuantityTypeIdentifierDietaryManganese|  |
+|HKQuantityTypeIdentifierDietaryMolybdenum|  |
+|HKQuantityTypeIdentifierDietaryNiacin|  |
+|HKQuantityTypeIdentifierDietaryPantothenicAcid|  |
+|HKQuantityTypeIdentifierDietaryPhosphorus|  |
+|HKQuantityTypeIdentifierDietaryPotassium|  |
+|HKQuantityTypeIdentifierDietaryProtein|  |
+|HKQuantityTypeIdentifierDietaryRiboflavin|  |
+|HKQuantityTypeIdentifierDietarySelenium|  |
+|HKQuantityTypeIdentifierDietarySodium|  |
+|HKQuantityTypeIdentifierDietarySugar|  |
+|HKQuantityTypeIdentifierDietaryThiamin|  |
+|HKQuantityTypeIdentifierDietaryVitaminA|  |
+|HKQuantityTypeIdentifierDietaryVitaminB12|  |
+|HKQuantityTypeIdentifierDietaryVitaminB6|  |
+|HKQuantityTypeIdentifierDietaryVitaminC|  |
+|HKQuantityTypeIdentifierDietaryVitaminD|  |
+|HKQuantityTypeIdentifierDietaryVitaminE|  |
+|HKQuantityTypeIdentifierDietaryVitaminK|  |
+|HKQuantityTypeIdentifierDietaryZinc|  |
+|*__Body Measurements__*||
+|HKQuantityTypeIdentifierBodyMassIndex|  |
+|HKQuantityTypeIdentifierBodyFatPercentage|  |
+|HKQuantityTypeIdentifierHeight|  |
+|HKQuantityTypeIdentifierBodyMass|  |
+|HKQuantityTypeIdentifierLeanBodyMass|  |
+|*__Results Identifiers__*||
+|HKQuantityTypeIdentifierOxygenSaturation|  |
+|HKQuantityTypeIdentifierPeripheralPerfusionIndex|  |
+|HKQuantityTypeIdentifierBloodGlucose|  |
+|HKQuantityTypeIdentifierNumberOfTimesFallen|  |
+|HKQuantityTypeIdentifierElectrodermalActivity|  |
+|HKQuantityTypeIdentifierInhalerUsage|  |
+|HKQuantityTypeIdentifierBloodAlcoholContent|  |
+|HKQuantityTypeIdentifierForcedVitalCapacity|  |
+|HKQuantityTypeIdentifierForcedExpiratoryVolume1|  |
+|HKQuantityTypeIdentifierPeakExpiratoryFlowRate|  |
+|*__Correlation Identifiers__*||
+|HKCorrelationTypeIdentifierBloodPressure|  |
+|HKCorrelationTypeIdentifierFood|  |
+|*__Sleep Identifiers__*||
+|HKCategoryTypeIdentifierSleepAnalysis|:white_check_mark:|
+|*__Workout Identifier__*||
+|HKWorkoutTypeIdentifier|  |
+|*__Fitness Identifiers__*||
+|HKQuantityTypeIdentifierStepCount|:white_check_mark:|
+|HKQuantityTypeIdentifierDistanceWalkingRunning|  |
+|HKQuantityTypeIdentifierDistanceCycling|  |
+|HKQuantityTypeIdentifierBasalEnergyBurned|  |
+|HKQuantityTypeIdentifierActiveEnergyBurned|  |
+|HKQuantityTypeIdentifierFlightsClimbed|  |
+|HKQuantityTypeIdentifierNikeFuel|  |
+|*__Vital Signs Identifiers__*||
+|HKQuantityTypeIdentifierHeartRate|  |
+|HKQuantityTypeIdentifierBodyTemperature|  |
+|HKQuantityTypeIdentifierBloodPressureSystolic|  |
+|HKQuantityTypeIdentifierBloodPressureDiastolic|  |
+|HKQuantityTypeIdentifierRespiratoryRate|  |
+|*__Characteristics Identifiers__*||
+|HKCharacteristicTypeIdentifierBiologicalSex|  |
+|HKCharacteristicTypeIdentifierBloodType|  |
+|HKCharacteristicTypeIdentifierDateOfBirth|  |
+
