@@ -1,6 +1,6 @@
 # HealthKitIO
 
-[![CI Status](http://img.shields.io/travis/Brent Hargrave/HealthKitIO.svg?style=flat)](https://travis-ci.org/Brent Hargrave/HealthKitIO)
+[![CI Status](http://img.shields.io/travis/openmhealth/HealthKitIO.svg?style=flat)](https://travis-ci.org/openmhealth/HealthKitIO)
 [![Version](https://img.shields.io/cocoapods/v/HealthKitIO.svg?style=flat)](http://cocoapods.org/pods/HealthKitIO)
 [![License](https://img.shields.io/cocoapods/l/HealthKitIO.svg?style=flat)](http://cocoapods.org/pods/HealthKitIO)
 [![Platform](https://img.shields.io/cocoapods/p/HealthKitIO.svg?style=flat)](http://cocoapods.org/pods/HealthKitIO)
@@ -19,10 +19,6 @@ it, simply add the following line to your Podfile:
 ```ruby
 pod "HealthKitIO"
 ```
-
-## Author
-
-Brent Hargrave, brent@brent.is
 
 ## License
 
