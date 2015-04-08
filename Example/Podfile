@@ -1,0 +1,9 @@
+source 'https://github.com/CocoaPods/Specs.git'
+
+
+target 'HealthKitIO', :exclusive => true do
+  pod "HealthKitIO", :path => "../"
+
+  pod 'Specta'
+  pod 'Expecta'
+end
