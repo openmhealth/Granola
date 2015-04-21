@@ -132,9 +132,9 @@
     [[(HKQuantitySample*)self.sample quantity] doubleValueForUnit:unit];
   return @{
     @"step_count": [NSNumber numberWithDouble:value],
-    @"effective-time-frame": @{
-      @"start-time": [self.sample.startDate RFC3339String],
-      @"end-time": [self.sample.endDate RFC3339String]
+    @"effective_time_frame": @{
+      @"start_date_time": [self.sample.startDate RFC3339String],
+      @"end_date_time": [self.sample.endDate RFC3339String]
     }
   };
 }
@@ -158,9 +158,9 @@
       @"value": [NSNumber numberWithDouble:value],
       @"unit": unitString
     },
-    @"effective-time-frame": @{
-      @"start-time": [self.sample.startDate RFC3339String],
-      @"end-time": [self.sample.endDate RFC3339String]
+    @"effective_time_frame": @{
+      @"start_date_time": [self.sample.startDate RFC3339String],
+      @"end_date_time": [self.sample.endDate RFC3339String]
     }
   };
 }
@@ -184,9 +184,9 @@
       @"value": [NSNumber numberWithDouble:value],
       @"unit": unitString
     },
-    @"effective-time-frame": @{
-      @"start-time": [self.sample.startDate RFC3339String],
-      @"end-time": [self.sample.endDate RFC3339String]
+    @"effective_time_frame": @{
+      @"start_date_time": [self.sample.startDate RFC3339String],
+      @"end_date_time": [self.sample.endDate RFC3339String]
     }
   };
 }
@@ -234,9 +234,9 @@
       @"value": [NSNumber numberWithDouble:value],
       @"unit": unitString
     },
-    @"effective-time-frame": @{
-      @"start-time": [self.sample.startDate RFC3339String],
-      @"end-time": [self.sample.endDate RFC3339String]
+    @"effective_time_frame": @{
+      @"start_date_time": [self.sample.startDate RFC3339String],
+      @"end_date_time": [self.sample.endDate RFC3339String]
     }
   };
 }
@@ -260,9 +260,9 @@
       @"value": [NSNumber numberWithDouble:value],
       @"unit": unitString
     },
-    @"effective-time-frame": @{
-      @"start-time": [self.sample.startDate RFC3339String],
-      @"end-time": [self.sample.endDate RFC3339String]
+    @"effective_time_frame": @{
+      @"start_date_time": [self.sample.startDate RFC3339String],
+      @"end_date_time": [self.sample.endDate RFC3339String]
     }
   };
 }
@@ -294,10 +294,10 @@
       @"value": value,
       @"unit": @"sec"
     },
-    @"effective-time-frame": @{
+    @"effective_time_frame": @{
       @"start_date_time": [self.sample.startDate RFC3339String],
       @"end_date_time": [self.sample.endDate RFC3339String]
-    },
+    }
   };
 }
 - (NSString*)schemaName {

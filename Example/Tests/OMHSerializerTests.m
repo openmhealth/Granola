@@ -241,8 +241,8 @@ describe(HKQuantityTypeIdentifierStepCount, ^{
     NSDictionary* pathsToValues = @{
       @"header.schema_id.name": @"step-count",
       @"body.step_count": value,
-      @"body.effective-time-frame.start-time": [sample.startDate RFC3339String],
-      @"body.effective-time-frame.end-time": [sample.endDate RFC3339String]
+      @"body.effective_time_frame.start_date_time": [sample.startDate RFC3339String],
+      @"body.effective_time_frame.end_date_time": [sample.endDate RFC3339String]
       };
     return @{
       @"sample": sample,
@@ -265,8 +265,8 @@ describe(HKQuantityTypeIdentifierHeight, ^{
         @"header.schema_id.name": @"body-height",
         @"body.body_height.value": value,
         @"body.body_height.unit": unitString,
-        @"body.effective-time-frame.start-time": [sample.startDate RFC3339String],
-        @"body.effective-time-frame.end-time": [sample.endDate RFC3339String]
+        @"body.effective_time_frame.start_date_time": [sample.startDate RFC3339String],
+        @"body.effective_time_frame.end_date_time": [sample.endDate RFC3339String]
       }
     };
   });
@@ -286,8 +286,8 @@ describe(HKQuantityTypeIdentifierBodyMass, ^{
         @"header.schema_id.name": @"body-weight",
         @"body.body_weight.value": value,
         @"body.body_weight.unit": unitString,
-        @"body.effective-time-frame.start-time": [sample.startDate RFC3339String],
-        @"body.effective-time-frame.end-time": [sample.endDate RFC3339String]
+        @"body.effective_time_frame.start_date_time": [sample.startDate RFC3339String],
+        @"body.effective_time_frame.end_date_time": [sample.endDate RFC3339String]
       }
     };
   });
@@ -328,8 +328,8 @@ describe(HKQuantityTypeIdentifierBloodGlucose, ^{
         @"header.schema_id.name": @"blood-glucose",
         @"body.blood_glucose.value": value,
         @"body.blood_glucose.unit": unitString,
-        @"body.effective-time-frame.start-time": [sample.startDate RFC3339String],
-        @"body.effective-time-frame.end-time": [sample.endDate RFC3339String]
+        @"body.effective_time_frame.start_date_time": [sample.startDate RFC3339String],
+        @"body.effective_time_frame.end_date_time": [sample.endDate RFC3339String]
       }
     };
   });
@@ -351,8 +351,8 @@ describe(HKQuantityTypeIdentifierBloodGlucose, ^{
           @"header.schema_id.name": @"calories-burned",
           @"body.kcal_burned.value": value,
           @"body.kcal_burned.unit": unitString,
-          @"body.effective-time-frame.start-time": [sample.startDate RFC3339String],
-          @"body.effective-time-frame.end-time": [sample.endDate RFC3339String]
+          @"body.effective_time_frame.start_date_time": [sample.startDate RFC3339String],
+          @"body.effective_time_frame.end_date_time": [sample.endDate RFC3339String]
         }
       };
     });
@@ -378,8 +378,8 @@ describe(HKCategoryTypeIdentifierSleepAnalysis, ^{
         @"header.schema_id.name": @"sleep-duration",
         @"body.sleep_duration.value": [NSNumber numberWithInteger:secs],
         @"body.sleep_duration.unit": @"sec",
-        @"body.effective-time-frame.start_date_time": [start RFC3339String],
-        @"body.effective-time-frame.end_date_time": [end RFC3339String],
+        @"body.effective_time_frame.start_date_time": [start RFC3339String],
+        @"body.effective_time_frame.end_date_time": [end RFC3339String],
       }
     };
   });
