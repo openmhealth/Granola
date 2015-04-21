@@ -97,7 +97,7 @@
       @"schema_id": @{
         @"namespace": @"omh",
         @"name": [self schemaName],
-        @"version": @"1.0"
+        @"version": [self schemaVersion]
       },
     },
     @"body": [self bodyData]
@@ -105,6 +105,10 @@
 }
 
 - (NSString*)schemaName {
+  @throw [[self class] unimplementedException];
+}
+
+- (NSString*)schemaVersion {
   @throw [[self class] unimplementedException];
 }
 
@@ -140,6 +144,9 @@
 - (NSString*)schemaName {
   return @"step-count";
 }
+- (NSString*)schemaVersion {
+  return @"1.0";
+}
 @end
 
 @interface OMHSerializerHeight : OMHSerializer; @end;
@@ -165,6 +172,9 @@
 }
 - (NSString*)schemaName {
   return @"body-height";
+}
+- (NSString*)schemaVersion {
+  return @"1.0";
 }
 @end
 
@@ -192,6 +202,9 @@
 - (NSString*)schemaName {
   return @"body-weight";
 }
+- (NSString*)schemaVersion {
+  return @"1.0";
+}
 @end
 
 @interface OMHSerializerHeartRate : OMHSerializer; @end;
@@ -215,6 +228,9 @@
 }
 - (NSString*)schemaName {
   return @"heart-rate";
+}
+- (NSString*)schemaVersion {
+  return @"1.0";
 }
 @end
 
@@ -242,6 +258,9 @@
 - (NSString*)schemaName {
   return @"blood-glucose";
 }
+- (NSString*)schemaVersion {
+  return @"1.0";
+}
 @end
 
 @interface OMHSerializerEnergyBurned : OMHSerializer; @end;
@@ -267,6 +286,9 @@
 }
 - (NSString*)schemaName {
   return @"calories-burned";
+}
+- (NSString*)schemaVersion {
+  return @"1.0";
 }
 @end
 
@@ -301,6 +323,9 @@
 }
 - (NSString*)schemaName {
   return @"sleep-duration";
+}
+- (NSString*)schemaVersion {
+  return @"1.0";
 }
 @end
 
