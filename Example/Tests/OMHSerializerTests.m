@@ -237,15 +237,14 @@ describe(HKQuantityTypeIdentifierStepCount, ^{
     HKSample* sample =
       [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierStepCount
                                  attrs:@{ @"value": value }];
-    NSDictionary* pathsToValues = @{
-      @"header.schema_id.name": @"step-count",
-      @"body.step_count": value,
-      @"body.effective_time_frame.start_date_time": [sample.startDate RFC3339String],
-      @"body.effective_time_frame.end_date_time": [sample.endDate RFC3339String]
-      };
     return @{
       @"sample": sample,
-      @"pathsToValues": pathsToValues
+      @"pathsToValues": @{
+        @"header.schema_id.name": @"step-count",
+        @"body.step_count": value,
+        @"body.effective_time_frame.time_interval.start_date_time": [sample.startDate RFC3339String],
+        @"body.effective_time_frame.time_interval.end_date_time": [sample.endDate RFC3339String]
+      }
     };
   });
 });
@@ -264,8 +263,8 @@ describe(HKQuantityTypeIdentifierHeight, ^{
         @"header.schema_id.name": @"body-height",
         @"body.body_height.value": value,
         @"body.body_height.unit": unitString,
-        @"body.effective_time_frame.start_date_time": [sample.startDate RFC3339String],
-        @"body.effective_time_frame.end_date_time": [sample.endDate RFC3339String]
+        @"body.effective_time_frame.time_interval.start_date_time": [sample.startDate RFC3339String],
+        @"body.effective_time_frame.time_interval.end_date_time": [sample.endDate RFC3339String]
       }
     };
   });
@@ -285,8 +284,8 @@ describe(HKQuantityTypeIdentifierBodyMass, ^{
         @"header.schema_id.name": @"body-weight",
         @"body.body_weight.value": value,
         @"body.body_weight.unit": unitString,
-        @"body.effective_time_frame.start_date_time": [sample.startDate RFC3339String],
-        @"body.effective_time_frame.end_date_time": [sample.endDate RFC3339String]
+        @"body.effective_time_frame.time_interval.start_date_time": [sample.startDate RFC3339String],
+        @"body.effective_time_frame.time_interval.end_date_time": [sample.endDate RFC3339String]
       }
     };
   });
@@ -327,8 +326,8 @@ describe(HKQuantityTypeIdentifierBloodGlucose, ^{
         @"header.schema_id.name": @"blood-glucose",
         @"body.blood_glucose.value": value,
         @"body.blood_glucose.unit": unitString,
-        @"body.effective_time_frame.start_date_time": [sample.startDate RFC3339String],
-        @"body.effective_time_frame.end_date_time": [sample.endDate RFC3339String]
+        @"body.effective_time_frame.time_interval.start_date_time": [sample.startDate RFC3339String],
+        @"body.effective_time_frame.time_interval.end_date_time": [sample.endDate RFC3339String]
       }
     };
   });
@@ -348,8 +347,8 @@ describe(HKQuantityTypeIdentifierActiveEnergyBurned, ^{
         @"header.schema_id.name": @"calories-burned",
         @"body.kcal_burned.value": value,
         @"body.kcal_burned.unit": unitString,
-        @"body.effective_time_frame.start_date_time": [sample.startDate RFC3339String],
-        @"body.effective_time_frame.end_date_time": [sample.endDate RFC3339String]
+        @"body.effective_time_frame.time_interval.start_date_time": [sample.startDate RFC3339String],
+        @"body.effective_time_frame.time_interval.end_date_time": [sample.endDate RFC3339String]
       }
     };
   });

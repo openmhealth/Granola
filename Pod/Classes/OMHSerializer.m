@@ -137,8 +137,10 @@
   return @{
     @"step_count": [NSNumber numberWithDouble:value],
     @"effective_time_frame": @{
-      @"start_date_time": [self.sample.startDate RFC3339String],
-      @"end_date_time": [self.sample.endDate RFC3339String]
+      @"time_interval": @{
+        @"start_date_time": [self.sample.startDate RFC3339String],
+        @"end_date_time": [self.sample.endDate RFC3339String]
+      }
     }
   };
 }
@@ -166,8 +168,10 @@
       @"unit": unitString
     },
     @"effective_time_frame": @{
-      @"start_date_time": [self.sample.startDate RFC3339String],
-      @"end_date_time": [self.sample.endDate RFC3339String]
+      @"time_interval": @{
+        @"start_date_time": [self.sample.startDate RFC3339String],
+        @"end_date_time": [self.sample.endDate RFC3339String]
+      }
     }
   };
 }
@@ -195,8 +199,10 @@
       @"unit": unitString
     },
     @"effective_time_frame": @{
-      @"start_date_time": [self.sample.startDate RFC3339String],
-      @"end_date_time": [self.sample.endDate RFC3339String]
+      @"time_interval": @{
+        @"start_date_time": [self.sample.startDate RFC3339String],
+        @"end_date_time": [self.sample.endDate RFC3339String]
+      }
     }
   };
 }
@@ -251,8 +257,10 @@
       @"unit": unitString
     },
     @"effective_time_frame": @{
-      @"start_date_time": [self.sample.startDate RFC3339String],
-      @"end_date_time": [self.sample.endDate RFC3339String]
+      @"time_interval": @{
+        @"start_date_time": [self.sample.startDate RFC3339String],
+        @"end_date_time": [self.sample.endDate RFC3339String]
+      }
     }
   };
 }
@@ -280,8 +288,10 @@
       @"unit": unitString
     },
     @"effective_time_frame": @{
-      @"start_date_time": [self.sample.startDate RFC3339String],
-      @"end_date_time": [self.sample.endDate RFC3339String]
+      @"time_interval": @{
+        @"start_date_time": [self.sample.startDate RFC3339String],
+        @"end_date_time": [self.sample.endDate RFC3339String]
+      }
     }
   };
 }
