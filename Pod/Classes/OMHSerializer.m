@@ -1,6 +1,6 @@
-#import <ObjectiveSugar/ObjectiveSugar.h>
 #import "OMHSerializer.h"
 #import "NSDate+RFC3339.h"
+#import <ObjectiveSugar/ObjectiveSugar.h>
 
 @interface OMHSerializer()
 @property (nonatomic, retain) HKSample* sample;
@@ -23,6 +23,7 @@
       HKQuantityTypeIdentifierBloodGlucose : @"OMHSerializerBloodGlucose",
       HKQuantityTypeIdentifierActiveEnergyBurned: @"OMHSerializerEnergyBurned",
       HKCategoryTypeIdentifierSleepAnalysis : @"OMHSerializerSleepAnalysis",
+      HKCorrelationTypeIdentifierBloodPressure: @"OMHSerializerBloodPressure",
     };
   }
   return typeIdsToClasses;
@@ -323,6 +324,71 @@
 }
 - (NSString*)schemaName {
   return @"sleep-duration";
+}
+- (NSString*)schemaVersion {
+  return @"1.0";
+}
+@end
+
+@interface OMHSerializerBloodPressure : OMHSerializer; @end;
+@implementation OMHSerializerBloodPressure
++ (BOOL)canSerialize:(HKCorrelation*)sample error:(NSError**)error {
+  NSSet* samples = sample.objects;
+  HKSample* (^firstSampleOfType)(NSString* typeIdentifier) =
+    ^HKSample*(NSString* typeIdentifier){
+      return [[samples select:^BOOL(HKSample* sample) {
+        return [[sample sampleType].identifier isEqual:typeIdentifier];
+      }] firstObject];
+    };
+  HKSample* systolicSample =
+    firstSampleOfType(HKQuantityTypeIdentifierBloodPressureSystolic);
+  HKSample* diastolicSample =
+    firstSampleOfType(HKQuantityTypeIdentifierBloodPressureDiastolic);
+  if (systolicSample && diastolicSample) return YES;
+  if (error) {
+    NSString* errorMessage = @"Missing Diastolic or Systolic sample";
+    NSDictionary* userInfo = @{ NSLocalizedDescriptionKey : errorMessage };
+    *error = [NSError errorWithDomain: OMHErrorDomain
+                                 code: OMHErrorCodeUnsupportedValues
+                             userInfo: userInfo];
+  }
+  return NO;
+}
+- (id)bodyData {
+  NSString* unitString = @"mmHg";
+  HKUnit* unit = [HKUnit unitFromString:unitString];
+  HKCorrelation* sample = (HKCorrelation*)self.sample;
+  double (^valueForFirstSampleOfType)(NSString* typeIdentifier) =
+    ^(NSString* typeIdentifier) {
+      HKQuantitySample* found =
+        [[sample.objects select:^BOOL(HKSample* sample) {
+          return [[sample sampleType].identifier isEqual:typeIdentifier];
+        }] firstObject];
+      return [found.quantity doubleValueForUnit:unit];
+    };
+  double systolicValue =
+    valueForFirstSampleOfType(HKQuantityTypeIdentifierBloodPressureSystolic);
+  double diastolicValue =
+    valueForFirstSampleOfType(HKQuantityTypeIdentifierBloodPressureDiastolic);
+  return @{
+    @"systolic_blood_pressure": @{
+      @"unit": unitString,
+      @"value": [NSNumber numberWithDouble: systolicValue]
+    },
+    @"diastolic_blood_pressure": @{
+      @"unit": unitString,
+      @"value": [NSNumber numberWithDouble: diastolicValue]
+    },
+    @"effective_time_frame": @{
+      @"time_interval": @{
+        @"start_date_time": [self.sample.startDate RFC3339String],
+        @"end_date_time": [self.sample.endDate RFC3339String]
+      }
+    }
+  };
+}
+- (NSString*)schemaName {
+  return @"blood-pressure";
 }
 - (NSString*)schemaVersion {
   return @"1.0";

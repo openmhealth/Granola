@@ -29,6 +29,25 @@
                                    startDate:start
                                      endDate:end];
   } else
+  if (sampleTypeIdentifier == HKCorrelationTypeIdentifierBloodPressure) {
+    NSSet* defaultSamples = [NSSet setWithArray:[@[
+        HKQuantityTypeIdentifierBloodPressureSystolic,
+        HKQuantityTypeIdentifierBloodPressureDiastolic
+      ] map:^(NSString* identifier) {
+        NSDate* sampledAt = [NSDate date];
+        return [OMHSampleFactory typeIdentifier:identifier
+                                          attrs:@{  @"start": sampledAt,
+                                                    @"end": sampledAt }];
+      }]];
+    NSSet* objects = or(attrs[@"objects"], defaultSamples);
+    HKCorrelationType *bloodPressureType =
+      [HKObjectType correlationTypeForIdentifier:HKCorrelationTypeIdentifierBloodPressure];
+    sample =
+      (HKSample*)[HKCorrelation correlationWithType:bloodPressureType
+                                          startDate:start
+                                            endDate:end
+                                            objects:objects];
+  } else
   if ([@[ HKQuantityTypeIdentifierHeight,
           HKQuantityTypeIdentifierBodyMass,
           HKQuantityTypeIdentifierHeartRate,
@@ -36,7 +55,9 @@
           HKQuantityTypeIdentifierNikeFuel,
           HKQuantityTypeIdentifierBloodGlucose,
           HKQuantityTypeIdentifierBasalEnergyBurned,
-          HKQuantityTypeIdentifierActiveEnergyBurned
+          HKQuantityTypeIdentifierActiveEnergyBurned,
+          HKQuantityTypeIdentifierBloodPressureSystolic,
+          HKQuantityTypeIdentifierBloodPressureDiastolic
         ] includes:sampleTypeIdentifier]) {
 
     NSString* defaultUnitString = nil;
@@ -50,6 +71,8 @@
       defaultUnitString = @"mg/dL";
     } else if ([sampleTypeIdentifier containsString:@"EnergyBurned"]) {
       defaultUnitString = @"kcal";
+    } else if ([sampleTypeIdentifier containsString:@"HKQuantityTypeIdentifierBloodPressure"]) {
+      defaultUnitString = @"mmHg";
     } else {
       defaultUnitString = @"count";
     };

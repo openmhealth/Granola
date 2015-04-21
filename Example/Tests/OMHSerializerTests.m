@@ -407,5 +407,73 @@ describe(HKCategoryTypeIdentifierSleepAnalysis, ^{
   });
 });
 
+describe(HKCorrelationTypeIdentifierBloodPressure, ^{
+  __block NSNumber* diastolicValue = nil;
+  __block NSNumber* systolicValue = nil;
+  __block HKSample* diastolicSample = nil;
+  __block HKSample* systolicSample = nil;
+  __block HKSample* sample = nil;
+  __block NSDate* sampledAt = nil;
+  beforeAll(^{
+    sampledAt = [NSDate date];
+    diastolicValue = [NSNumber numberWithDouble:60];
+    systolicValue = [NSNumber numberWithDouble:100];
+    diastolicSample =
+      [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierBloodPressureDiastolic
+                                 attrs:@{ @"start": sampledAt,
+                                          @"end": sampledAt,
+                                          @"value": diastolicValue }];
+    systolicSample =
+      [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierBloodPressureSystolic
+                                 attrs:@{ @"start": sampledAt,
+                                          @"end": sampledAt,
+                                          @"value": systolicValue }];
+  });
+  describe(@"+forSample:error:", ^{
+    __block NSError* error = nil;
+    __block OMHSerializer* instance = nil;
+    context(@"with sample lacking either a systolic or diastolic sample", ^{
+      beforeAll(^{
+        NSSet* objects = [NSSet setWithObjects: diastolicSample, nil];
+        sample =
+          [OMHSampleFactory typeIdentifier:HKCorrelationTypeIdentifierBloodPressure
+                                     attrs:@{ @"start": sampledAt,
+                                              @"end": sampledAt,
+                                              @"objects": objects }];
+        instance = [OMHSerializer forSample:sample error:&error];
+      });
+      it(@"returns nil", ^{
+        expect(instance).to.beNil();
+      });
+      it(@"populates error", ^{
+        expect(error).notTo.beNil();
+        expect(error.code).to.equal(OMHErrorCodeUnsupportedValues);
+        expect(error.localizedDescription).to.contain(@"Diastolic");
+      });
+    });
+  });
+  itShouldBehaveLike(@"AnySerializerForSupportedSample", ^{
+    NSSet* objects =
+      [NSSet setWithObjects: systolicSample, diastolicSample, nil];
+    sample =
+      [OMHSampleFactory typeIdentifier:HKCorrelationTypeIdentifierBloodPressure
+                                 attrs:@{ @"start": sampledAt,
+                                          @"end": sampledAt,
+                                          @"objects": objects }];
+    return @{
+      @"sample": sample,
+      @"pathsToValues": @{
+        @"header.schema_id.name": @"blood-pressure",
+        @"body.systolic_blood_pressure.value": systolicValue,
+        @"body.systolic_blood_pressure.unit": @"mmHg",
+        @"body.diastolic_blood_pressure.value": diastolicValue,
+        @"body.diastolic_blood_pressure.unit": @"mmHg",
+        @"body.effective_time_frame.time_interval.start_date_time": [sampledAt RFC3339String],
+        @"body.effective_time_frame.time_interval.end_date_time": [sampledAt RFC3339String],
+      }
+    };
+  });
+});
+
 SpecEnd
 
