@@ -21,7 +21,6 @@
       HKQuantityTypeIdentifierStepCount : @"OMHSerializerStepCount",
       HKQuantityTypeIdentifierHeartRate : @"OMHSerializerHeartRate",
       HKQuantityTypeIdentifierBloodGlucose : @"OMHSerializerBloodGlucose",
-      HKQuantityTypeIdentifierBasalEnergyBurned: @"OMHSerializerEnergyBurned",
       HKQuantityTypeIdentifierActiveEnergyBurned: @"OMHSerializerEnergyBurned",
       HKCategoryTypeIdentifierSleepAnalysis : @"OMHSerializerSleepAnalysis",
     };

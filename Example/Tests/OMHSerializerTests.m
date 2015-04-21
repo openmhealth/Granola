@@ -19,7 +19,6 @@ void (^logTypeSupportTableString)() = ^{
       HKQuantityTypeIdentifierStepCount,
       HKQuantityTypeIdentifierDistanceWalkingRunning,
       HKQuantityTypeIdentifierDistanceCycling,
-      HKQuantityTypeIdentifierBasalEnergyBurned,
       HKQuantityTypeIdentifierActiveEnergyBurned,
       HKQuantityTypeIdentifierFlightsClimbed,
       HKQuantityTypeIdentifierNikeFuel,
@@ -335,29 +334,26 @@ describe(HKQuantityTypeIdentifierBloodGlucose, ^{
   });
 });
 
-[@[HKQuantityTypeIdentifierBasalEnergyBurned,
-   HKQuantityTypeIdentifierActiveEnergyBurned ] each:^(id type) {
-  describe(type, ^{
-    itShouldBehaveLike(@"AnySerializerForSupportedSample", ^{
-      NSString* unitString = @"kcal";
-      NSNumber* value = [NSNumber numberWithDouble:160];
-      HKSample* sample =
-        [OMHSampleFactory typeIdentifier:type
-                                   attrs:@{ @"value": value,
-                                            @"unitString": unitString }];
-      return @{
-        @"sample": sample,
-        @"pathsToValues": @{
-          @"header.schema_id.name": @"calories-burned",
-          @"body.kcal_burned.value": value,
-          @"body.kcal_burned.unit": unitString,
-          @"body.effective_time_frame.start_date_time": [sample.startDate RFC3339String],
-          @"body.effective_time_frame.end_date_time": [sample.endDate RFC3339String]
-        }
-      };
-    });
+describe(HKQuantityTypeIdentifierActiveEnergyBurned, ^{
+  itShouldBehaveLike(@"AnySerializerForSupportedSample", ^{
+    NSString* unitString = @"kcal";
+    NSNumber* value = [NSNumber numberWithDouble:160];
+    HKSample* sample =
+      [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierActiveEnergyBurned
+                                 attrs:@{ @"value": value,
+                                          @"unitString": unitString }];
+    return @{
+      @"sample": sample,
+      @"pathsToValues": @{
+        @"header.schema_id.name": @"calories-burned",
+        @"body.kcal_burned.value": value,
+        @"body.kcal_burned.unit": unitString,
+        @"body.effective_time_frame.start_date_time": [sample.startDate RFC3339String],
+        @"body.effective_time_frame.end_date_time": [sample.endDate RFC3339String]
+      }
+    };
   });
-}];
+});
 
 describe(HKCategoryTypeIdentifierSleepAnalysis, ^{
   NSString* identifier = HKCategoryTypeIdentifierSleepAnalysis;
