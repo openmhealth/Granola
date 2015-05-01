@@ -44,13 +44,13 @@
 |*__Body Measurements__*||
 |HKQuantityTypeIdentifierBodyMassIndex|  |
 |HKQuantityTypeIdentifierBodyFatPercentage|  |
-|HKQuantityTypeIdentifierHeight|  |
-|HKQuantityTypeIdentifierBodyMass|  |
+|HKQuantityTypeIdentifierHeight|:white_check_mark:|
+|HKQuantityTypeIdentifierBodyMass|:white_check_mark:|
 |HKQuantityTypeIdentifierLeanBodyMass|  |
 |*__Results Identifiers__*||
 |HKQuantityTypeIdentifierOxygenSaturation|  |
 |HKQuantityTypeIdentifierPeripheralPerfusionIndex|  |
-|HKQuantityTypeIdentifierBloodGlucose|  |
+|HKQuantityTypeIdentifierBloodGlucose|:white_check_mark:|
 |HKQuantityTypeIdentifierNumberOfTimesFallen|  |
 |HKQuantityTypeIdentifierElectrodermalActivity|  |
 |HKQuantityTypeIdentifierInhalerUsage|  |
@@ -59,7 +59,7 @@
 |HKQuantityTypeIdentifierForcedExpiratoryVolume1|  |
 |HKQuantityTypeIdentifierPeakExpiratoryFlowRate|  |
 |*__Correlation Identifiers__*||
-|HKCorrelationTypeIdentifierBloodPressure|  |
+|HKCorrelationTypeIdentifierBloodPressure|:white_check_mark:|
 |HKCorrelationTypeIdentifierFood|  |
 |*__Sleep Identifiers__*||
 |HKCategoryTypeIdentifierSleepAnalysis|:white_check_mark:|
@@ -69,12 +69,11 @@
 |HKQuantityTypeIdentifierStepCount|:white_check_mark:|
 |HKQuantityTypeIdentifierDistanceWalkingRunning|  |
 |HKQuantityTypeIdentifierDistanceCycling|  |
-|HKQuantityTypeIdentifierBasalEnergyBurned|  |
-|HKQuantityTypeIdentifierActiveEnergyBurned|  |
+|HKQuantityTypeIdentifierActiveEnergyBurned|:white_check_mark:|
 |HKQuantityTypeIdentifierFlightsClimbed|  |
 |HKQuantityTypeIdentifierNikeFuel|  |
 |*__Vital Signs Identifiers__*||
-|HKQuantityTypeIdentifierHeartRate|  |
+|HKQuantityTypeIdentifierHeartRate|:white_check_mark:|
 |HKQuantityTypeIdentifierBodyTemperature|  |
 |HKQuantityTypeIdentifierBloodPressureSystolic|  |
 |HKQuantityTypeIdentifierBloodPressureDiastolic|  |
