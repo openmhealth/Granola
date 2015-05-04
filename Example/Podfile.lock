@@ -1,29 +1,26 @@
 PODS:
-  - Expecta (0.4.0)
-  - HealthKitIO (0.1.0):
+  - Expecta (1.0.0)
+  - Granola (0.1.0):
     - ObjectiveSugar (~> 1.1)
-  - NSObject-Tap (1.0.1)
   - ObjectiveSugar (1.1.0)
-  - Specta (0.5.0)
+  - Specta (1.0.0)
   - VVJSONSchemaValidation (1.3.0)
 
 DEPENDENCIES:
-  - Expecta
-  - HealthKitIO (from `../`)
-  - NSObject-Tap
-  - Specta
-  - VVJSONSchemaValidation
+  - Expecta (~> 1.0)
+  - Granola (from `../`)
+  - Specta (~> 1.0)
+  - VVJSONSchemaValidation (~> 1.3)
 
 EXTERNAL SOURCES:
-  HealthKitIO:
+  Granola:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Expecta: 392a6b5bfb9f4097e47dd8064d9b732079490332
-  HealthKitIO: 4b1a0b43a5e1b0d479336243a7bb40197a588522
-  NSObject-Tap: 07b174cf61d27b1b56384300d4ca2220853ab43b
+  Expecta: 32604574add2c46a36f8d2f716b6c5736eb75024
+  Granola: 5c4834fe825ae1ab57e6913749213f7e504cbebb
   ObjectiveSugar: a6a25f23d657c19df0a0b972466d5b5ca9f5295c
-  Specta: eb90708ed77569bbda089f8ead10bb99b8e9489e
+  Specta: 96fe05fe5c7348b5223f85e862904f6e832abb14
   VVJSONSchemaValidation: a384962161691d152c02464e61a86b4014f27d7c
 
-COCOAPODS: 0.36.4
+COCOAPODS: 0.37.1

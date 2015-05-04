@@ -1,25 +1,17 @@
-# HealthKitIO
+# Granola
 
-(TODO: perhaps create a logo? Examples:
-[AFNetworking](https://github.com/AFNetworking/AFNetworking),
-[CocoaLumberjack](https://github.com/CocoaLumberjack/CocoaLumberjack),
-[Alamofire](https://github.com/Alamofire/Alamofire),
-[Spring](https://github.com/MengTo/Spring),
-[Quick](https://github.com/Quick/Quick))
-
-(TODO: continuous integration badges, like...)
-[![CI Status](http://img.shields.io/travis/openmhealth/HealthKitIO.svg?style=flat)](https://travis-ci.org/openmhealth/HealthKitIO)
-[![Version](https://img.shields.io/cocoapods/v/HealthKitIO.svg?style=flat)](http://cocoapods.org/pods/HealthKitIO)
-[![License](https://img.shields.io/cocoapods/l/HealthKitIO.svg?style=flat)](http://cocoapods.org/pods/HealthKitIO)
-[![Platform](https://img.shields.io/cocoapods/p/HealthKitIO.svg?style=flat)](http://cocoapods.org/pods/HealthKitIO)
-
+_*A healthful serializer for your HealthKit data.*_
 
 ## Overview
 
-So you want to store your app's [HealthKit](https://developer.apple.com/healthkit/) data somewhere *outside* of HealthKit, perhaps a remote server for analysis or backup? Use HealthKitIO to serialize your data.
+So you want to store your app's [HealthKit](https://developer.apple.com/healthkit/)
+data somewhere *outside* of HealthKit, perhaps a remote server for analysis or
+backup? Use Granola to serialize your data.
 
-HealthKitIO spares you the effort of mapping HealthKit's API to JSON yourself,
-and emits JSON that validates against [schemas developed by Open mHealth](http://www.openmhealth.org/developers/schemas/) to ensure the data is intuitive and clinically meaningful.
+Granola spares you the effort of mapping HealthKit's API to JSON yourself,
+and emits JSON that validates against
+[schemas developed by Open mHealth](http://www.openmhealth.org/developers/schemas/)
+to ensure the data is intuitive and clinically meaningful.
 
 
 ***
@@ -28,11 +20,10 @@ and emits JSON that validates against [schemas developed by Open mHealth](http:/
 
 ### CocoaPods
 
-HealthKitIO is available through [CocoaPods](http://cocoapods.org). To install
-it, simply add the following line to your `Podfile`:
+Granola is available through [CocoaPods](http://cocoapods.org). To install it, simply add the following line to your `Podfile`:
 
 ```ruby
-pod "HealthKitIO"
+pod "Granola"
 ```
 
 ***
@@ -41,12 +32,17 @@ pod "HealthKitIO"
 
 ### Quick start
 
-First, be sure to study Apple's [HealthKit Framework Reference](https://developer.apple.com/library/ios/documentation/HealthKit/Reference/HealthKit_Framework), which includes code samples illustrating how to ask your app's user for permission to access their HealthKit data, and how to query that data after you've gained permission.
+First, be sure to study Apple's
+[HealthKit Framework Reference](https://developer.apple.com/library/ios/documentation/HealthKit/Reference/HealthKit_Framework),
+which includes code samples illustrating how to ask your app's user for
+permission to access their HealthKit data, and how to query that data after
+you've gained permission.
 
-Now, let's say you want to see what a "steps" sample data point looks like serialized to JSON.
+Now, let's say you want to see what a "steps" sample data point looks like
+serialized to JSON.
 
 ```objective-c
-// HealthKitIO includes OMHSerializer for serializing HealthKit data
+// Granola includes OMHSerializer for serializing HealthKit data
 #import "OMHSerializer.h"
 
 // (initialize your HKHealthStore instance, request permissions with it)
@@ -66,9 +62,9 @@ HKSampleQuery* query =
      if (!results) abort();
      // pick a sample to serialize
      HKQuantitySample *sample = [results first];
-     // create a serializer with the sample, skip error-handling for example
-     OMHSerializer *serializer = [OMHSerializer forHKSample:sample error:nil];
-     NSString* jsonString = [serializer jsonOrError:nil];
+     // create and use a serializer instance
+     OMHSerializer *serializer = [OMHSerializer new];
+     NSString* jsonString = [serializer jsonForSample:sample error:nil];
      NSLog(@"sample json: %@", jsonString);
    }];
 // run the query with your authorized HKHealthStore instance
@@ -79,33 +75,47 @@ Upon running your code, the console would render the data sample as Open mHealth
 
 ```json
 {
-  "effective-time-frame" : {
-    "end-time" : "2014-09-17T19:44:32-04:00",
-    "start-time" : "2014-09-17T19:44:27-04:00"
+  "body" : {
+    "step_count" : 45,
+    "effective_time_frame" : {
+      "time_interval" : {
+        "start_date_time" : "2015-05-12T18:58:06.969Z",
+        "end_date_time" : "2015-05-12T18:58:32.524Z"
+      }
+    }
   },
-  "step_count" : 14
+  "header" : {
+    "id" : "4A00E553-B01D-4757-ADD0-A4283BABAC6F",
+    "creation_date_time" : "2015-05-12T18:58:06.969Z",
+    "schema_id" : {
+      "namespace" : "omh",
+      "name" : "step-count",
+      "version" : "1.0"
+    }
+  }
 }
 ```
 
 ### HKObjectType support
 
-The serializer doesn't yet support all of HealthKit's data types. The list of supported types is available through a class method:
+The serializer doesn't yet support all of HealthKit's data types. The list of
+supported types is available through a class method:
 
 ```objective-c
 [OMHSerializer supportedTypeIdentifiers]
 //=> [HKQuantityTypeIdentifierStepCount, ...]
 ```
 
-Attempting to init a serializer with an HKObject of unsupported type or values
-returns `nil` and populates the provided error.
+Attempting to serialize an HKObject of unsupported type or values returns `nil`
+and populates the provided error.
 
 ```objective-c
 HKQuantitySample *sampleOfUnsupportedType = [results first];
 // create a serializer with the sample
 NSError* error = nil;
-OMHSerializer *serializer =
-  [[OMHSerializer alloc] initWithHKSample:sampleOfUnsupportedType
-                                    error:&error];
+OMHSerializer *serializer = [OMHSerializer new];
+NSString* jsonString = [serializer jsonForSample:sampleOfUnsupportedType
+                                           error:&error];
 if (serializer == nil) {
   // handle failure
   NSLog(@"%@", error.localizedDescription];
@@ -114,18 +124,20 @@ if (serializer == nil) {
 }
 ```
 
-Support for all possible HKObjectType identifiers, pulled from
-the [HealthKit Constant Reference](https://developer.apple.com/library/ios/documentation/HealthKit/Reference/HealthKit_Constants/index.html#//apple_ref/doc/constant_group/Body_Measurements),
-is summarized [here](../doc/hkobject_type_coverage.md). Note that the majority
+Support for all possible HKObjectType identifiers, pulled from the
+[HealthKit Constant Reference](https://developer.apple.com/library/ios/documentation/HealthKit/Reference/HealthKit_Constants),
+is summarized [here](Docs/hkobject_type_coverage.md). Note that the majority
 of these identifiers are not yet in use by most applications.
 
-[Contact us](#contact) to request support for a particular type or
+[Contact us](##contact) to request support for a particular type or
 [contribute](#contributing) support with a pull request.
 
 
 ## Contact
 
-Follow HealthKitIO on Twitter (@HealthKitIO)
+Have a question? Please [open an issue](https://github.com/openmhealth/Granola/issues/new)!
+
+Also, feel free to tweet at Open mHealth ([@openmhealth](http://twitter.com/openmhealth)).
 
 
 ## Contributing
@@ -139,5 +151,10 @@ Follow HealthKitIO on Twitter (@HealthKitIO)
 
 ## License
 
-HealthKitIO is available under the MIT license. See the LICENSE file for more info.
+Granola is available under the Apache 2 license. See the [LICENSE](/LICENSE) file for more info.
+
+
+## Authors
+
+Brent Hargrave ([@brenthargrave](http://twitter.com/brenthargrave))
 

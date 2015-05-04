@@ -4,4 +4,7 @@
 
 - (NSString *)RFC3339String;
 
++ (NSDate*)fromRFC3339String:(NSString*)dateString;
+
 @end
+

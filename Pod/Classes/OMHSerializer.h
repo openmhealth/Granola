@@ -6,10 +6,7 @@
 
 + (NSArray*)supportedTypeIdentifiers;
 
-+ (id)forSample:(HKSample*)sample error:(NSError**)error;
-- (id)initWithSample:(HKSample*)sample;
-
-- (NSString*)jsonOrError:(NSError**)serializationError;
+- (NSString*)jsonForSample:(HKSample*)sample error:(NSError**)error;
 
 @end
 

@@ -1,6 +1,6 @@
 ## HKObjectType Coverage
 
-|HKObject type|HealthKitIO|
+|HKObject type|Granola|
 |-------------|:---------:|
 |*__Nutrition Identifiers__*||
 |HKQuantityTypeIdentifierDietaryBiotin|  |

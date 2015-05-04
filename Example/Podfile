@@ -1,11 +1,10 @@
 source 'https://github.com/CocoaPods/Specs.git'
 
+target 'Granola', :exclusive => true do
+  pod "Granola", :path => "../"
 
-target 'HealthKitIO', :exclusive => true do
-  pod "HealthKitIO", :path => "../"
-
-  pod 'Specta'
-  pod 'Expecta'
-  pod 'NSObject-Tap'
-  pod 'VVJSONSchemaValidation'
+  pod 'Specta', '~> 1.0'
+  pod 'Expecta', '~> 1.0'
+  pod 'VVJSONSchemaValidation', '~> 1.3'
 end
+

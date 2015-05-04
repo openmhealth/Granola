@@ -37,31 +37,6 @@
   @throw [self unimplementedException];
 }
 
-+ (id)forSample:(HKSample*)sample error:(NSError**)error {
-  NSParameterAssert(sample);
-  NSArray* supportedTypeIdentifiers = [self supportedTypeIdentifiers];
-  NSString* sampleTypeIdentifier = sample.sampleType.identifier;
-  if ([supportedTypeIdentifiers includes:sampleTypeIdentifier]) {
-    NSString* serializerClassName =
-      [self typeIdentifiersToClasses][sampleTypeIdentifier];
-    Class serializerClass = NSClassFromString(serializerClassName);
-    if ([serializerClass canSerialize:sample error:error]) {
-      return [[serializerClass alloc] initWithSample:sample];
-    }
-  } else {
-    if (error) {
-      NSString* errorMessage =
-        [NSString stringWithFormat: @"Unsupported HKSample type: %@",
-        sampleTypeIdentifier];
-      NSDictionary* userInfo = @{ NSLocalizedDescriptionKey : errorMessage };
-      *error = [NSError errorWithDomain: OMHErrorDomain
-                                   code: OMHErrorCodeUnsupportedType
-                               userInfo: userInfo];
-    }
-  }
-  return nil;
-}
-
 - (id)initWithSample:(HKSample*)sample {
   self = [super init];
   if (self) {
@@ -72,20 +47,43 @@
   return self;
 }
 
-- (NSString*)jsonOrError:(NSError**)serializationError {
-  NSData *jsonData =
-    [NSJSONSerialization dataWithJSONObject:[self data]
-                                    options:NSJSONWritingPrettyPrinted
-                                      error:serializationError];
-  if (jsonData) {
-    NSString *jsonString =
-      [[NSString alloc] initWithData:jsonData
-                            encoding:NSUTF8StringEncoding];
-    return jsonString;
-  } else {
-    // serialization error populated, return nil
+- (NSString*)jsonForSample:(HKSample*)sample error:(NSError**)error {
+  NSParameterAssert(sample);
+  // first, verify we support the sample type
+  NSArray* supportedTypeIdentifiers = [[self class] supportedTypeIdentifiers];
+  NSString* sampleTypeIdentifier = sample.sampleType.identifier;
+  if (![supportedTypeIdentifiers includes:sampleTypeIdentifier]) {
+    if (error) {
+      NSString* errorMessage =
+        [NSString stringWithFormat: @"Unsupported HKSample type: %@",
+        sampleTypeIdentifier];
+      NSDictionary* userInfo = @{ NSLocalizedDescriptionKey : errorMessage };
+      *error = [NSError errorWithDomain: OMHErrorDomain
+                                   code: OMHErrorCodeUnsupportedType
+                               userInfo: userInfo];
+    }
     return nil;
   }
+  // if we support it, select appropriate subclass for sample
+  NSString* serializerClassName =
+    [[self class] typeIdentifiersToClasses][sampleTypeIdentifier];
+  Class serializerClass = NSClassFromString(serializerClassName);
+  // subclass verifies it supports sample's values
+  if (![serializerClass canSerialize:sample error:error]) {
+    return nil;
+  }
+  // instantiate a serializer
+  OMHSerializer* serializer = [[serializerClass alloc] initWithSample:sample];
+  NSData* jsonData =
+    [NSJSONSerialization dataWithJSONObject:[serializer data]
+                                    options:NSJSONWritingPrettyPrinted
+                                      error:error];
+  if (!jsonData) {
+    return nil; // return early if JSON serialization failed
+  }
+  NSString* jsonString = [[NSString alloc] initWithData:jsonData
+                                               encoding:NSUTF8StringEncoding];
+  return jsonString;
 }
 
 #pragma mark - Private

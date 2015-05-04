@@ -15,18 +15,18 @@
 		9E272AB11ADEFF1B007DE4ED /* OMHSampleFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E272AB01ADEFF1B007DE4ED /* OMHSampleFactory.m */; };
 		9E272AB41ADF523F007DE4ED /* OMHSchemaStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E272AB31ADF523F007DE4ED /* OMHSchemaStore.m */; };
 		9ECA505C1AD60A3000E367CA /* schema in Resources */ = {isa = PBXBuildFile; fileRef = 9ECA505B1AD60A3000E367CA /* schema */; };
-		F8FEF4241A43B7BFE271ADD7 /* libPods-HealthKitIO.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CABD26178AD457AEB783167 /* libPods-HealthKitIO.a */; };
+		F8FEF4241A43B7BFE271ADD7 /* libPods-Granola.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CABD26178AD457AEB783167 /* libPods-Granola.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0713970833C99FFE3A26765F /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
-		0CABD26178AD457AEB783167 /* libPods-HealthKitIO.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-HealthKitIO.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		1497BA18A434AE1495648DE8 /* HealthKitIO.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = HealthKitIO.podspec; path = ../HealthKitIO.podspec; sourceTree = "<group>"; };
-		6003F58A195388D20070C39A /* HealthKitIO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HealthKitIO.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0CABD26178AD457AEB783167 /* libPods-Granola.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Granola.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1497BA18A434AE1495648DE8 /* Granola.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Granola.podspec; path = ../Granola.podspec; sourceTree = "<group>"; };
+		6003F58A195388D20070C39A /* Granola.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Granola.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		6003F591195388D20070C39A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		6003F5AE195388D20070C39A /* HealthKitIO.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HealthKitIO.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6003F5AE195388D20070C39A /* Granola.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Granola.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F5AF195388D20070C39A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		6003F5B7195388D20070C39A /* Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
 		6003F5B9195388D20070C39A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -38,9 +38,9 @@
 		9E272AB31ADF523F007DE4ED /* OMHSchemaStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OMHSchemaStore.m; sourceTree = "<group>"; };
 		9ECA505B1AD60A3000E367CA /* schema */ = {isa = PBXFileReference; lastKnownFileType = folder; name = schema; path = "omh-schemas/schema"; sourceTree = "<group>"; };
 		9EDEA5811ADB0B5200D3F174 /* HKObject+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HKObject+Private.h"; sourceTree = "<group>"; };
-		AD7D73655EC87F9772FA4779 /* Pods-HealthKitIO.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HealthKitIO.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HealthKitIO/Pods-HealthKitIO.debug.xcconfig"; sourceTree = "<group>"; };
+		AD7D73655EC87F9772FA4779 /* Pods-Granola.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Granola.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Granola/Pods-Granola.debug.xcconfig"; sourceTree = "<group>"; };
 		EF857A4BFD07184BC663D020 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		F9F510F403C68D61B5084DE9 /* Pods-HealthKitIO.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HealthKitIO.release.xcconfig"; path = "Pods/Target Support Files/Pods-HealthKitIO/Pods-HealthKitIO.release.xcconfig"; sourceTree = "<group>"; };
+		F9F510F403C68D61B5084DE9 /* Pods-Granola.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Granola.release.xcconfig"; path = "Pods/Target Support Files/Pods-Granola/Pods-Granola.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,7 +51,7 @@
 				6003F5B0195388D20070C39A /* XCTest.framework in Frameworks */,
 				6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */,
-				F8FEF4241A43B7BFE271ADD7 /* libPods-HealthKitIO.a in Frameworks */,
+				F8FEF4241A43B7BFE271ADD7 /* libPods-Granola.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,8 +61,8 @@
 		3CBAC3C90B6EE47B545DBAFB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				AD7D73655EC87F9772FA4779 /* Pods-HealthKitIO.debug.xcconfig */,
-				F9F510F403C68D61B5084DE9 /* Pods-HealthKitIO.release.xcconfig */,
+				AD7D73655EC87F9772FA4779 /* Pods-Granola.debug.xcconfig */,
+				F9F510F403C68D61B5084DE9 /* Pods-Granola.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -81,8 +81,8 @@
 		6003F58B195388D20070C39A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6003F58A195388D20070C39A /* HealthKitIO.app */,
-				6003F5AE195388D20070C39A /* HealthKitIO.xctest */,
+				6003F58A195388D20070C39A /* Granola.app */,
+				6003F5AE195388D20070C39A /* Granola.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -94,7 +94,7 @@
 				6003F58F195388D20070C39A /* CoreGraphics.framework */,
 				6003F591195388D20070C39A /* UIKit.framework */,
 				6003F5AF195388D20070C39A /* XCTest.framework */,
-				0CABD26178AD457AEB783167 /* libPods-HealthKitIO.a */,
+				0CABD26178AD457AEB783167 /* libPods-Granola.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -127,7 +127,7 @@
 		60FF7A9C1954A5C5007DD14C /* Podspec Metadata */ = {
 			isa = PBXGroup;
 			children = (
-				1497BA18A434AE1495648DE8 /* HealthKitIO.podspec */,
+				1497BA18A434AE1495648DE8 /* Granola.podspec */,
 				EF857A4BFD07184BC663D020 /* README.md */,
 				0713970833C99FFE3A26765F /* LICENSE */,
 			);
@@ -137,9 +137,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		6003F5AD195388D20070C39A /* HealthKitIO */ = {
+		6003F5AD195388D20070C39A /* Granola */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6003F5C2195388D20070C39A /* Build configuration list for PBXNativeTarget "HealthKitIO" */;
+			buildConfigurationList = 6003F5C2195388D20070C39A /* Build configuration list for PBXNativeTarget "Granola" */;
 			buildPhases = (
 				4C80BEBFD91B74FEFF48262F /* Check Pods Manifest.lock */,
 				6003F5AA195388D20070C39A /* Sources */,
@@ -151,9 +151,9 @@
 			);
 			dependencies = (
 			);
-			name = HealthKitIO;
-			productName = HealthKitIOTests;
-			productReference = 6003F5AE195388D20070C39A /* HealthKitIO.xctest */;
+			name = Granola;
+			productName = GranolaTests;
+			productReference = 6003F5AE195388D20070C39A /* Granola.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -171,7 +171,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 6003F585195388D10070C39A /* Build configuration list for PBXProject "HealthKitIO" */;
+			buildConfigurationList = 6003F585195388D10070C39A /* Build configuration list for PBXProject "Granola" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -184,7 +184,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				6003F5AD195388D20070C39A /* HealthKitIO */,
+				6003F5AD195388D20070C39A /* Granola */,
 			);
 		};
 /* End PBXProject section */
@@ -229,7 +229,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HealthKitIO/Pods-HealthKitIO-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Granola/Pods-Granola-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -333,7 +333,7 @@
 		};
 		6003F5C3195388D20070C39A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AD7D73655EC87F9772FA4779 /* Pods-HealthKitIO.debug.xcconfig */;
+			baseConfigurationReference = AD7D73655EC87F9772FA4779 /* Pods-Granola.debug.xcconfig */;
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
@@ -355,7 +355,7 @@
 		};
 		6003F5C4195388D20070C39A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F9F510F403C68D61B5084DE9 /* Pods-HealthKitIO.release.xcconfig */;
+			baseConfigurationReference = F9F510F403C68D61B5084DE9 /* Pods-Granola.release.xcconfig */;
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
@@ -374,7 +374,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		6003F585195388D10070C39A /* Build configuration list for PBXProject "HealthKitIO" */ = {
+		6003F585195388D10070C39A /* Build configuration list for PBXProject "Granola" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6003F5BD195388D20070C39A /* Debug */,
@@ -383,7 +383,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6003F5C2195388D20070C39A /* Build configuration list for PBXNativeTarget "HealthKitIO" */ = {
+		6003F5C2195388D20070C39A /* Build configuration list for PBXNativeTarget "Granola" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6003F5C3195388D20070C39A /* Debug */,

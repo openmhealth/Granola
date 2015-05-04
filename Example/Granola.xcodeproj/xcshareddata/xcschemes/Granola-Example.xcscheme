@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6003F5AD195388D20070C39A"
-               BuildableName = "HealthKitIO.xctest"
-               BlueprintName = "HealthKitIO"
-               ReferencedContainer = "container:HealthKitIO.xcodeproj">
+               BuildableName = "Granola.xctest"
+               BlueprintName = "Granola"
+               ReferencedContainer = "container:Granola.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6003F5AD195388D20070C39A"
-               BuildableName = "HealthKitIO.xctest"
-               BlueprintName = "HealthKitIO"
-               ReferencedContainer = "container:HealthKitIO.xcodeproj">
+               BuildableName = "Granola.xctest"
+               BlueprintName = "Granola"
+               ReferencedContainer = "container:Granola.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -43,9 +43,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6003F5AD195388D20070C39A"
-            BuildableName = "HealthKitIO.xctest"
-            BlueprintName = "HealthKitIO"
-            ReferencedContainer = "container:HealthKitIO.xcodeproj">
+            BuildableName = "Granola.xctest"
+            BlueprintName = "Granola"
+            ReferencedContainer = "container:Granola.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -63,9 +63,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6003F5AD195388D20070C39A"
-            BuildableName = "HealthKitIO.xctest"
-            BlueprintName = "HealthKitIO"
-            ReferencedContainer = "container:HealthKitIO.xcodeproj">
+            BuildableName = "Granola.xctest"
+            BlueprintName = "Granola"
+            ReferencedContainer = "container:Granola.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -82,9 +82,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6003F5AD195388D20070C39A"
-            BuildableName = "HealthKitIO.xctest"
-            BlueprintName = "HealthKitIO"
-            ReferencedContainer = "container:HealthKitIO.xcodeproj">
+            BuildableName = "Granola.xctest"
+            BlueprintName = "Granola"
+            ReferencedContainer = "container:Granola.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

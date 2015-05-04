@@ -1,7 +1,7 @@
-#import <HealthKitIO/OMHSerializer.h>
+#import <Granola/OMHSerializer.h>
 #import <VVJSONSchemaValidation/VVJSONSchema.h>
 #import <ObjectiveSugar/ObjectiveSugar.h>
-#import <HealthKitIO/OMHError.h>
+#import <Granola/OMHError.h>
 #import "OMHSampleFactory.h"
 #import "OMHSchemaStore.h"
 #import "NSDate+RFC3339.h"
@@ -100,7 +100,7 @@ void (^logTypeSupportTableString)() = ^{
   };
   NSMutableArray* tableRows = [NSMutableArray array];
   [@[
-    @[ @"HKObject type", @"HealthKitIO" ],
+    @[ @"HKObject type", @"Granola" ],
     @[ @"-------------", @":---------:" ],
     ] each:^(id row) { [tableRows push: row]; }];
   [allTypesGrouped each:^(id groupName, id typesList){
@@ -126,9 +126,9 @@ void (^logTypeSupportTableString)() = ^{
 
 id (^deserializedJsonForSample)(HKSample* sample) =
   ^(HKSample* sample){
-    OMHSerializer* instance = [OMHSerializer forSample:sample error:nil];
-    NSString* json = [instance jsonOrError:nil];
-    NSData *data = [json dataUsingEncoding:NSUTF8StringEncoding];
+    OMHSerializer* instance = [OMHSerializer new];
+    NSString* json = [instance jsonForSample:sample error:nil];
+    NSData* data = [json dataUsingEncoding:NSUTF8StringEncoding];
     return [NSJSONSerialization JSONObjectWithData:data
                                            options:0
                                              error:nil];
@@ -155,22 +155,27 @@ describe(@"OMHSerializer", ^{
     });
   });
 
-  describe(@"+forSample:error:", ^{
-    __block NSError* error = nil;
+  describe(@"-jsonForSample:error:", ^{
+    __block NSError* error;
     __block HKSample* sample;
     __block OMHSerializer* instance;
+    __block NSString* json;
+    beforeEach(^{
+      instance = [OMHSerializer new];
+    });
     it(@"without sample raises exception", ^{
       expect(^{
-        [OMHSerializer forSample:nil error:nil];
+        [instance jsonForSample:nil error:nil];
       }).to.raise(NSInternalInconsistencyException);
     });
     context(@"with sample of unsupported type", ^{
       beforeEach(^{
+        error = nil;
         sample = [OMHSampleFactory typeIdentifier:unsupportedTypeIdentifier];
-        instance = [OMHSerializer forSample:sample error:&error];
+        json = [instance jsonForSample:sample error:&error];
       });
       it(@"returns nil", ^{
-        expect(instance).to.beNil();
+        expect(json).to.beNil();
       });
       it(@"populates error", ^{
         expect(error).notTo.beNil();
@@ -181,10 +186,12 @@ describe(@"OMHSerializer", ^{
     [supportedTypeIdentifiers each:^(NSString* typeIdentifier){
       context([NSString stringWithFormat:
       @"with sample of supported type %@", typeIdentifier], ^{
-        it(@"and supported values returns instance", ^{
-          sample = [OMHSampleFactory typeIdentifier:typeIdentifier];
-          instance = [OMHSerializer forSample:sample error:&error];
-          expect(instance).to.beKindOf([OMHSerializer class]);
+        it(@"and supported values returns json result without error", ^{
+          NSError* error = nil;
+          HKSample* sample = [OMHSampleFactory typeIdentifier:typeIdentifier];
+          json = [instance jsonForSample:sample error:&error];
+          expect(json).notTo.beNil();
+          expect(error).to.beNil();
         });
       });
     }];
@@ -195,7 +202,7 @@ SpecEnd
 
 SharedExamplesBegin(AnySerializerForSupportedSample)
 sharedExamplesFor(@"AnySerializerForSupportedSample", ^(NSDictionary* data) {
-  describe(@"-jsonOrError:", ^{
+  describe(@"-jsonForSample:error:", ^{
     __block id object = nil;
     __block HKSample* sample = nil;
     __block id pathsToValues = nil;
@@ -378,30 +385,22 @@ describe(HKCategoryTypeIdentifierSleepAnalysis, ^{
       }
     };
   });
-  describe(@"+forSample:error:", ^{
-    __block NSError* error = nil;
-    __block HKSample* sample;
-    __block OMHSerializer* instance;
-    context(@"if sample's value unsupported", ^{
-      beforeEach(^{
-        HKCategoryType* type =
-          [HKObjectType categoryTypeForIdentifier:identifier];
-        sample =
-          [HKCategorySample categorySampleWithType:type
-                                             value:HKCategoryValueSleepAnalysisInBed
-                                         startDate:[NSDate date]
-                                           endDate:[NSDate date]];
-        instance = [OMHSerializer forSample:sample error:&error];
-      });
-      it(@"returns nil", ^{
-        OMHSerializer* instance = [OMHSerializer forSample:sample error:nil];
-        expect(instance).to.beNil();
-      });
-      it(@"populates error", ^{
-        expect(error).notTo.beNil();
-        expect(error.code).to.equal(OMHErrorCodeUnsupportedValues);
-        expect(error.localizedDescription).to.contain(@"HKCategoryValueSleepAnalysis");
-      });
+  describe(@"-jsonForSample:error:", ^{
+    it(@"returns nil and populates error if sample's value unsupported", ^{
+      HKCategoryType* type =
+        [HKObjectType categoryTypeForIdentifier:identifier];
+      HKSample* sample =
+        [HKCategorySample categorySampleWithType:type
+                                           value:HKCategoryValueSleepAnalysisInBed
+                                       startDate:[NSDate date]
+                                         endDate:[NSDate date]];
+      OMHSerializer* instance = [OMHSerializer new];
+      NSError* error;
+      NSString* json = [instance jsonForSample:sample error:&error];
+      expect(json).to.beNil();
+      expect(error).notTo.beNil();
+      expect(error.code).to.equal(OMHErrorCodeUnsupportedValues);
+      expect(error.localizedDescription).to.contain(@"HKCategoryValueSleepAnalysis");
     });
   });
 });
@@ -413,6 +412,7 @@ describe(HKCorrelationTypeIdentifierBloodPressure, ^{
   __block HKSample* systolicSample = nil;
   __block HKSample* sample = nil;
   __block NSDate* sampledAt = nil;
+  __block NSString* json = nil;
   beforeAll(^{
     sampledAt = [NSDate date];
     diastolicValue = [NSNumber numberWithDouble:60];
@@ -428,7 +428,7 @@ describe(HKCorrelationTypeIdentifierBloodPressure, ^{
                                           @"end": sampledAt,
                                           @"value": systolicValue }];
   });
-  describe(@"+forSample:error:", ^{
+  describe(@"-jsonForSample:error:", ^{
     __block NSError* error = nil;
     __block OMHSerializer* instance = nil;
     context(@"with sample lacking either a systolic or diastolic sample", ^{
@@ -439,10 +439,11 @@ describe(HKCorrelationTypeIdentifierBloodPressure, ^{
                                      attrs:@{ @"start": sampledAt,
                                               @"end": sampledAt,
                                               @"objects": objects }];
-        instance = [OMHSerializer forSample:sample error:&error];
+        instance = [OMHSerializer new];
+        json = [instance jsonForSample:sample error:&error];
       });
       it(@"returns nil", ^{
-        expect(instance).to.beNil();
+        expect(json).to.beNil();
       });
       it(@"populates error", ^{
         expect(error).notTo.beNil();
