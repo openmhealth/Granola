@@ -124,10 +124,12 @@ if (serializer == nil) {
 }
 ```
 
-Support for all possible HKObjectType identifiers, pulled from the
+The supported HKObjectType identifiers, pulled from the
 [HealthKit Constant Reference](https://developer.apple.com/library/ios/documentation/HealthKit/Reference/HealthKit_Constants),
-is summarized [here](Docs/hkobject_type_coverage.md). Note that the majority
-of these identifiers are not yet in use by most applications.
+are summarized [here](Docs/hkobject_type_coverage.md). Note that the majority
+of these identifiers are not yet in use by most applications. 
+
+We're also working on a handful of generic schemas that support all HealthKit data types, e.g. a `hk-quantity-sample` schema. Granola will soon be updated to support these generic schemas. Over time, as curated schemas are developed that correspond to the HealthKit data represented by the generic schemas, the generic mappings will be replaced by mappings to the curated schemas.
 
 [Contact us](##contact) to request support for a particular type or
 [contribute](#contributing) support with a pull request.
