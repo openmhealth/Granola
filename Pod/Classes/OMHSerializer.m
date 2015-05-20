@@ -411,8 +411,6 @@
     if ([sample.sampleType.description isEqualToString:HKQuantityTypeIdentifierBodyMassIndex]){
         return YES;
     }
-    NSLog(@"Sample type desc: %@",sample.sampleType.description);
-    NSLog(@"HK QuanityTypeID: %@",HKQuantityTypeIdentifierBodyMassIndex);
     return NO;
 }
 - (id)bodyData {
