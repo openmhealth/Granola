@@ -405,6 +405,32 @@ describe(HKCategoryTypeIdentifierSleepAnalysis, ^{
   });
 });
 
+describe(HKQuantityTypeIdentifierBodyMassIndex, ^{
+    itShouldBehaveLike(@"AnySerializerForSupportedSample", ^{
+        NSDate* start = [NSDate date];
+        NSDate* end = [start dateByAddingTimeInterval:3600];
+        NSNumber *value = [NSNumber numberWithFloat:29.3];
+        NSString *unitString = @"count";
+        HKSample* sample = [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierBodyMassIndex
+                                                      attrs:@{@"value":value,
+                                                              @"unitString":unitString,
+                                                              @"start":start,
+                                                              @"end":end}
+                            ];
+        return @{
+            @"sample": sample,
+            @"pathsToValues": @{
+                @"header.schema_id.name": @"body-mass-index",
+                @"body.body_mass_index.value": value,
+                @"body.body_mass_index.unit": @"kg/m2",
+                @"body.effective_time_frame.time_interval.start_date_time": [start RFC3339String],
+                @"body.effective_time_frame.time_interval.end_date_time": [end RFC3339String]
+            }
+        };
+        
+    });
+});
+
 describe(HKCorrelationTypeIdentifierBloodPressure, ^{
   __block NSNumber* diastolicValue = nil;
   __block NSNumber* systolicValue = nil;

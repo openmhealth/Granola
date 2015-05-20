@@ -57,7 +57,8 @@
           HKQuantityTypeIdentifierBasalEnergyBurned,
           HKQuantityTypeIdentifierActiveEnergyBurned,
           HKQuantityTypeIdentifierBloodPressureSystolic,
-          HKQuantityTypeIdentifierBloodPressureDiastolic
+          HKQuantityTypeIdentifierBloodPressureDiastolic,
+          HKQuantityTypeIdentifierBodyMassIndex
         ] includes:sampleTypeIdentifier]) {
 
     NSString* defaultUnitString = nil;

@@ -22,6 +22,7 @@
       HKQuantityTypeIdentifierHeartRate : @"OMHSerializerHeartRate",
       HKQuantityTypeIdentifierBloodGlucose : @"OMHSerializerBloodGlucose",
       HKQuantityTypeIdentifierActiveEnergyBurned: @"OMHSerializerEnergyBurned",
+      HKQuantityTypeIdentifierBodyMassIndex: @"OMHSerializerBodyMassIndex",
       HKCategoryTypeIdentifierSleepAnalysis : @"OMHSerializerSleepAnalysis",
       HKCorrelationTypeIdentifierBloodPressure: @"OMHSerializerBloodPressure",
     };
@@ -403,3 +404,43 @@
 }
 @end
 
+@interface OMHSerializerBodyMassIndex : OMHSerializer; @end;
+@implementation OMHSerializerBodyMassIndex
+
++ (BOOL)canSerialize:(HKSample *)sample error:(NSError *__autoreleasing *)error {
+    if ([sample.sampleType.description isEqualToString:HKQuantityTypeIdentifierBodyMassIndex]){
+        return YES;
+    }
+    NSLog(@"Sample type desc: %@",sample.sampleType.description);
+    NSLog(@"HK QuanityTypeID: %@",HKQuantityTypeIdentifierBodyMassIndex);
+    return NO;
+}
+- (id)bodyData {
+    NSString *unitStringForValue = @"count";
+    HKUnit *unit = [HKUnit unitFromString:unitStringForValue];
+    HKQuantitySample *quantitySample = (HKQuantitySample*)self.sample;
+    double value = [[quantitySample quantity] doubleValueForUnit:unit];
+    NSString *unitStringForSchema = @"kg/m2";
+    
+    return @{
+        @"body_mass_index": @{
+            @"value":[NSNumber numberWithDouble:value],
+            @"unit":unitStringForSchema
+        },
+        @"effective_time_frame": @{
+            @"time_interval": @{
+                @"start_date_time": [quantitySample.startDate RFC3339String],
+                @"end_date_time": [quantitySample.endDate RFC3339String]
+            }
+        }
+    };
+    
+}
+- (NSString*)schemaName {
+    return @"body-mass-index";
+}
+- (NSString*)schemaVersion {
+    return @"1.0";
+}
+
+@end
