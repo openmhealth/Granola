@@ -25,6 +25,8 @@
       HKQuantityTypeIdentifierBodyMassIndex: @"OMHSerializerBodyMassIndex",
       HKCategoryTypeIdentifierSleepAnalysis : @"OMHSerializerSleepAnalysis",
       HKCorrelationTypeIdentifierBloodPressure: @"OMHSerializerBloodPressure",
+      HKQuantityTypeIdentifierDietaryBiotin: @"OMHSerializerGenericQuantitySample",
+      HKQuantityTypeIdentifierInhalerUsage: @"OMHSerializerGenericQuantitySample"
     };
   }
   return typeIdsToClasses;
@@ -85,6 +87,13 @@
   NSString* jsonString = [[NSString alloc] initWithData:jsonData
                                                encoding:NSUTF8StringEncoding];
   return jsonString;
+}
+
++ (NSString*)parseUnitFromQuantity:(HKQuantity*)quantity{
+    NSString *quantityDescription = [quantity description];
+    NSArray *array = [quantityDescription componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    //array = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF != ''"]];
+    return [array objectAtIndex:1];
 }
 
 #pragma mark - Private
@@ -411,8 +420,6 @@
     if ([sample.sampleType.description isEqualToString:HKQuantityTypeIdentifierBodyMassIndex]){
         return YES;
     }
-    NSLog(@"Sample type desc: %@",sample.sampleType.description);
-    NSLog(@"HK QuanityTypeID: %@",HKQuantityTypeIdentifierBodyMassIndex);
     return NO;
 }
 - (id)bodyData {
@@ -443,4 +450,78 @@
     return @"1.0";
 }
 
+@end
+
+@interface OMHSerializerGenericQuantitySample : OMHSerializer; @end;
+@implementation OMHSerializerGenericQuantitySample
+
++ (BOOL)canSerialize:(HKSample *)sample error:(NSError *__autoreleasing *)error {
+    return YES;
+}
+- (id)bodyData {
+    HKQuantitySample *quantitySample = (HKQuantitySample*)self.sample;
+    NSDictionary *metadata = [quantitySample metadata];
+    
+    HKQuantity *quantity = [quantitySample quantity];
+    NSMutableDictionary *serializedUnitValues = [NSMutableDictionary new];
+    if ([quantity isCompatibleWithUnit:[HKUnit unitFromString:@"count"]]) {
+        [serializedUnitValues addEntriesFromDictionary:@{
+                         @"count": [NSNumber numberWithDouble:[quantity doubleValueForUnit:[HKUnit unitFromString:@"count"]]]
+                         }
+         ];
+    }
+    else{
+        NSString *unitString = [OMHSerializer parseUnitFromQuantity:quantity];
+        [serializedUnitValues addEntriesFromDictionary:@{
+                                @"unit_value":@{
+                                    @"value": [NSNumber numberWithDouble:[quantity doubleValueForUnit:[HKUnit unitFromString:unitString]]],
+                                    @"unit": unitString
+                                
+                                }
+                            }
+         ];
+    }
+    
+//    if ([metadata count]>0) {
+//        NSMutableDictionary *metadataPairs = [NSMutableDictionary ]
+//        //NEED TO ITERATE OVER THE METADATA AND PLOP THEM INTO SCHEMA
+//        for (id key in metadata) {
+//            [metadataPairs setObject:"key" forKey:
+//            [metadata objectForKey:key]
+//        }
+//    }
+    
+    //TODO: need to add metadata
+    NSDictionary *effectiveTimeFrameDictionary = [[NSDictionary alloc ]init];
+    if ([quantitySample.startDate isEqualToDate:quantitySample.endDate]){
+        effectiveTimeFrameDictionary = @{
+                                         @"date_time":[quantitySample.startDate RFC3339String]
+                                         };
+    }
+    else{
+        effectiveTimeFrameDictionary = @{
+                                          @"time_interval": @{
+                                                  @"start_date_time": [quantitySample.startDate RFC3339String],
+                                                  @"end_date_time": [quantitySample.endDate RFC3339String]
+                                                  }
+                                          };
+
+    }
+    
+    
+    NSDictionary *partialSerializedDictionary =
+    @{
+        @"quantity_type":[[quantitySample quantityType] description] ,
+        @"effective_time_frame":effectiveTimeFrameDictionary
+    } ;
+    NSMutableDictionary *fullSerializedDictionary = [partialSerializedDictionary mutableCopy];
+    [fullSerializedDictionary addEntriesFromDictionary:serializedUnitValues];
+    return fullSerializedDictionary;
+}
+- (NSString*)schemaName {
+    return @"hk-quantity-sample";
+}
+- (NSString*)schemaVersion {
+    return @"1.0";
+}
 @end
