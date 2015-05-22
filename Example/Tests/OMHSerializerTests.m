@@ -408,8 +408,7 @@ describe(HKQuantityTypeIdentifierBodyMassIndex, ^{
                                                       attrs:@{@"value":value,
                                                               @"unitString":unitString,
                                                               @"start":start,
-                                                              @"end":end}
-                            ];
+                                                              @"end":end}];
         return @{
             @"sample": sample,
             @"pathsToValues": @{
@@ -421,6 +420,54 @@ describe(HKQuantityTypeIdentifierBodyMassIndex, ^{
             }
         };
         
+    });
+});
+
+describe(@"HKQuantityTypeIdentifierDietaryBiotin with effective_time_frame", ^{
+    itShouldBehaveLike(@"AnySerializerForSupportedSample",^{
+        NSDate *start = [NSDate date];
+        NSDate *end = [start dateByAddingTimeInterval:3600];
+        NSNumber *value = [NSNumber numberWithFloat:8.8];
+        NSString *unitString = @"mcg";
+        HKSample *sample = [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierDietaryBiotin
+                                                      attrs:@{@"value":value,
+                                                              @"unitString":unitString,
+                                                              @"start":start,
+                                                              @"end":end}];
+        return @{
+            @"sample":sample,
+            @"pathsToValues": @{
+                @"header.schema_id.name": @"hk-quantity-sample",
+                @"body.quantity_type":[HKQuantityTypeIdentifierDietaryBiotin description],
+                @"body.unit_value.value":value,
+                @"body.unit_value.unit":unitString,
+                @"body.effective_time_frame.time_interval.start_date_time":[start RFC3339String],
+                @"body.effective_time_frame.time_interval.end_date_time":[end RFC3339String]
+            }
+        };
+    });
+});
+
+describe(@"HKQuantityTypeIdentifierInhalerUsage with date_time", ^{
+    itShouldBehaveLike(@"AnySerializerForSupportedSample",^{
+        NSDate *start = [NSDate date];
+        NSDate *end = start;
+        NSNumber *value = [NSNumber numberWithInt:3];
+        NSString *unitString = @"count";
+        HKSample *sample = [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierInhalerUsage
+                                                      attrs:@{@"value":value,
+                                                              @"unitString":unitString,
+                                                              @"start":start,
+                                                              @"end":end}];
+        return @{
+                 @"sample":sample,
+                 @"pathsToValues": @{
+                         @"header.schema_id.name": @"hk-quantity-sample",
+                         @"body.quantity_type":[HKQuantityTypeIdentifierInhalerUsage description],
+                         @"body.count":value,
+                         @"body.effective_time_frame.date_time":[start RFC3339String]
+                    }
+                 };
     });
 });
 

@@ -58,7 +58,9 @@
           HKQuantityTypeIdentifierActiveEnergyBurned,
           HKQuantityTypeIdentifierBloodPressureSystolic,
           HKQuantityTypeIdentifierBloodPressureDiastolic,
-          HKQuantityTypeIdentifierBodyMassIndex
+          HKQuantityTypeIdentifierBodyMassIndex,
+          HKQuantityTypeIdentifierDietaryBiotin,
+          HKQuantityTypeIdentifierInhalerUsage
         ] includes:sampleTypeIdentifier]) {
 
     NSString* defaultUnitString = nil;
@@ -74,7 +76,10 @@
       defaultUnitString = @"kcal";
     } else if ([sampleTypeIdentifier containsString:@"HKQuantityTypeIdentifierBloodPressure"]) {
       defaultUnitString = @"mmHg";
-    } else {
+    } else if (sampleTypeIdentifier == HKQuantityTypeIdentifierDietaryBiotin) {
+     defaultUnitString = @"mcg";
+    }
+    else {
       defaultUnitString = @"count";
     };
     NSString* unitString = or(attrs[@"unitString"], defaultUnitString);
