@@ -364,24 +364,19 @@ describe(HKQuantityTypeIdentifierActiveEnergyBurned, ^{
 describe(HKCategoryTypeIdentifierSleepAnalysis, ^{
   NSString* identifier = HKCategoryTypeIdentifierSleepAnalysis;
   itShouldBehaveLike(@"AnySerializerForSupportedSample", ^{
-    NSDate* start = [NSDate date];
-    NSInteger secs = [@1800 integerValue];
-    NSDate* end =
-      [[NSCalendar currentCalendar] dateByAddingUnit:NSCalendarUnitSecond
-                                               value:secs
-                                              toDate:start
-                                             options:kNilOptions];
+      NSDate* start = [NSDate date];
+      NSDate* end = [start dateByAddingTimeInterval:60*60*8];
     HKSample* sample =
       [OMHSampleFactory typeIdentifier:HKCategoryTypeIdentifierSleepAnalysis
                                  attrs:@{ @"start": start, @"end": end }];
     return @{
       @"sample": sample,
       @"pathsToValues": @{
-        @"header.schema_id.name": @"sleep-duration",
-        @"body.sleep_duration.value": [NSNumber numberWithInteger:secs],
-        @"body.sleep_duration.unit": @"sec",
-        @"body.effective_time_frame.start_date_time": [start RFC3339String],
-        @"body.effective_time_frame.end_date_time": [end RFC3339String],
+        @"header.schema_id.name": @"hk-category-sample",
+        @"body.category_value": @"Asleep",
+        @"body.category_type": HKCategoryTypeIdentifierSleepAnalysis,
+        @"body.effective_time_frame.time_interval.start_date_time": [start RFC3339String],
+        @"body.effective_time_frame.time_interval.end_date_time": [end RFC3339String],
       }
     };
   });
@@ -397,10 +392,8 @@ describe(HKCategoryTypeIdentifierSleepAnalysis, ^{
       OMHSerializer* instance = [OMHSerializer new];
       NSError* error;
       NSString* json = [instance jsonForSample:sample error:&error];
-      expect(json).to.beNil();
-      expect(error).notTo.beNil();
-      expect(error.code).to.equal(OMHErrorCodeUnsupportedValues);
-      expect(error.localizedDescription).to.contain(@"HKCategoryValueSleepAnalysis");
+        expect(json).notTo.beNil();
+        expect(error).to.beNil();
     });
   });
 });
