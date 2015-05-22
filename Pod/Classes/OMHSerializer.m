@@ -23,7 +23,7 @@
       HKQuantityTypeIdentifierBloodGlucose : @"OMHSerializerBloodGlucose",
       HKQuantityTypeIdentifierActiveEnergyBurned: @"OMHSerializerEnergyBurned",
       HKQuantityTypeIdentifierBodyMassIndex: @"OMHSerializerBodyMassIndex",
-      HKCategoryTypeIdentifierSleepAnalysis : @"OMHSerializerSleepAnalysis",
+      HKCategoryTypeIdentifierSleepAnalysis : @"OMHSerializerGenericCategorySample",
       HKCorrelationTypeIdentifierBloodPressure: @"OMHSerializerBloodPressure",
       HKQuantityTypeIdentifierDietaryBiotin: @"OMHSerializerGenericQuantitySample",
       HKQuantityTypeIdentifierInhalerUsage: @"OMHSerializerGenericQuantitySample"
