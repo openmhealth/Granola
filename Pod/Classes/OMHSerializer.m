@@ -525,3 +525,63 @@
     return @"1.0";
 }
 @end
+
+@interface OMHSerializerGenericCategorySample : OMHSerializer; @end;
+@implementation OMHSerializerGenericCategorySample
+
+//TODO: Check to see if there are any necessary details to implement here, probably check for sleep and value settings otherwise it will explode
++ (BOOL)canSerialize:(HKSample *)sample error:(NSError *__autoreleasing *)error {
+    //check whether the category type is contained in the list of currently appropriate
+    return YES;
+}
+- (id)bodyData {
+    HKCategorySample *categorySample = (HKCategorySample*) self.sample;
+    NSString *schemaMappedValue = [NSString new];
+    if ([[categorySample.categoryType description] isEqualToString:HKCategoryTypeIdentifierSleepAnalysis]){
+        switch (categorySample.value){
+            case 0:
+                schemaMappedValue = @"InBed";
+                break;
+            case 1:
+                schemaMappedValue = @"Asleep";
+                break;
+        }
+    }
+    else{
+        NSException *e = [NSException
+                          exceptionWithName:@"SerializerCategoryTypeIncorrect"
+                          reason:@"Generic category sample serializer received incorrect category type"
+                          userInfo:nil];
+        @throw e;
+    }
+    
+    NSDictionary *effectiveTimeFrameDictionary = [[NSDictionary alloc ]init];
+    if ([categorySample.startDate isEqualToDate:categorySample.endDate]){
+        effectiveTimeFrameDictionary = @{
+                                         @"date_time":[categorySample.startDate RFC3339String]
+                                         };
+    }
+    else{
+        effectiveTimeFrameDictionary = @{
+                                         @"time_interval": @{
+                                                 @"start_date_time": [categorySample.startDate RFC3339String],
+                                                 @"end_date_time": [categorySample.endDate RFC3339String]
+                                                 }
+                                         };
+        
+    }
+    
+    return @{
+             @"effective_time_frame":effectiveTimeFrameDictionary,
+             @"category_type": [[categorySample categoryType] description],
+             @"category_value": schemaMappedValue
+             };
+}
+- (NSString*)schemaName {
+    return @"hk-category-sample";
+}
+- (NSString*)schemaVersion {
+    return @"1.0";
+}
+
+@end
