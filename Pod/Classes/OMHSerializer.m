@@ -26,7 +26,8 @@
       HKCategoryTypeIdentifierSleepAnalysis : @"OMHSerializerGenericCategorySample",
       HKCorrelationTypeIdentifierBloodPressure: @"OMHSerializerBloodPressure",
       HKQuantityTypeIdentifierDietaryBiotin: @"OMHSerializerGenericQuantitySample",
-      HKQuantityTypeIdentifierInhalerUsage: @"OMHSerializerGenericQuantitySample"
+      HKQuantityTypeIdentifierInhalerUsage: @"OMHSerializerGenericQuantitySample",
+      HKCorrelationTypeIdentifierFood: @"OMHSerializerGenericCorrelation"
     };
   }
   return typeIdsToClasses;
@@ -570,7 +571,6 @@
                                          };
         
     }
-    
     return @{
              @"effective_time_frame":effectiveTimeFrameDictionary,
              @"category_type": [[categorySample categoryType] description],
@@ -583,5 +583,73 @@
 - (NSString*)schemaVersion {
     return @"1.0";
 }
+@end
 
+@interface OMHSerializerGenericCorrelation : OMHSerializer; @end;
+@implementation OMHSerializerGenericCorrelation
+
+//TODO: Implement
++ (BOOL)canSerialize:(HKSample *)sample error:(NSError *__autoreleasing *)error {
+    return YES;
+}
+- (id)bodyData {
+    HKCorrelation *correlationSample = (HKCorrelation*)self.sample;
+    
+    NSMutableArray *quantitySampleArray = [NSMutableArray new];
+    NSMutableArray *categorySampleArray = [NSMutableArray new];
+    for (NSObject *sample in correlationSample.objects) {
+        if ([sample isKindOfClass:[HKQuantitySample class]]){
+            //craete serialized with the sample input, then call body
+            OMHSerializerGenericQuantitySample *quantitySampleSerializer = [OMHSerializerGenericQuantitySample new];
+            quantitySampleSerializer = [quantitySampleSerializer initWithSample:(HKQuantitySample*)sample];
+            NSDictionary *serializedQuantitySample = (NSDictionary*)[quantitySampleSerializer bodyData];
+            [quantitySampleArray addObject:serializedQuantitySample];
+        }
+        else if ([sample isKindOfClass:[HKCategorySample class]]){
+            OMHSerializerGenericCategorySample *categorySampleSerializer = [OMHSerializerGenericCategorySample new];
+            categorySampleSerializer = [categorySampleSerializer initWithSample:(HKCategorySample*)sample];
+            NSDictionary *serializedCategorySample = (NSDictionary*)[categorySampleSerializer bodyData];
+            [quantitySampleArray addObject:serializedCategorySample];
+        }
+        else {
+            NSException *e = [NSException
+                              exceptionWithName:@"CorrelationContainsInvalidSample"
+                              reason:@"HKCorrelation can only contain samples of type HKQuantitySample or HKCategorySample"
+                              userInfo:nil];
+            @throw e;
+        }
+    }
+    
+    
+    NSDictionary *effectiveTimeFrameDictionary = [[NSDictionary alloc ]init];
+    if ([correlationSample.startDate isEqualToDate:correlationSample.endDate]){
+        effectiveTimeFrameDictionary = @{
+                                         @"date_time":[correlationSample.startDate RFC3339String]
+                                         };
+    }
+    else{
+        effectiveTimeFrameDictionary = @{
+                                         @"time_interval": @{
+                                                 @"start_date_time": [correlationSample.startDate RFC3339String],
+                                                 @"end_date_time": [correlationSample.endDate RFC3339String]
+                                                 }
+                                         };
+        
+    }
+    
+    return @{@"effective_time_frame":effectiveTimeFrameDictionary,
+             @"correlation_type":[correlationSample.correlationType description],
+             @"quantity_samples":quantitySampleArray,
+             @"category_samples":categorySampleArray
+             };
+    
+    
+    
+}
+- (NSString*)schemaName {
+    return @"hk-correlation";
+}
+- (NSString*)schemaVersion {
+    return @"1.0";
+}
 @end
