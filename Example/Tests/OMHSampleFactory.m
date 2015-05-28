@@ -28,8 +28,8 @@
                                        value:HKCategoryValueSleepAnalysisAsleep
                                    startDate:start
                                      endDate:end];
-  } else
-  if (sampleTypeIdentifier == HKCorrelationTypeIdentifierBloodPressure) {
+  }
+  else if (sampleTypeIdentifier == HKCorrelationTypeIdentifierBloodPressure) {
     NSSet* defaultSamples = [NSSet setWithArray:[@[
         HKQuantityTypeIdentifierBloodPressureSystolic,
         HKQuantityTypeIdentifierBloodPressureDiastolic
@@ -47,8 +47,23 @@
                                           startDate:start
                                             endDate:end
                                             objects:objects];
-  } else
-  if ([@[ HKQuantityTypeIdentifierHeight,
+  }
+  else if (sampleTypeIdentifier == HKCorrelationTypeIdentifierFood){
+      NSSet *nutritionContentSamples = nil;
+      if(attrs[@"objects"]){
+          nutritionContentSamples = attrs[@"objects"];
+      }
+      else{
+          HKQuantitySample *defaultCarbQuantitySample = [HKQuantitySample quantitySampleWithType:[HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierDietaryCarbohydrates] quantity:[HKQuantity quantityWithUnit:[HKUnit unitFromString:@"g"] doubleValue:29.3] startDate:start endDate:end metadata:nil];
+          HKQuantitySample *defaultCalorieQuantitySample = [HKQuantitySample quantitySampleWithType:[HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierDietaryEnergyConsumed] quantity:[HKQuantity quantityWithUnit:[HKUnit unitFromString:@"kcal"] doubleValue:105] startDate:start endDate:end metadata:nil];
+          nutritionContentSamples = [NSSet setWithArray:@[defaultCarbQuantitySample,defaultCalorieQuantitySample]];
+      }
+      sample = (HKSample*)[HKCorrelation correlationWithType:[HKCorrelationType correlationTypeForIdentifier:HKCorrelationTypeIdentifierFood]
+                                                   startDate:start
+                                                     endDate:end
+                                                     objects:nutritionContentSamples];
+  }
+  else if ([@[ HKQuantityTypeIdentifierHeight,
           HKQuantityTypeIdentifierBodyMass,
           HKQuantityTypeIdentifierHeartRate,
           HKQuantityTypeIdentifierStepCount,
@@ -60,7 +75,9 @@
           HKQuantityTypeIdentifierBloodPressureDiastolic,
           HKQuantityTypeIdentifierBodyMassIndex,
           HKQuantityTypeIdentifierDietaryBiotin,
-          HKQuantityTypeIdentifierInhalerUsage
+          HKQuantityTypeIdentifierInhalerUsage,
+          HKQuantityTypeIdentifierDietaryCarbohydrates,
+          HKQuantityTypeIdentifierDietaryEnergyConsumed
         ] includes:sampleTypeIdentifier]) {
 
     NSString* defaultUnitString = nil;
