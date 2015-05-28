@@ -1,3 +1,4 @@
 [submodule "Example/Tests/omh-schemas"]
 	path = Example/Tests/omh-schemas
 	url = https://github.com/openmhealth/schemas.git
+	branch = feature/health-kit

@@ -456,6 +456,7 @@
 @interface OMHSerializerGenericQuantitySample : OMHSerializer; @end;
 @implementation OMHSerializerGenericQuantitySample
 
+//TODO: Check if there are any necessary details to implement here
 + (BOOL)canSerialize:(HKSample *)sample error:(NSError *__autoreleasing *)error {
     return YES;
 }

@@ -214,7 +214,7 @@ sharedExamplesFor(@"AnySerializerForSupportedSample", ^(NSDictionary* data) {
     it(@"validates against data-point schema", ^{
       NSError* validationError = nil;
       BOOL valid = [OMHSchemaStore validateObject:object
-                              againstSchemaAtPath:@"generic/data-point"
+                              againstSchemaAtPath:@"omh/data-point"
                                         withError:&validationError];
       expect(valid).to.beTruthy();
     });
@@ -229,7 +229,15 @@ sharedExamplesFor(@"AnySerializerForSupportedSample", ^(NSDictionary* data) {
         @"header.schema_id.version": @"1.0",
       }];
       [allKeysValues each:^(id keyPath, id keyPathValue){
-        expect([object valueForKeyPath:keyPath]).to.equal(keyPathValue);
+          if([keyPath containsString:@"quantity_samples"] || [keyPath containsString:@"category_samples"]){
+              for(NSObject *keyArrayValue in keyPathValue){
+                  expect([object valueForKeyPath:keyPath]).to.contain(keyArrayValue);
+              }
+          }
+          else{
+              expect([object valueForKeyPath:keyPath]).to.equal(keyPathValue);
+          }
+        
       }];
     });
   });
@@ -471,6 +479,60 @@ describe(@"HKQuantityTypeIdentifierInhalerUsage with date_time", ^{
     });
 });
 
+describe(HKCorrelationTypeIdentifierFood,^{
+    itShouldBehaveLike(@"AnySerializerForSupportedSample", ^{
+        //energyConsumedQuantitySample = nil;
+        //carbConsumedQuantitySample = nil;
+        NSDate *sampleDate = [NSDate date];
+        NSLog(@"In Correlation, sampleDate: %@",[sampleDate description]);
+        NSNumber *calorieValue = [NSNumber numberWithDouble:105];
+        NSNumber *carbValue = [NSNumber numberWithDouble:29.3];
+        NSString *calorieUnitString = @"kcal";
+        NSString *carbUnitString = @"g";
+        //beforeAll(^{
+        HKSample *energyConsumedQuantitySample = [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierDietaryEnergyConsumed
+                                                                  attrs:@{ @"start":sampleDate,
+                                                                           @"end":sampleDate,
+                                                                           @"value":calorieValue,
+                                                                           @"unitString":calorieUnitString
+                                                                           }];
+        HKSample *carbConsumedQuantitySample = [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierDietaryCarbohydrates
+                                                                attrs:@{ @"start":sampleDate,
+                                                                         @"end":sampleDate,
+                                                                         @"value":carbValue,
+                                                                         @"unitString":carbUnitString
+                                                                         }];
+        
+        NSSet *dietaryComponentSamples = [NSSet setWithArray:@[energyConsumedQuantitySample,carbConsumedQuantitySample]];
+        NSLog(@"In Correlation, samples order: %@",[dietaryComponentSamples description]);
+        NSDate *correlationStart = [NSDate date];
+        NSDate *correlationEnd = [correlationStart dateByAddingTimeInterval:360];
+        HKSample *foodSample = [OMHSampleFactory typeIdentifier:HKCorrelationTypeIdentifierFood
+                                                          attrs:@{@"start": correlationStart,
+                                                                  @"end": correlationEnd,
+                                                                  @"objects":dietaryComponentSamples
+                                                                  }];
+        
+        return @{
+                 @"sample":foodSample,
+                 @"pathsToValues": @{
+                         @"header.schema_id.name": @"hk-correlation",
+                         @"body.effective_time_frame.time_interval.start_date_time": [correlationStart RFC3339String],
+                         @"body.effective_time_frame.time_interval.end_date_time": [correlationEnd RFC3339String],
+                         @"body.correlation_type": [HKCorrelationTypeIdentifierFood description],
+                         //@"body.quantity_samples": @[energyConsumedQuantitySample,carbConsumedQuantitySample]
+                         @"body.quantity_samples.effective_time_frame.date_time": @[[sampleDate RFC3339String],[sampleDate RFC3339String]],
+                         @"body.quantity_samples.unit_value.value": @[carbValue,calorieValue],
+                         @"body.quantity_samples.unit_value.unit": @[carbUnitString,calorieUnitString],
+                         @"body.quantity_samples.quantity_type": @[[HKQuantityTypeIdentifierDietaryCarbohydrates description],[HKQuantityTypeIdentifierDietaryEnergyConsumed description]]
+                         
+                         
+                         }
+                 };
+    });
+    
+});
+
 describe(HKCorrelationTypeIdentifierBloodPressure, ^{
   __block NSNumber* diastolicValue = nil;
   __block NSNumber* systolicValue = nil;
@@ -540,6 +602,8 @@ describe(HKCorrelationTypeIdentifierBloodPressure, ^{
     };
   });
 });
+
+
 
 SpecEnd
 
