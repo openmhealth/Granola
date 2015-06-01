@@ -117,6 +117,14 @@
 
 }
 
++ (NSArray*) serializeMetadataArray:(NSDictionary*)metadata{
+    NSMutableArray *serializedArray = [NSMutableArray new];
+    for (id key in metadata) {
+        [serializedArray addObject:@{@"key":key,@"value":[metadata valueForKey:key]}];
+    }
+    return [serializedArray copy];
+}
+
 #pragma mark - Private
 
 - (id)data {
@@ -443,7 +451,7 @@
 }
 - (id)bodyData {
     HKQuantitySample *quantitySample = (HKQuantitySample*)self.sample;
-    NSDictionary *metadata = [quantitySample metadata];
+    NSArray *metadataArray;
     
     HKQuantity *quantity = [quantitySample quantity];
     NSMutableDictionary *serializedUnitValues = [NSMutableDictionary new];
@@ -464,18 +472,7 @@
                             }
          ];
     }
-    
-//    if ([metadata count]>0) {
-//        NSMutableDictionary *metadataPairs = [NSMutableDictionary ]
-//        //NEED TO ITERATE OVER THE METADATA AND PLOP THEM INTO SCHEMA
-//        for (id key in metadata) {
-//            [metadataPairs setObject:"key" forKey:
-//            [metadata objectForKey:key]
-//        }
-//    }
-    
-    //TODO: need to add metadata
-    
+      
     NSDictionary *partialSerializedDictionary =
     @{
         @"quantity_type":[[quantitySample quantityType] description] ,
@@ -483,6 +480,10 @@
     } ;
     NSMutableDictionary *fullSerializedDictionary = [partialSerializedDictionary mutableCopy];
     [fullSerializedDictionary addEntriesFromDictionary:serializedUnitValues];
+    if (self.sample.metadata.count>0) {
+        metadataArray = [OMHSerializer serializeMetadataArray:self.sample.metadata];
+        [fullSerializedDictionary setObject:[OMHSerializer serializeMetadataArray:self.sample.metadata] forKey:@"metadata"];
+    }
     return fullSerializedDictionary;
 }
 - (NSString*)schemaName {
@@ -522,11 +523,18 @@
         @throw e;
     }
     
-    return @{
-             @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:categorySample.startDate endDate:categorySample.endDate],
-             @"category_type": [[categorySample categoryType] description],
-             @"category_value": schemaMappedValue
-             };
+    NSMutableDictionary *fullSerializedDictionary = [NSMutableDictionary new];
+    [fullSerializedDictionary addEntriesFromDictionary:@{
+                                                    @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:categorySample.startDate endDate:categorySample.endDate],
+                                                    @"category_type": [[categorySample categoryType] description],
+                                                    @"category_value": schemaMappedValue
+                                                    }];
+    
+    if(self.sample.metadata.count>0){
+        [fullSerializedDictionary setObject:[OMHSerializer serializeMetadataArray:self.sample.metadata] forKey:@"metadata"];
+    }
+    
+    return fullSerializedDictionary;
 }
 - (NSString*)schemaName {
     return @"hk-category-sample";
@@ -571,11 +579,16 @@
         }
     }
     
-    return @{@"effective_time_frame":[OMHSerializer populateTimeFrameProperty:correlationSample.startDate endDate:correlationSample.endDate],
-             @"correlation_type":[correlationSample.correlationType description],
-             @"quantity_samples":quantitySampleArray,
-             @"category_samples":categorySampleArray
-             };
+    NSMutableDictionary *fullSerializedDictionary = [NSMutableDictionary new];
+    [fullSerializedDictionary addEntriesFromDictionary:@{@"effective_time_frame":[OMHSerializer populateTimeFrameProperty:correlationSample.startDate endDate:correlationSample.endDate],
+                                                         @"correlation_type":[correlationSample.correlationType description],
+                                                         @"quantity_samples":quantitySampleArray,
+                                                         @"category_samples":categorySampleArray
+                                                         }];
+    if(self.sample.metadata.count>0){
+        [fullSerializedDictionary setObject:[OMHSerializer serializeMetadataArray:self.sample.metadata] forKey:@"metadata"];
+    }
+    return fullSerializedDictionary;
     
     
     
@@ -598,24 +611,27 @@
 - (id)bodyData {
     HKWorkout *workoutSample = (HKWorkout*)self.sample;
     
-    NSMutableDictionary *workoutPropertyDictionary = [NSMutableDictionary new];
+    NSMutableDictionary *fullSerializedDictionary = [NSMutableDictionary new];
     if(workoutSample.totalDistance){
         NSString *unitString = [OMHSerializer parseUnitFromQuantity:workoutSample.totalDistance];
-        [workoutPropertyDictionary setObject:@{@"value":[NSNumber numberWithDouble:[workoutSample.totalDistance doubleValueForUnit:[HKUnit unitFromString:unitString]]],@"unit":unitString} forKey:@"distance"];
+        [fullSerializedDictionary setObject:@{@"value":[NSNumber numberWithDouble:[workoutSample.totalDistance doubleValueForUnit:[HKUnit unitFromString:unitString]]],@"unit":unitString} forKey:@"distance"];
     }
     if(workoutSample.totalEnergyBurned){
-        [workoutPropertyDictionary setObject:@{@"value":[NSNumber numberWithDouble:[workoutSample.totalEnergyBurned doubleValueForUnit:[HKUnit unitFromString:@"kcal"]]],@"unit":@"kcal"} forKey:@"kcal_burned"];
+        [fullSerializedDictionary setObject:@{@"value":[NSNumber numberWithDouble:[workoutSample.totalEnergyBurned doubleValueForUnit:[HKUnit unitFromString:@"kcal"]]],@"unit":@"kcal"} forKey:@"kcal_burned"];
     }
     if(workoutSample.duration){
-        [workoutPropertyDictionary setObject:@{@"value":[NSNumber numberWithDouble:workoutSample.duration],@"unit":@"sec"} forKey:@"duration"];
+        [fullSerializedDictionary setObject:@{@"value":[NSNumber numberWithDouble:workoutSample.duration],@"unit":@"sec"} forKey:@"duration"];
     }
     
-    [workoutPropertyDictionary addEntriesFromDictionary:@{
+    [fullSerializedDictionary addEntriesFromDictionary:@{
                                                           @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:workoutSample.startDate endDate:workoutSample.endDate],
                                                           @"activity_name":[OMHWorkoutEnumMap stringForHKWorkoutActivityType:workoutSample.workoutActivityType]
                                                           
                                                          }];
-    return workoutPropertyDictionary;
+    if(self.sample.metadata.count>0){
+        [fullSerializedDictionary setObject:[OMHSerializer serializeMetadataArray:self.sample.metadata] forKey:@"metadata"];
+    }
+    return fullSerializedDictionary;
 }
 
 - (NSString*)schemaName {
