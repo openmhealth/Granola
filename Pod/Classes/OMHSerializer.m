@@ -422,12 +422,6 @@
             @"unit":unitStringForSchema
         },
         @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:quantitySample.startDate endDate:quantitySample.endDate]
-//        @"effective_time_frame": @{
-//            @"time_interval": @{
-//                @"start_date_time": [quantitySample.startDate RFC3339String],
-//                @"end_date_time": [quantitySample.endDate RFC3339String]
-//            }
-//        }
     };
     
 }
@@ -481,22 +475,6 @@
 //    }
     
     //TODO: need to add metadata
-//    NSDictionary *effectiveTimeFrameDictionary = [[NSDictionary alloc ]init];
-//    if ([quantitySample.startDate isEqualToDate:quantitySample.endDate]){
-//        effectiveTimeFrameDictionary = @{
-//                                         @"date_time":[quantitySample.startDate RFC3339String]
-//                                         };
-//    }
-//    else{
-//        effectiveTimeFrameDictionary = @{
-//                                          @"time_interval": @{
-//                                                  @"start_date_time": [quantitySample.startDate RFC3339String],
-//                                                  @"end_date_time": [quantitySample.endDate RFC3339String]
-//                                                  }
-//                                          };
-//
-//    }
-    
     
     NSDictionary *partialSerializedDictionary =
     @{
@@ -572,7 +550,7 @@
     NSMutableArray *categorySampleArray = [NSMutableArray new];
     for (NSObject *sample in correlationSample.objects) {
         if ([sample isKindOfClass:[HKQuantitySample class]]){
-            //craete serialized with the sample input, then call body
+            //create serialized with the sample input, then call body
             OMHSerializerGenericQuantitySample *quantitySampleSerializer = [OMHSerializerGenericQuantitySample new];
             quantitySampleSerializer = [quantitySampleSerializer initWithSample:(HKQuantitySample*)sample];
             NSDictionary *serializedQuantitySample = (NSDictionary*)[quantitySampleSerializer bodyData];
@@ -619,7 +597,7 @@
 
 - (id)bodyData {
     HKWorkout *workoutSample = (HKWorkout*)self.sample;
-    //NSDictionary *effectiveTimeFrameDictionary = ;
+    
     NSMutableDictionary *workoutPropertyDictionary = [NSMutableDictionary new];
     if(workoutSample.totalDistance){
         NSString *unitString = [OMHSerializer parseUnitFromQuantity:workoutSample.totalDistance];
