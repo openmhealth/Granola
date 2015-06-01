@@ -2,9 +2,11 @@
 #import <VVJSONSchemaValidation/VVJSONSchema.h>
 #import <ObjectiveSugar/ObjectiveSugar.h>
 #import <Granola/OMHError.h>
+#import <Granola/OMHWorkoutEnumMap.h>
 #import "OMHSampleFactory.h"
 #import "OMHSchemaStore.h"
 #import "NSDate+RFC3339.h"
+
 
 void (^logTypeSupportTableString)() = ^{
   id allTypesGrouped = @{
@@ -533,6 +535,64 @@ describe(HKCorrelationTypeIdentifierFood,^{
     
 });
 
+describe(@"HKWorkoutTypeIdentifier with no details", ^{
+    itShouldBehaveLike(@"AnySerializerForSupportedSample",^{
+        NSDate *activityStart = [NSDate date];
+        NSDate *activityEnd = [activityStart dateByAddingTimeInterval:3600];
+        
+        HKSample *workoutSample = [OMHSampleFactory typeIdentifier:HKWorkoutTypeIdentifier
+                                                             attrs:@{@"start":activityStart,
+                                                                     @"end":activityEnd,
+                                                                     @"activity_type":@(HKWorkoutActivityTypeRunning)
+                                                                     
+                                                                     }];
+        return @{
+                 @"sample":workoutSample,
+                 @"pathsToValues":@{
+                         @"header.schema_id.name":@"hk-workout",
+                         @"body.effective_time_frame.time_interval.start_date_time": [activityStart RFC3339String],
+                         @"body.effective_time_frame.time_interval.end_date_time": [activityEnd RFC3339String],
+                         @"body.activity_name":[OMHWorkoutEnumMap stringForHKWorkoutActivityType:HKWorkoutActivityTypeRunning]
+                         }
+                 };
+    });
+});
+
+describe(@"HKWorkoutTypeIdentifier with details", ^{
+    itShouldBehaveLike(@"AnySerializerForSupportedSample",^{
+        NSDate *activityStart = [NSDate date];
+        NSDate *activityEnd = [activityStart dateByAddingTimeInterval:3600];
+        HKQuantity *energyBurned = [HKQuantity quantityWithUnit:[HKUnit unitFromString:@"kcal"] doubleValue:123.3];
+        HKQuantity *distance = [HKQuantity quantityWithUnit:[HKUnit unitFromString:@"mi"] doubleValue:13.1];
+        
+        HKSample *workoutSample = [OMHSampleFactory typeIdentifier:HKWorkoutTypeIdentifier
+                                                             attrs:@{
+                                                                     @"start":activityStart,
+                                                                     @"end":activityEnd,
+                                                                     @"activity_type":@(HKWorkoutActivityTypeRunning),
+                                                                     @"duration":@(360.5),
+                                                                     @"energy_burned":energyBurned,
+                                                                     @"distance":distance
+                                                                     }];
+        return @{
+                 @"sample":workoutSample,
+                 @"pathsToValues":@{
+                         @"header.schema_id.name":@"hk-workout",
+                         @"body.effective_time_frame.time_interval.start_date_time": [activityStart RFC3339String],
+                         @"body.effective_time_frame.time_interval.end_date_time": [activityEnd RFC3339String],
+                         @"body.activity_name":[OMHWorkoutEnumMap stringForHKWorkoutActivityType:HKWorkoutActivityTypeRunning],
+                         @"body.duration.value":@360.5,
+                         @"body.duration.unit":@"sec",
+                         @"body.kcal_burned.value":@([energyBurned doubleValueForUnit:[HKUnit unitFromString:@"kcal"]]),
+                         @"body.kcal_burned.unit":@"kcal",
+                         @"body.distance.value":@([distance doubleValueForUnit:[HKUnit unitFromString:@"mi"]]),
+                         @"body.distance.unit":@"mi"
+                         }
+                 };
+        
+    });
+});
+
 describe(HKCorrelationTypeIdentifierBloodPressure, ^{
   __block NSNumber* diastolicValue = nil;
   __block NSNumber* systolicValue = nil;
@@ -601,8 +661,5 @@ describe(HKCorrelationTypeIdentifierBloodPressure, ^{
     };
   });
 });
-
-
-
 SpecEnd
 

@@ -63,6 +63,38 @@
                                                      endDate:end
                                                      objects:nutritionContentSamples];
   }
+  else if (sampleTypeIdentifier == HKWorkoutTypeIdentifier){
+      //If we pass attributes into the sample factory, then they should be used in creating the sample
+      if([attrs count]>0){
+          NSTimeInterval duration = 100;
+          int activityType = HKWorkoutActivityTypeCycling;
+          if(attrs[@"activity_type"]){
+              NSString *activityTypeStr = (NSString*)attrs[@"activity_type"];
+              activityType = [activityTypeStr intValue];
+          }
+          //If one of these three keys has been set in the attributes that were passed to the factory, then we want to create a more complex workout sample
+          if([attrs hasKey:@"duration"] || [attrs hasKey:@"energy_burned"] || [attrs hasKey:@"distance"]){
+              if(attrs[@"duration"]){
+                  NSString *timeIntervalStr = (NSString*)attrs[@"duration"];
+                  duration = [timeIntervalStr doubleValue];
+              }
+              
+              HKQuantity *defaultEnergyBurned = [HKQuantity quantityWithUnit:[HKUnit unitFromString:@"kcal"] doubleValue:120.1];
+              HKQuantity *defaultDistance = [HKQuantity quantityWithUnit:[HKUnit unitFromString:@"km"] doubleValue:5.2];
+              sample = (HKSample*)[HKWorkout workoutWithActivityType:activityType startDate:or(attrs[@"start"],defaultStart) endDate:or(attrs[@"end"],defaultEnd) duration:duration totalEnergyBurned:or(attrs[@"energy_burned"],defaultEnergyBurned) totalDistance:or(attrs[@"distance"],defaultDistance) metadata:nil];
+          }
+          //If we do not have keys in the attribute dictionary for the more complex pieces of workout data, then we can create a simple workout sample
+          else{
+              sample = (HKSample*)[HKWorkout workoutWithActivityType:activityType startDate:or(attrs[@"start"],defaultStart) endDate:or(attrs[@"end"],defaultEnd)];
+          }
+          
+      }
+      //If no attributes are passed into the sample factory, then we can create a simple workout with start and end date set to now
+      else{
+          sample = (HKSample*)[HKWorkout workoutWithActivityType:HKWorkoutActivityTypeCycling startDate:[NSDate date] endDate:[NSDate date]];
+      }
+      
+  }
   else if ([@[ HKQuantityTypeIdentifierHeight,
           HKQuantityTypeIdentifierBodyMass,
           HKQuantityTypeIdentifierHeartRate,
