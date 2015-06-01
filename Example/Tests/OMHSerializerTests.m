@@ -231,7 +231,7 @@ sharedExamplesFor(@"AnySerializerForSupportedSample", ^(NSDictionary* data) {
         @"header.schema_id.version": @"1.0",
       }];
       [allKeysValues each:^(id keyPath, id keyPathValue){
-          if([keyPath containsString:@"quantity_samples"] || [keyPath containsString:@"category_samples"]){
+          if([keyPath containsString:@"quantity_samples"] || [keyPath containsString:@"category_samples"] || [keyPath containsString:@"metadata"]){
               for(NSObject *keyArrayValue in keyPathValue){
                   expect([object valueForKeyPath:keyPath]).to.contain(keyArrayValue);
               }
@@ -458,6 +458,41 @@ describe(@"HKQuantityTypeIdentifierDietaryBiotin with time_interval", ^{
     });
 });
 
+describe(@"HKQuantityTypeIdentifierDietaryBiotin with meta_data", ^{
+    itShouldBehaveLike(@"AnySerializerForSupportedSample",^{
+        NSDate *start = [NSDate date];
+        NSDate *end = [start dateByAddingTimeInterval:3600];
+        NSNumber *value = [NSNumber numberWithFloat:8.8];
+        NSNumber *referenceLowValue = [NSNumber numberWithDouble:2.0];
+        NSString *unitString = @"mcg";
+        HKSample *sample = [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierDietaryBiotin
+                                                      attrs:@{@"value":value,
+                                                              @"unitString":unitString,
+                                                              @"start":start,
+                                                              @"end":end,
+                                                              @"metadata":@{
+                                                                    HKMetadataKeyWasTakenInLab:@YES,
+                                                                    HKMetadataKeyTimeZone:@"CST",
+                                                                    HKMetadataKeyReferenceRangeLowerLimit:referenceLowValue
+                                                                            }
+                                                              }];
+        return @{
+                 @"sample":sample,
+                 @"pathsToValues":@{
+                         @"body.quantity_type":[HKQuantityTypeIdentifierDietaryBiotin description],
+                         @"body.unit_value.value":value,
+                         @"body.unit_value.unit":unitString,
+                         @"body.effective_time_frame.time_interval.start_date_time":[start RFC3339String],
+                         @"body.effective_time_frame.time_interval.end_date_time":[end RFC3339String],
+                         @"body.metadata.key":@[[HKMetadataKeyWasTakenInLab description],[HKMetadataKeyTimeZone description],[HKMetadataKeyReferenceRangeLowerLimit description]],
+                         @"body.metadata.value":@[@YES,@"CST",referenceLowValue]
+                         }
+                 };
+
+    });
+                       
+});
+
 describe(@"HKQuantityTypeIdentifierInhalerUsage with date_time", ^{
     itShouldBehaveLike(@"AnySerializerForSupportedSample",^{
         NSDate *start = [NSDate date];
@@ -564,13 +599,14 @@ describe(@"HKWorkoutTypeIdentifier with details", ^{
         NSDate *activityEnd = [activityStart dateByAddingTimeInterval:3600];
         HKQuantity *energyBurned = [HKQuantity quantityWithUnit:[HKUnit unitFromString:@"kcal"] doubleValue:123.3];
         HKQuantity *distance = [HKQuantity quantityWithUnit:[HKUnit unitFromString:@"mi"] doubleValue:13.1];
+        NSNumber *durationValue = [NSNumber numberWithDouble:360.5];
         
         HKSample *workoutSample = [OMHSampleFactory typeIdentifier:HKWorkoutTypeIdentifier
                                                              attrs:@{
                                                                      @"start":activityStart,
                                                                      @"end":activityEnd,
                                                                      @"activity_type":@(HKWorkoutActivityTypeRunning),
-                                                                     @"duration":@(360.5),
+                                                                     @"duration":durationValue,
                                                                      @"energy_burned":energyBurned,
                                                                      @"distance":distance
                                                                      }];

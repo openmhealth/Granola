@@ -18,16 +18,22 @@
                                    options:kNilOptions];
   NSDate* start = or(attrs[@"start"], defaultStart);
   NSDate* end = or(attrs[@"end"], defaultEnd);
-
+  NSDictionary *metadata = nil;
+  if(attrs[@"metadata"]){
+    metadata = attrs[@"metadata"];
+  }
   HKSample* sample = nil;
   if (sampleTypeIdentifier == HKCategoryTypeIdentifierSleepAnalysis) {
     HKCategoryType* type =
       [HKObjectType categoryTypeForIdentifier:sampleTypeIdentifier];
+    
+    
     sample =
     [HKCategorySample categorySampleWithType:type
                                        value:HKCategoryValueSleepAnalysisAsleep
                                    startDate:start
-                                     endDate:end];
+                                     endDate:end
+                                    metadata:metadata];
   }
   else if (sampleTypeIdentifier == HKCorrelationTypeIdentifierBloodPressure) {
     NSSet* defaultSamples = [NSSet setWithArray:[@[
@@ -42,11 +48,14 @@
     NSSet* objects = or(attrs[@"objects"], defaultSamples);
     HKCorrelationType *bloodPressureType =
       [HKObjectType correlationTypeForIdentifier:HKCorrelationTypeIdentifierBloodPressure];
+    NSDictionary *metadata = nil;
+    
     sample =
       (HKSample*)[HKCorrelation correlationWithType:bloodPressureType
                                           startDate:start
                                             endDate:end
-                                            objects:objects];
+                                            objects:objects
+                                           metadata:metadata];
   }
   else if (sampleTypeIdentifier == HKCorrelationTypeIdentifierFood){
       NSSet *nutritionContentSamples = nil;
@@ -58,20 +67,25 @@
           HKQuantitySample *defaultCalorieQuantitySample = [HKQuantitySample quantitySampleWithType:[HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierDietaryEnergyConsumed] quantity:[HKQuantity quantityWithUnit:[HKUnit unitFromString:@"kcal"] doubleValue:105] startDate:start endDate:end metadata:nil];
           nutritionContentSamples = [NSSet setWithArray:@[defaultCarbQuantitySample,defaultCalorieQuantitySample]];
       }
+      NSDictionary *metadata = nil;
+      
       sample = (HKSample*)[HKCorrelation correlationWithType:[HKCorrelationType correlationTypeForIdentifier:HKCorrelationTypeIdentifierFood]
                                                    startDate:start
                                                      endDate:end
-                                                     objects:nutritionContentSamples];
+                                                     objects:nutritionContentSamples
+                                                    metadata:metadata];
   }
   else if (sampleTypeIdentifier == HKWorkoutTypeIdentifier){
       //If we pass attributes into the sample factory, then they should be used in creating the sample
       if([attrs count]>0){
+          
           NSTimeInterval duration = 100;
           int activityType = HKWorkoutActivityTypeCycling;
           if(attrs[@"activity_type"]){
               NSString *activityTypeStr = (NSString*)attrs[@"activity_type"];
               activityType = [activityTypeStr intValue];
           }
+          
           //If one of these three keys has been set in the attributes that were passed to the factory, then we want to create a more complex workout sample
           if([attrs hasKey:@"duration"] || [attrs hasKey:@"energy_burned"] || [attrs hasKey:@"distance"]){
               if(attrs[@"duration"]){
@@ -79,9 +93,11 @@
                   duration = [timeIntervalStr doubleValue];
               }
               
+              NSDictionary *metadata = nil;
+              
               HKQuantity *defaultEnergyBurned = [HKQuantity quantityWithUnit:[HKUnit unitFromString:@"kcal"] doubleValue:120.1];
               HKQuantity *defaultDistance = [HKQuantity quantityWithUnit:[HKUnit unitFromString:@"km"] doubleValue:5.2];
-              sample = (HKSample*)[HKWorkout workoutWithActivityType:activityType startDate:or(attrs[@"start"],defaultStart) endDate:or(attrs[@"end"],defaultEnd) duration:duration totalEnergyBurned:or(attrs[@"energy_burned"],defaultEnergyBurned) totalDistance:or(attrs[@"distance"],defaultDistance) metadata:nil];
+              sample = (HKSample*)[HKWorkout workoutWithActivityType:activityType startDate:or(attrs[@"start"],defaultStart) endDate:or(attrs[@"end"],defaultEnd) duration:duration totalEnergyBurned:or(attrs[@"energy_burned"],defaultEnergyBurned) totalDistance:or(attrs[@"distance"],defaultDistance) metadata:metadata];
           }
           //If we do not have keys in the attribute dictionary for the more complex pieces of workout data, then we can create a simple workout sample
           else{
@@ -142,15 +158,22 @@
       [HKObjectType quantityTypeForIdentifier:sampleTypeIdentifier];
     HKQuantity* quantity = [HKQuantity quantityWithUnit:unit
                                             doubleValue:value.doubleValue];
+    NSDictionary *metadata = nil;
+    if(attrs[@"metadata"]){
+        metadata = attrs[@"metadata"];
+    }
+             
     sample =
       [HKQuantitySample quantitySampleWithType:quantityType
                                       quantity:quantity
                                      startDate:start
-                                       endDate:end];
+                                       endDate:end
+                                      metadata:metadata];
   }
   // validate sample object using HK private API, exposed via category,
   // see HKObject+Private.h
   // NOTE: throws _HKObjectValidationFailureException if invalid
+  
   [sample validateForSaving:nil];
   return sample;
 }
