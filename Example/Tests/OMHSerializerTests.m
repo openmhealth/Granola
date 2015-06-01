@@ -431,7 +431,7 @@ describe(HKQuantityTypeIdentifierBodyMassIndex, ^{
     });
 });
 
-describe(@"HKQuantityTypeIdentifierDietaryBiotin with effective_time_frame", ^{
+describe(@"HKQuantityTypeIdentifierDietaryBiotin with time_interval", ^{
     itShouldBehaveLike(@"AnySerializerForSupportedSample",^{
         NSDate *start = [NSDate date];
         NSDate *end = [start dateByAddingTimeInterval:3600];
@@ -596,8 +596,7 @@ describe(HKCorrelationTypeIdentifierBloodPressure, ^{
         @"body.systolic_blood_pressure.unit": @"mmHg",
         @"body.diastolic_blood_pressure.value": diastolicValue,
         @"body.diastolic_blood_pressure.unit": @"mmHg",
-        @"body.effective_time_frame.time_interval.start_date_time": [sampledAt RFC3339String],
-        @"body.effective_time_frame.time_interval.end_date_time": [sampledAt RFC3339String],
+        @"body.effective_time_frame.date_time": [sampledAt RFC3339String]
       }
     };
   });

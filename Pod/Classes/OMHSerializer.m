@@ -97,6 +97,24 @@
     return [array objectAtIndex:1];
 }
 
++ (NSDictionary*) populateTimeFrameProperty:(NSDate*)startDate endDate:(NSDate*)endDate{
+    if ([startDate isEqualToDate:endDate]){
+        return @{
+                 @"date_time":[startDate RFC3339String]
+                 };
+    }
+    else{
+        return  @{
+                  @"time_interval": @{
+                                        @"start_date_time": [startDate RFC3339String],
+                                        @"end_date_time": [endDate RFC3339String]
+                                    }
+                };
+        
+    }
+
+}
+
 #pragma mark - Private
 
 - (id)data {
@@ -145,12 +163,7 @@
     [[(HKQuantitySample*)self.sample quantity] doubleValueForUnit:unit];
   return @{
     @"step_count": [NSNumber numberWithDouble:value],
-    @"effective_time_frame": @{
-      @"time_interval": @{
-        @"start_date_time": [self.sample.startDate RFC3339String],
-        @"end_date_time": [self.sample.endDate RFC3339String]
-      }
-    }
+    @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
   };
 }
 - (NSString*)schemaName {
@@ -176,12 +189,7 @@
       @"value": [NSNumber numberWithDouble:value],
       @"unit": unitString
     },
-    @"effective_time_frame": @{
-      @"time_interval": @{
-        @"start_date_time": [self.sample.startDate RFC3339String],
-        @"end_date_time": [self.sample.endDate RFC3339String]
-      }
-    }
+    @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
   };
 }
 - (NSString*)schemaName {
@@ -207,12 +215,7 @@
       @"value": [NSNumber numberWithDouble:value],
       @"unit": unitString
     },
-    @"effective_time_frame": @{
-      @"time_interval": @{
-        @"start_date_time": [self.sample.startDate RFC3339String],
-        @"end_date_time": [self.sample.endDate RFC3339String]
-      }
-    }
+    @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
   };
 }
 - (NSString*)schemaName {
@@ -237,9 +240,7 @@
       @"value": [NSNumber numberWithDouble:value],
       @"unit": @"beats/min"
     },
-    @"effective_time_frame": @{
-      @"date_time": [self.sample.startDate RFC3339String],
-    }
+    @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
   };
 }
 - (NSString*)schemaName {
@@ -265,12 +266,7 @@
       @"value": [NSNumber numberWithDouble:value],
       @"unit": unitString
     },
-    @"effective_time_frame": @{
-      @"time_interval": @{
-        @"start_date_time": [self.sample.startDate RFC3339String],
-        @"end_date_time": [self.sample.endDate RFC3339String]
-      }
-    }
+    @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
   };
 }
 - (NSString*)schemaName {
@@ -296,12 +292,8 @@
       @"value": [NSNumber numberWithDouble:value],
       @"unit": unitString
     },
-    @"effective_time_frame": @{
-      @"time_interval": @{
-        @"start_date_time": [self.sample.startDate RFC3339String],
-        @"end_date_time": [self.sample.endDate RFC3339String]
-      }
-    }
+    @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+
   };
 }
 - (NSString*)schemaName {
@@ -335,10 +327,7 @@
       @"value": value,
       @"unit": @"sec"
     },
-    @"effective_time_frame": @{
-      @"start_date_time": [self.sample.startDate RFC3339String],
-      @"end_date_time": [self.sample.endDate RFC3339String]
-    }
+    @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
   };
 }
 - (NSString*)schemaName {
@@ -398,12 +387,7 @@
       @"unit": unitString,
       @"value": [NSNumber numberWithDouble: diastolicValue]
     },
-    @"effective_time_frame": @{
-      @"time_interval": @{
-        @"start_date_time": [self.sample.startDate RFC3339String],
-        @"end_date_time": [self.sample.endDate RFC3339String]
-      }
-    }
+    @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
   };
 }
 - (NSString*)schemaName {
@@ -435,12 +419,13 @@
             @"value":[NSNumber numberWithDouble:value],
             @"unit":unitStringForSchema
         },
-        @"effective_time_frame": @{
-            @"time_interval": @{
-                @"start_date_time": [quantitySample.startDate RFC3339String],
-                @"end_date_time": [quantitySample.endDate RFC3339String]
-            }
-        }
+        @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:quantitySample.startDate endDate:quantitySample.endDate]
+//        @"effective_time_frame": @{
+//            @"time_interval": @{
+//                @"start_date_time": [quantitySample.startDate RFC3339String],
+//                @"end_date_time": [quantitySample.endDate RFC3339String]
+//            }
+//        }
     };
     
 }
@@ -494,27 +479,27 @@
 //    }
     
     //TODO: need to add metadata
-    NSDictionary *effectiveTimeFrameDictionary = [[NSDictionary alloc ]init];
-    if ([quantitySample.startDate isEqualToDate:quantitySample.endDate]){
-        effectiveTimeFrameDictionary = @{
-                                         @"date_time":[quantitySample.startDate RFC3339String]
-                                         };
-    }
-    else{
-        effectiveTimeFrameDictionary = @{
-                                          @"time_interval": @{
-                                                  @"start_date_time": [quantitySample.startDate RFC3339String],
-                                                  @"end_date_time": [quantitySample.endDate RFC3339String]
-                                                  }
-                                          };
-
-    }
+//    NSDictionary *effectiveTimeFrameDictionary = [[NSDictionary alloc ]init];
+//    if ([quantitySample.startDate isEqualToDate:quantitySample.endDate]){
+//        effectiveTimeFrameDictionary = @{
+//                                         @"date_time":[quantitySample.startDate RFC3339String]
+//                                         };
+//    }
+//    else{
+//        effectiveTimeFrameDictionary = @{
+//                                          @"time_interval": @{
+//                                                  @"start_date_time": [quantitySample.startDate RFC3339String],
+//                                                  @"end_date_time": [quantitySample.endDate RFC3339String]
+//                                                  }
+//                                          };
+//
+//    }
     
     
     NSDictionary *partialSerializedDictionary =
     @{
         @"quantity_type":[[quantitySample quantityType] description] ,
-        @"effective_time_frame":effectiveTimeFrameDictionary
+        @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:quantitySample.startDate endDate:quantitySample.endDate]
     } ;
     NSMutableDictionary *fullSerializedDictionary = [partialSerializedDictionary mutableCopy];
     [fullSerializedDictionary addEntriesFromDictionary:serializedUnitValues];
@@ -557,23 +542,8 @@
         @throw e;
     }
     
-    NSDictionary *effectiveTimeFrameDictionary = [[NSDictionary alloc ]init];
-    if ([categorySample.startDate isEqualToDate:categorySample.endDate]){
-        effectiveTimeFrameDictionary = @{
-                                         @"date_time":[categorySample.startDate RFC3339String]
-                                         };
-    }
-    else{
-        effectiveTimeFrameDictionary = @{
-                                         @"time_interval": @{
-                                                 @"start_date_time": [categorySample.startDate RFC3339String],
-                                                 @"end_date_time": [categorySample.endDate RFC3339String]
-                                                 }
-                                         };
-        
-    }
     return @{
-             @"effective_time_frame":effectiveTimeFrameDictionary,
+             @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:categorySample.startDate endDate:categorySample.endDate],
              @"category_type": [[categorySample categoryType] description],
              @"category_value": schemaMappedValue
              };
@@ -621,24 +591,7 @@
         }
     }
     
-    
-    NSDictionary *effectiveTimeFrameDictionary = [[NSDictionary alloc ]init];
-    if ([correlationSample.startDate isEqualToDate:correlationSample.endDate]){
-        effectiveTimeFrameDictionary = @{
-                                         @"date_time":[correlationSample.startDate RFC3339String]
-                                         };
-    }
-    else{
-        effectiveTimeFrameDictionary = @{
-                                         @"time_interval": @{
-                                                 @"start_date_time": [correlationSample.startDate RFC3339String],
-                                                 @"end_date_time": [correlationSample.endDate RFC3339String]
-                                                 }
-                                         };
-        
-    }
-    
-    return @{@"effective_time_frame":effectiveTimeFrameDictionary,
+    return @{@"effective_time_frame":[OMHSerializer populateTimeFrameProperty:correlationSample.startDate endDate:correlationSample.endDate],
              @"correlation_type":[correlationSample.correlationType description],
              @"quantity_samples":quantitySampleArray,
              @"category_samples":categorySampleArray
