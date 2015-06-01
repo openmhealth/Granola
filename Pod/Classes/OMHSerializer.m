@@ -1,6 +1,7 @@
 #import "OMHSerializer.h"
 #import "NSDate+RFC3339.h"
 #import <ObjectiveSugar/ObjectiveSugar.h>
+#import "OMHWorkoutEnumMap.h"
 
 @interface OMHSerializer()
 @property (nonatomic, retain) HKSample* sample;
@@ -27,7 +28,8 @@
       HKCorrelationTypeIdentifierBloodPressure: @"OMHSerializerBloodPressure",
       HKQuantityTypeIdentifierDietaryBiotin: @"OMHSerializerGenericQuantitySample",
       HKQuantityTypeIdentifierInhalerUsage: @"OMHSerializerGenericQuantitySample",
-      HKCorrelationTypeIdentifierFood: @"OMHSerializerGenericCorrelation"
+      HKCorrelationTypeIdentifierFood: @"OMHSerializerGenericCorrelation",
+      HKWorkoutTypeIdentifier: @"OMHSerializerGenericWorkout"
     };
   }
   return typeIdsToClasses;
@@ -607,3 +609,43 @@
     return @"1.0";
 }
 @end
+
+@interface OMHSerializerGenericWorkout : OMHSerializer; @end
+@implementation OMHSerializerGenericWorkout
+
++ (BOOL)canSerialize:(HKSample *)sample error:(NSError *__autoreleasing *)error {
+    return YES;
+}
+
+- (id)bodyData {
+    HKWorkout *workoutSample = (HKWorkout*)self.sample;
+    //NSDictionary *effectiveTimeFrameDictionary = ;
+    NSMutableDictionary *workoutPropertyDictionary = [NSMutableDictionary new];
+    if(workoutSample.totalDistance){
+        NSString *unitString = [OMHSerializer parseUnitFromQuantity:workoutSample.totalDistance];
+        [workoutPropertyDictionary setObject:@{@"value":[NSNumber numberWithDouble:[workoutSample.totalDistance doubleValueForUnit:[HKUnit unitFromString:unitString]]],@"unit":unitString} forKey:@"distance"];
+    }
+    if(workoutSample.totalEnergyBurned){
+        [workoutPropertyDictionary setObject:@{@"value":[NSNumber numberWithDouble:[workoutSample.totalEnergyBurned doubleValueForUnit:[HKUnit unitFromString:@"kcal"]]],@"unit":@"kcal"} forKey:@"kcal_burned"];
+    }
+    if(workoutSample.duration){
+        [workoutPropertyDictionary setObject:@{@"value":[NSNumber numberWithDouble:workoutSample.duration],@"unit":@"sec"} forKey:@"duration"];
+    }
+    
+    [workoutPropertyDictionary addEntriesFromDictionary:@{
+                                                          @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:workoutSample.startDate endDate:workoutSample.endDate],
+                                                          @"activity_name":[OMHWorkoutEnumMap stringForHKWorkoutActivityType:workoutSample.workoutActivityType]
+                                                          
+                                                         }];
+    return workoutPropertyDictionary;
+}
+
+- (NSString*)schemaName {
+    return @"hk-workout";
+}
+- (NSString*)schemaVersion {
+    return @"1.0";
+}
+
+@end
+
