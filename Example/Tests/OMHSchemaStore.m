@@ -28,32 +28,22 @@
 }
 
 - (void)loadSchemas {
-  _storage = [VVMutableJSONSchemaStorage storage];
-  [@[
-    @"omh/schema-id",
-    @"omh/date-time",
-    @"omh/unit-value",
-    @"omh/duration-unit-value",
-    @"omh/part-of-day",
-    @"omh/time-interval",
-    @"omh/time-frame",
-    @"omh/header",
-    @"omh/data-point",
-    @"omh/step-count"
-  ] each:^(NSString* partialPath) {
-    NSURL* schemaURI = [self schemaURIForPartialPath:partialPath];
-    // add schema at URI
-    NSError *error = nil;
-    VVJSONSchema* schema =
-      [VVJSONSchema schemaWithData:[NSData dataWithContentsOfURL:schemaURI]
-                           baseURI:schemaURI
-                  referenceStorage:_storage
-                             error:&error];
-    NSAssert(schema,
-        @"Failed to create schema: %@, error: %@", schemaURI, error);
-    NSAssert([_storage addSchema:schema],
-        @"Failed to add schema to storage: %@", schemaURI);
-  }];
+    _storage = [VVMutableJSONSchemaStorage storage];
+    [[OMHSchemaStore schemaPartialPaths]
+     each:^(NSString* partialPath) {
+         NSURL* schemaURI = [self schemaURIForPartialPath:partialPath];
+         // add schema at URI
+         NSError *error = nil;
+         VVJSONSchema* schema =
+         [VVJSONSchema schemaWithData:[NSData dataWithContentsOfURL:schemaURI]
+                              baseURI:schemaURI
+                     referenceStorage:_storage
+                                error:&error];
+         NSAssert(schema,
+                  @"Failed to create schema: %@, error: %@", schemaURI, error);
+         NSAssert([_storage addSchema:schema],
+                  @"Failed to add schema to storage: %@", schemaURI);
+     }];
 }
 
 - (VVJSONSchema*)schemaForPartialPath:(NSString*)path {
@@ -75,6 +65,59 @@
   NSAssert(schemaURI, @"No schema %@ in %@", filename, dirname);
   return schemaURI;
 }
+
++ (NSArray*)schemaPartialPaths{
+    static NSArray* schemaPartialPaths = nil;
+    
+    if (schemaPartialPaths == nil)
+    {
+        schemaPartialPaths = @[
+                               @"omh/schema-id",
+                               @"omh/date-time",
+                               @"omh/unit-value",
+                               @"omh/duration-unit-value",
+                               @"omh/part-of-day",
+                               @"omh/time-interval",
+                               @"omh/time-frame",
+                               @"omh/header",
+                               @"omh/data-point",
+                               @"omh/step-count",
+                               @"omh/length-unit-value",
+                               @"omh/mass-unit-value",
+                               @"omh/descriptive-statistic",
+                               @"omh/body-height",
+                               @"omh/body-weight",
+                               @"omh/activity-name",
+                               @"omh/area-unit-value",
+                               @"omh/temporal-relationship-to-sleep",
+                               @"omh/blood-specimen-type",
+                               @"omh/temporal-relationship-to-meal",
+                               @"omh/blood-glucose",
+                               @"omh/position-during-measurement",
+                               @"omh/systolic-blood-pressure",
+                               @"omh/diastolic-blood-pressure",
+                               @"omh/blood-pressure",
+                               @"omh/temporal-relationship-to-physical-activity",
+                               @"omh/heart-rate",
+                               @"omh/body-mass-index",
+                               @"omh/sleep-duration",
+                               @"omh/physical-activity",
+                               @"omh/kcal-unit-value",
+                               @"omh/calories-burned",
+                               @"granola/hk-metadata",
+                               @"granola/hk-quantity-type",
+                               @"granola/hk-quantity-sample",
+                               @"granola/hk-category-type",
+                               @"granola/hk-category-sample",
+                               @"granola/hk-correlation-type",
+                               @"granola/hk-correlation",
+                               @"granola/hk-workout"];
+    }
+    
+    return schemaPartialPaths;
+}
+
+
 
 @end
 

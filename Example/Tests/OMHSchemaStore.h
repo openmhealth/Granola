@@ -4,5 +4,7 @@
 + (BOOL)validateObject:(id)object
    againstSchemaAtPath:(NSString*)path
              withError:(NSError**)validationError;
++ (NSArray*) schemaPartialPaths;
+
 @end
 
