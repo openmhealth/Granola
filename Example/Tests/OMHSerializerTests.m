@@ -371,41 +371,66 @@ describe(HKQuantityTypeIdentifierActiveEnergyBurned, ^{
   });
 });
 
-describe(HKCategoryTypeIdentifierSleepAnalysis, ^{
-  NSString* identifier = HKCategoryTypeIdentifierSleepAnalysis;
+describe(@"HKCategoryTypeIdentifierSleepAnalysis InBed", ^{
+  
   itShouldBehaveLike(@"AnySerializerForSupportedSample", ^{
       NSDate* start = [NSDate date];
       NSDate* end = [start dateByAddingTimeInterval:60*60*8];
     HKSample* sample =
       [OMHSampleFactory typeIdentifier:HKCategoryTypeIdentifierSleepAnalysis
-                                 attrs:@{ @"start": start, @"end": end }];
+                                 attrs:@{ @"start": start, @"end": end, @"value":@(HKCategoryValueSleepAnalysisInBed)}];
     return @{
       @"sample": sample,
       @"pathsToValues": @{
         @"header.schema_id.name": @"hk-category-sample",
-        @"body.category_value": @"Asleep",
+        @"body.category_value": @"InBed",
         @"body.category_type": HKCategoryTypeIdentifierSleepAnalysis,
         @"body.effective_time_frame.time_interval.start_date_time": [start RFC3339String],
         @"body.effective_time_frame.time_interval.end_date_time": [end RFC3339String],
       }
     };
   });
-  describe(@"-jsonForSample:error:", ^{
-    it(@"returns nil and populates error if sample's value unsupported", ^{
-      HKCategoryType* type =
-        [HKObjectType categoryTypeForIdentifier:identifier];
-      HKSample* sample =
-        [HKCategorySample categorySampleWithType:type
-                                           value:HKCategoryValueSleepAnalysisInBed
-                                       startDate:[NSDate date]
-                                         endDate:[NSDate date]];
-      OMHSerializer* instance = [OMHSerializer new];
-      NSError* error;
-      NSString* json = [instance jsonForSample:sample error:&error];
-        expect(json).notTo.beNil();
-        expect(error).to.beNil();
+//  describe(@"-jsonForSample:error:", ^{
+//    it(@"returns nil and populates error if sample's value unsupported", ^{
+//      HKCategoryType* type =
+//        [HKObjectType categoryTypeForIdentifier:identifier];
+//      HKSample* sample =
+//        [HKCategorySample categorySampleWithType:type
+//                                           value:HKCategoryValueSleepAnalysisInBed
+//                                       startDate:[NSDate date]
+//                                         endDate:[NSDate date]];
+//      OMHSerializer* instance = [OMHSerializer new];
+//      NSError* error;
+//      NSString* json = [instance jsonForSample:sample error:&error];
+//        expect(json).notTo.beNil();
+//        expect(error).to.beNil();
+//    });
+//  });
+});
+
+describe(@"HKCategoryTypeIdentifierSleepAnalysis Asleep",^{
+    
+    itShouldBehaveLike(@"AnySerializerForSupportedSample", ^{
+        NSDate* start = [NSDate date];
+        NSInteger secs = [@1800 integerValue];
+        NSDate* end = [start dateByAddingTimeInterval:secs];
+        
+
+        HKSample* sample =
+        [OMHSampleFactory typeIdentifier:HKCategoryTypeIdentifierSleepAnalysis
+                                   attrs:@{ @"start": start, @"end": end, @"value":@(HKCategoryValueSleepAnalysisAsleep)}];
+        return @{
+                 @"sample":sample,
+                 @"pathsToValues":@{
+                         @"header.schema_id.name": @"sleep-duration",
+                         @"body.sleep_duration.value": [NSNumber numberWithInteger:secs],
+                         @"body.sleep_duration.unit": @"sec",
+                         @"body.effective_time_frame.time_interval.start_date_time": [start RFC3339String],
+                         @"body.effective_time_frame.time_interval.end_date_time": [end RFC3339String]
+
+                         }
+                 };
     });
-  });
 });
 
 describe(HKQuantityTypeIdentifierBodyMassIndex, ^{
@@ -557,7 +582,6 @@ describe(HKCorrelationTypeIdentifierFood,^{
                          @"body.effective_time_frame.time_interval.start_date_time": [correlationStart RFC3339String],
                          @"body.effective_time_frame.time_interval.end_date_time": [correlationEnd RFC3339String],
                          @"body.correlation_type": [HKCorrelationTypeIdentifierFood description],
-                         //@"body.quantity_samples": @[energyConsumedQuantitySample,carbConsumedQuantitySample]
                          @"body.quantity_samples.effective_time_frame.date_time": @[[sampleDate RFC3339String],[sampleDate RFC3339String]],
                          @"body.quantity_samples.unit_value.value": @[carbValue,calorieValue],
                          @"body.quantity_samples.unit_value.unit": @[carbUnitString,calorieUnitString],

@@ -26,11 +26,15 @@
   if (sampleTypeIdentifier == HKCategoryTypeIdentifierSleepAnalysis) {
     HKCategoryType* type =
       [HKObjectType categoryTypeForIdentifier:sampleTypeIdentifier];
-    
+      int value = HKCategoryValueSleepAnalysisAsleep;
+      if(attrs[@"value"]){
+          NSString *valueStr = (NSString*)attrs[@"value"];
+          value = [valueStr integerValue];
+      }
     
     sample =
     [HKCategorySample categorySampleWithType:type
-                                       value:HKCategoryValueSleepAnalysisAsleep
+                                       value:value
                                    startDate:start
                                      endDate:end
                                     metadata:metadata];
