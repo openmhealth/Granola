@@ -140,7 +140,7 @@
       @"id": self.sample.UUID.UUIDString,
       @"creation_date_time": [self.sample.startDate RFC3339String],
       @"schema_id": @{
-        @"namespace": @"omh",
+        @"namespace": [self schemaNamespace],
         @"name": [self schemaName],
         @"version": [self schemaVersion]
       },
@@ -159,6 +159,10 @@
 
 - (id)bodyData {
   @throw [[self class] unimplementedException];
+}
+
+- (NSString*)schemaNamespace {
+    @throw [[self class] unimplementedException];
 }
 
 + (NSException*)unimplementedException {
@@ -189,6 +193,9 @@
 - (NSString*)schemaVersion {
   return @"1.0";
 }
+- (NSString*)schemaNamespace{
+    return @"omh";
+}
 @end
 
 @interface OMHSerializerHeight : OMHSerializer; @end;
@@ -214,6 +221,9 @@
 }
 - (NSString*)schemaVersion {
   return @"1.0";
+}
+- (NSString*)schemaNamespace{
+    return @"omh";
 }
 @end
 
@@ -241,6 +251,9 @@
 - (NSString*)schemaVersion {
   return @"1.0";
 }
+- (NSString*)schemaNamespace{
+    return @"omh";
+}
 @end
 
 @interface OMHSerializerHeartRate : OMHSerializer; @end;
@@ -265,6 +278,9 @@
 }
 - (NSString*)schemaVersion {
   return @"1.0";
+}
+- (NSString*)schemaNamespace{
+    return @"omh";
 }
 @end
 
@@ -292,6 +308,9 @@
 - (NSString*)schemaVersion {
   return @"1.0";
 }
+- (NSString*)schemaNamespace{
+    return @"omh";
+}
 @end
 
 @interface OMHSerializerEnergyBurned : OMHSerializer; @end;
@@ -318,6 +337,9 @@
 }
 - (NSString*)schemaVersion {
   return @"1.0";
+}
+- (NSString*)schemaNamespace{
+    return @"omh";
 }
 @end
 
@@ -352,6 +374,9 @@
 }
 - (NSString*)schemaVersion {
   return @"1.0";
+}
+- (NSString*)schemaNamespace{
+    return @"omh";
 }
 @end
 
@@ -413,6 +438,9 @@
 - (NSString*)schemaVersion {
   return @"1.0";
 }
+- (NSString*)schemaNamespace{
+    return @"omh";
+}
 @end
 
 @interface OMHSerializerBodyMassIndex : OMHSerializer; @end;
@@ -446,7 +474,9 @@
 - (NSString*)schemaVersion {
     return @"1.0";
 }
-
+- (NSString*)schemaNamespace{
+    return @"omh";
+}
 @end
 
 @interface OMHSerializerGenericQuantitySample : OMHSerializer; @end;
@@ -499,6 +529,9 @@
 - (NSString*)schemaVersion {
     return @"1.0";
 }
+- (NSString*)schemaNamespace{
+    return @"granola";
+}
 @end
 
 @interface OMHSerializerGenericCategorySample : OMHSerializer; @end;
@@ -548,6 +581,9 @@
 }
 - (NSString*)schemaVersion {
     return @"1.0";
+}
+- (NSString*)schemaNamespace{
+    return @"granola";
 }
 @end
 
@@ -606,6 +642,9 @@
 - (NSString*)schemaVersion {
     return @"1.0";
 }
+- (NSString*)schemaNamespace{
+    return @"granola";
+}
 @end
 
 @interface OMHSerializerGenericWorkout : OMHSerializer; @end
@@ -647,6 +686,8 @@
 - (NSString*)schemaVersion {
     return @"1.0";
 }
-
+- (NSString*)schemaNamespace{
+    return @"granola";
+}
 @end
 
