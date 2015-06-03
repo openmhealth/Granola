@@ -147,9 +147,7 @@
                           @"end_date_time": [endDate RFC3339String]
                           }
                   };
-        
     }
-    
 }
 
 + (NSDictionary*) serializeMetadataArray:(NSDictionary*)metadata{
@@ -487,16 +485,14 @@
     return NO;
 }
 - (id)bodyData {
-    NSString *unitStringForValue = @"count";
-    HKUnit *unit = [HKUnit unitFromString:unitStringForValue];
+    HKUnit *unit = [HKUnit unitFromString:@"count"];
     HKQuantitySample *quantitySample = (HKQuantitySample*)self.sample;
     double value = [[quantitySample quantity] doubleValueForUnit:unit];
-    NSString *unitStringForSchema = @"kg/m2";
     
     return @{
         @"body_mass_index": @{
             @"value":[NSNumber numberWithDouble:value],
-            @"unit":unitStringForSchema
+            @"unit":@"kg/m2"
         },
         @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:quantitySample.startDate endDate:quantitySample.endDate]
     };
@@ -550,27 +546,27 @@
     NSMutableDictionary *serializedUnitValues = [NSMutableDictionary new];
     if ([quantity isCompatibleWithUnit:[HKUnit unitFromString:@"count"]]) {
         [serializedUnitValues addEntriesFromDictionary:@{
-                         @"count": [NSNumber numberWithDouble:[quantity doubleValueForUnit:[HKUnit unitFromString:@"count"]]]
-                         }
+                                                         @"count": [NSNumber numberWithDouble:[quantity doubleValueForUnit:[HKUnit unitFromString:@"count"]]]
+                                                         }
          ];
     }
     else{
         NSString *unitString = [OMHSerializer parseUnitFromQuantity:quantity];
         [serializedUnitValues addEntriesFromDictionary:@{
-                                @"unit_value":@{
-                                    @"value": [NSNumber numberWithDouble:[quantity doubleValueForUnit:[HKUnit unitFromString:unitString]]],
-                                    @"unit": unitString
-                                
-                                }
-                            }
+                                                         @"unit_value":@{
+                                                                 @"value": [NSNumber numberWithDouble:[quantity doubleValueForUnit:[HKUnit unitFromString:unitString]]],
+                                                                 @"unit": unitString
+                                                                 
+                                                                 }
+                                                         }
          ];
     }
-      
+    
     NSDictionary *partialSerializedDictionary =
     @{
-        @"quantity_type":[[quantitySample quantityType] description] ,
-        @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:quantitySample.startDate endDate:quantitySample.endDate]
-    } ;
+      @"quantity_type":[[quantitySample quantityType] description] ,
+      @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:quantitySample.startDate endDate:quantitySample.endDate]
+      } ;
     NSMutableDictionary *fullSerializedDictionary = [partialSerializedDictionary mutableCopy];
     [fullSerializedDictionary addEntriesFromDictionary:serializedUnitValues];
     return fullSerializedDictionary;
@@ -635,14 +631,13 @@
     
     //Sleep analysis is currently the only supported HKCategorySample in HealthKit, so we can assume that values we receive will relate to sleep analysis
     //Error checking for correct types is done in the canSerialize method.
-    NSString *schemaMappedValue = [OMHHealthKitConstantsMapper stringForHKSleepAnalysisValue:categorySample.value];
-    NSMutableDictionary *fullSerializedDictionary = [NSMutableDictionary new];
-    [fullSerializedDictionary addEntriesFromDictionary:@{
-                                                         @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:categorySample.startDate endDate:categorySample.endDate],
-                                                         @"category_type": [[categorySample categoryType] description],
-                                                         @"category_value": schemaMappedValue
-                                                         }];
-    return fullSerializedDictionary;
+    NSString *schemaMappedValue = [OMHHealthKitConstantsMapper stringForHKSleepAnalysisValue:(int)categorySample.value];
+    
+    return @{
+             @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:categorySample.startDate endDate:categorySample.endDate],
+             @"category_type": [[categorySample categoryType] description],
+             @"category_value": schemaMappedValue
+             };
 }
 - (NSString*)schemaName {
     return @"hk-category-sample";
@@ -731,16 +726,11 @@
         }
     }
     
-    NSMutableDictionary *fullSerializedDictionary = [NSMutableDictionary new];
-    [fullSerializedDictionary addEntriesFromDictionary:@{@"effective_time_frame":[OMHSerializer populateTimeFrameProperty:correlationSample.startDate endDate:correlationSample.endDate],
+    return @{@"effective_time_frame":[OMHSerializer populateTimeFrameProperty:correlationSample.startDate endDate:correlationSample.endDate],
                                                          @"correlation_type":[correlationSample.correlationType description],
                                                          @"quantity_samples":quantitySampleArray,
                                                          @"category_samples":categorySampleArray
-                                                         }];
-    return fullSerializedDictionary;
-    
-    
-    
+                                                         };
 }
 - (NSString*)schemaName {
     return @"hk-correlation";
