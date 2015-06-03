@@ -689,14 +689,26 @@
             //create serialized with the sample input, then call body
             OMHSerializerGenericQuantitySample *quantitySampleSerializer = [OMHSerializerGenericQuantitySample new];
             quantitySampleSerializer = [quantitySampleSerializer initWithSample:(HKQuantitySample*)sample];
-            NSDictionary *serializedQuantitySample = (NSDictionary*)[quantitySampleSerializer bodyData];
-            [quantitySampleArray addObject:serializedQuantitySample];
+            NSError *error = nil;
+            if([OMHSerializerGenericQuantitySample canSerialize:(HKSample*)sample error:&error]){
+                NSDictionary *serializedQuantitySample = (NSDictionary*)[quantitySampleSerializer bodyData];
+                [quantitySampleArray addObject:serializedQuantitySample];
+            }
+            else{
+                NSLog(@"%@",[error localizedDescription]);
+            }
         }
         else if ([sample isKindOfClass:[HKCategorySample class]]){
             OMHSerializerGenericCategorySample *categorySampleSerializer = [OMHSerializerGenericCategorySample new];
             categorySampleSerializer = [categorySampleSerializer initWithSample:(HKCategorySample*)sample];
-            NSDictionary *serializedCategorySample = (NSDictionary*)[categorySampleSerializer bodyData];
-            [quantitySampleArray addObject:serializedCategorySample];
+            NSError *error = nil;
+            if([OMHSerializerGenericCategorySample canSerialize:(HKSample*)sample error:&error]){
+                NSDictionary *serializedCategorySample = (NSDictionary*)[categorySampleSerializer bodyData];
+                [quantitySampleArray addObject:serializedCategorySample];
+            }
+            else{
+                NSLog(@"%@",[error localizedDescription]);
+            }
         }
         else {
             NSException *e = [NSException
