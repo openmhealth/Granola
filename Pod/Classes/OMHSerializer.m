@@ -31,39 +31,39 @@
 
 + (NSDictionary*)typeIdentifiersWithOMHSchemaToClasses {
     //This list contains a mapping of HealthKit type identifiers to a schema if an OMH schema exists for that type.
-  static NSDictionary* typeIdsToClasses = nil;
-  if (typeIdsToClasses == nil) {
-    typeIdsToClasses = @{
-      HKQuantityTypeIdentifierHeight : @"OMHSerializerHeight",
-      HKQuantityTypeIdentifierBodyMass : @"OMHSerializerWeight",
-      HKQuantityTypeIdentifierStepCount : @"OMHSerializerStepCount",
-      HKQuantityTypeIdentifierHeartRate : @"OMHSerializerHeartRate",
-      HKQuantityTypeIdentifierBloodGlucose : @"OMHSerializerBloodGlucose",
-      HKQuantityTypeIdentifierActiveEnergyBurned: @"OMHSerializerEnergyBurned",
-      HKQuantityTypeIdentifierBodyMassIndex: @"OMHSerializerBodyMassIndex",
-      HKCategoryTypeIdentifierSleepAnalysis : @"OMHSerializerSleepAnalysis", //Samples with Asleep value use this serializer, samples with InBed value use generic category serializer 
-      HKCorrelationTypeIdentifierBloodPressure: @"OMHSerializerBloodPressure"
-    };
-  }
-  return typeIdsToClasses;
+    static NSDictionary* typeIdsToClasses = nil;
+    if (typeIdsToClasses == nil) {
+        typeIdsToClasses = @{
+                             HKQuantityTypeIdentifierHeight : @"OMHSerializerHeight",
+                             HKQuantityTypeIdentifierBodyMass : @"OMHSerializerWeight",
+                             HKQuantityTypeIdentifierStepCount : @"OMHSerializerStepCount",
+                             HKQuantityTypeIdentifierHeartRate : @"OMHSerializerHeartRate",
+                             HKQuantityTypeIdentifierBloodGlucose : @"OMHSerializerBloodGlucose",
+                             HKQuantityTypeIdentifierActiveEnergyBurned: @"OMHSerializerEnergyBurned",
+                             HKQuantityTypeIdentifierBodyMassIndex: @"OMHSerializerBodyMassIndex",
+                             HKCategoryTypeIdentifierSleepAnalysis : @"OMHSerializerSleepAnalysis", //Samples with Asleep value use this serializer, samples with InBed value use generic category serializer
+                             HKCorrelationTypeIdentifierBloodPressure: @"OMHSerializerBloodPressure"
+                             };
+    }
+    return typeIdsToClasses;
 }
 
 + (NSArray*)typeIdentifiersWithOMHSchema {
-  return [[self typeIdentifiersWithOMHSchemaToClasses] allKeys];
+    return [[self typeIdentifiersWithOMHSchemaToClasses] allKeys];
 }
 
 + (BOOL)canSerialize:(HKSample*)sample error:(NSError**)error {
-  @throw [self unimplementedException];
+    @throw [self unimplementedException];
 }
 
 - (id)initWithSample:(HKSample*)sample {
-  self = [super init];
-  if (self) {
-    _sample = sample;
-  } else {
-    return nil;
-  }
-  return self;
+    self = [super init];
+    if (self) {
+        _sample = sample;
+    } else {
+        return nil;
+    }
+    return self;
 }
 
 - (NSString*)jsonForSample:(HKSample*)sample error:(NSError**)error {
@@ -168,30 +168,30 @@
     NSMutableDictionary *serializedBodyDictionaryWithMetadata = [NSMutableDictionary dictionaryWithDictionary:serializedBodyDictionaryWithoutMetadata];
     [serializedBodyDictionaryWithMetadata addEntriesFromDictionary:[OMHSerializer serializeMetadataArray:self.sample.metadata]];
     return @{
-            @"header": @{
-                    @"id": self.sample.UUID.UUIDString,
-                    @"creation_date_time": [self.sample.startDate RFC3339String],
-                    @"schema_id": @{
-                            @"namespace": [self schemaNamespace],
-                            @"name": [self schemaName],
-                            @"version": [self schemaVersion]
-                            },
-                    },
-            @"body":serializedBodyDictionaryWithMetadata
-            };
+             @"header": @{
+                     @"id": self.sample.UUID.UUIDString,
+                     @"creation_date_time": [self.sample.startDate RFC3339String],
+                     @"schema_id": @{
+                             @"namespace": [self schemaNamespace],
+                             @"name": [self schemaName],
+                             @"version": [self schemaVersion]
+                             },
+                     },
+             @"body":serializedBodyDictionaryWithMetadata
+             };
     
 }
 
 - (NSString*)schemaName {
-  @throw [[self class] unimplementedException];
+    @throw [[self class] unimplementedException];
 }
 
 - (NSString*)schemaVersion {
-  @throw [[self class] unimplementedException];
+    @throw [[self class] unimplementedException];
 }
 
 - (id)bodyData {
-  @throw [[self class] unimplementedException];
+    @throw [[self class] unimplementedException];
 }
 
 - (NSString*)schemaNamespace {
@@ -199,31 +199,31 @@
 }
 
 + (NSException*)unimplementedException {
-  return [NSException exceptionWithName:NSInternalInconsistencyException
-                                 reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
-                               userInfo:nil];
+    return [NSException exceptionWithName:NSInternalInconsistencyException
+                                   reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
+                                 userInfo:nil];
 }
 @end
 
 @interface OMHSerializerStepCount : OMHSerializer; @end;
 @implementation OMHSerializerStepCount
 + (BOOL)canSerialize:(HKQuantitySample*)sample error:(NSError**)error {
-  return YES;
+    return YES;
 }
 - (id)bodyData {
-  HKUnit* unit = [HKUnit unitFromString:@"count"];
-  double value =
+    HKUnit* unit = [HKUnit unitFromString:@"count"];
+    double value =
     [[(HKQuantitySample*)self.sample quantity] doubleValueForUnit:unit];
-  return @{
-    @"step_count": [NSNumber numberWithDouble:value],
-    @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
-  };
+    return @{
+             @"step_count": [NSNumber numberWithDouble:value],
+             @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+             };
 }
 - (NSString*)schemaName {
-  return @"step-count";
+    return @"step-count";
 }
 - (NSString*)schemaVersion {
-  return @"1.0";
+    return @"1.0";
 }
 - (NSString*)schemaNamespace{
     return @"omh";
@@ -233,26 +233,26 @@
 @interface OMHSerializerHeight : OMHSerializer; @end;
 @implementation OMHSerializerHeight
 + (BOOL)canSerialize:(HKQuantitySample*)sample error:(NSError**)error {
-  return YES;
+    return YES;
 }
 - (id)bodyData {
-  NSString* unitString = @"cm";
-  HKUnit* unit = [HKUnit unitFromString:unitString];
-  double value =
+    NSString* unitString = @"cm";
+    HKUnit* unit = [HKUnit unitFromString:unitString];
+    double value =
     [[(HKQuantitySample*)self.sample quantity] doubleValueForUnit:unit];
-  return @{
-    @"body_height": @{
-      @"value": [NSNumber numberWithDouble:value],
-      @"unit": unitString
-    },
-    @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
-  };
+    return @{
+             @"body_height": @{
+                     @"value": [NSNumber numberWithDouble:value],
+                     @"unit": unitString
+                     },
+             @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+             };
 }
 - (NSString*)schemaName {
-  return @"body-height";
+    return @"body-height";
 }
 - (NSString*)schemaVersion {
-  return @"1.0";
+    return @"1.0";
 }
 - (NSString*)schemaNamespace{
     return @"omh";
@@ -262,26 +262,26 @@
 @interface OMHSerializerWeight : OMHSerializer; @end;
 @implementation OMHSerializerWeight
 + (BOOL)canSerialize:(HKQuantitySample*)sample error:(NSError**)error {
-  return YES;
+    return YES;
 }
 - (id)bodyData {
-  NSString* unitString = @"lb";
-  HKUnit* unit = [HKUnit unitFromString:unitString];
-  double value =
+    NSString* unitString = @"lb";
+    HKUnit* unit = [HKUnit unitFromString:unitString];
+    double value =
     [[(HKQuantitySample*)self.sample quantity] doubleValueForUnit:unit];
-  return @{
-    @"body_weight": @{
-      @"value": [NSNumber numberWithDouble:value],
-      @"unit": unitString
-    },
-    @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
-  };
+    return @{
+             @"body_weight": @{
+                     @"value": [NSNumber numberWithDouble:value],
+                     @"unit": unitString
+                     },
+             @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+             };
 }
 - (NSString*)schemaName {
-  return @"body-weight";
+    return @"body-weight";
 }
 - (NSString*)schemaVersion {
-  return @"1.0";
+    return @"1.0";
 }
 - (NSString*)schemaNamespace{
     return @"omh";
@@ -291,25 +291,25 @@
 @interface OMHSerializerHeartRate : OMHSerializer; @end;
 @implementation OMHSerializerHeartRate
 + (BOOL)canSerialize:(HKQuantitySample*)sample error:(NSError**)error {
-  return YES;
+    return YES;
 }
 - (id)bodyData {
-  HKUnit* unit = [HKUnit unitFromString:@"count/min"];
-  double value =
+    HKUnit* unit = [HKUnit unitFromString:@"count/min"];
+    double value =
     [[(HKQuantitySample*)self.sample quantity] doubleValueForUnit:unit];
-  return @{
-    @"heart_rate": @{
-      @"value": [NSNumber numberWithDouble:value],
-      @"unit": @"beats/min"
-    },
-    @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
-  };
+    return @{
+             @"heart_rate": @{
+                     @"value": [NSNumber numberWithDouble:value],
+                     @"unit": @"beats/min"
+                     },
+             @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+             };
 }
 - (NSString*)schemaName {
-  return @"heart-rate";
+    return @"heart-rate";
 }
 - (NSString*)schemaVersion {
-  return @"1.0";
+    return @"1.0";
 }
 - (NSString*)schemaNamespace{
     return @"omh";
@@ -319,26 +319,26 @@
 @interface OMHSerializerBloodGlucose : OMHSerializer; @end;
 @implementation OMHSerializerBloodGlucose
 + (BOOL)canSerialize:(HKQuantitySample*)sample error:(NSError**)error {
-  return YES;
+    return YES;
 }
 - (id)bodyData {
-  NSString* unitString = @"mg/dL";
-  HKUnit* unit = [HKUnit unitFromString:unitString];
-  double value =
+    NSString* unitString = @"mg/dL";
+    HKUnit* unit = [HKUnit unitFromString:unitString];
+    double value =
     [[(HKQuantitySample*)self.sample quantity] doubleValueForUnit:unit];
-  return @{
-    @"blood_glucose": @{
-      @"value": [NSNumber numberWithDouble:value],
-      @"unit": unitString
-    },
-    @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
-  };
+    return @{
+             @"blood_glucose": @{
+                     @"value": [NSNumber numberWithDouble:value],
+                     @"unit": unitString
+                     },
+             @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+             };
 }
 - (NSString*)schemaName {
-  return @"blood-glucose";
+    return @"blood-glucose";
 }
 - (NSString*)schemaVersion {
-  return @"1.0";
+    return @"1.0";
 }
 - (NSString*)schemaNamespace{
     return @"omh";
@@ -348,27 +348,27 @@
 @interface OMHSerializerEnergyBurned : OMHSerializer; @end;
 @implementation OMHSerializerEnergyBurned
 + (BOOL)canSerialize:(HKQuantitySample*)sample error:(NSError**)error {
-  return YES;
+    return YES;
 }
 - (id)bodyData {
-  NSString* unitString = @"kcal";
-  HKUnit* unit = [HKUnit unitFromString:unitString];
-  double value =
+    NSString* unitString = @"kcal";
+    HKUnit* unit = [HKUnit unitFromString:unitString];
+    double value =
     [[(HKQuantitySample*)self.sample quantity] doubleValueForUnit:unit];
-  return @{
-    @"kcal_burned": @{
-      @"value": [NSNumber numberWithDouble:value],
-      @"unit": unitString
-    },
-    @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
-
-  };
+    return @{
+             @"kcal_burned": @{
+                     @"value": [NSNumber numberWithDouble:value],
+                     @"unit": unitString
+                     },
+             @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+             
+             };
 }
 - (NSString*)schemaName {
-  return @"calories-burned";
+    return @"calories-burned";
 }
 - (NSString*)schemaVersion {
-  return @"1.0";
+    return @"1.0";
 }
 - (NSString*)schemaNamespace{
     return @"omh";
@@ -378,34 +378,34 @@
 @interface OMHSerializerSleepAnalysis : OMHSerializer; @end;
 @implementation OMHSerializerSleepAnalysis
 + (BOOL)canSerialize:(HKCategorySample*)sample error:(NSError**)error {
-  if (sample.value == HKCategoryValueSleepAnalysisAsleep) return YES;
-  if (error) {
-    NSString* errorMessage =
-      @"HKCategoryValueSleepAnalysis value HKCategoryValueSleepAnalysisInBed uses OMHSerializerGenericCategorySample";
-    NSDictionary* userInfo = @{ NSLocalizedDescriptionKey : errorMessage };
-    *error = [NSError errorWithDomain: OMHErrorDomain
-                                 code: OMHErrorCodeUnsupportedValues
-                             userInfo: userInfo];
-  }
-  return NO;
+    if (sample.value == HKCategoryValueSleepAnalysisAsleep) return YES;
+    if (error) {
+        NSString* errorMessage =
+        @"HKCategoryValueSleepAnalysis value HKCategoryValueSleepAnalysisInBed uses OMHSerializerGenericCategorySample";
+        NSDictionary* userInfo = @{ NSLocalizedDescriptionKey : errorMessage };
+        *error = [NSError errorWithDomain: OMHErrorDomain
+                                     code: OMHErrorCodeUnsupportedValues
+                                 userInfo: userInfo];
+    }
+    return NO;
 }
 - (id)bodyData {
-  id value =
+    id value =
     [NSNumber numberWithFloat:
-      [self.sample.endDate timeIntervalSinceDate:self.sample.startDate]];
-  return @{
-    @"sleep_duration": @{
-      @"value": value,
-      @"unit": @"sec"
-    },
-    @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
-  };
+     [self.sample.endDate timeIntervalSinceDate:self.sample.startDate]];
+    return @{
+             @"sleep_duration": @{
+                     @"value": value,
+                     @"unit": @"sec"
+                     },
+             @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+             };
 }
 - (NSString*)schemaName {
-  return @"sleep-duration";
+    return @"sleep-duration";
 }
 - (NSString*)schemaVersion {
-  return @"1.0";
+    return @"1.0";
 }
 - (NSString*)schemaNamespace{
     return @"omh";
@@ -415,60 +415,60 @@
 @interface OMHSerializerBloodPressure : OMHSerializer; @end;
 @implementation OMHSerializerBloodPressure
 + (BOOL)canSerialize:(HKCorrelation*)sample error:(NSError**)error {
-  NSSet* samples = sample.objects;
-  HKSample* (^firstSampleOfType)(NSString* typeIdentifier) =
+    NSSet* samples = sample.objects;
+    HKSample* (^firstSampleOfType)(NSString* typeIdentifier) =
     ^HKSample*(NSString* typeIdentifier){
-      return [[samples select:^BOOL(HKSample* sample) {
-        return [[sample sampleType].identifier isEqual:typeIdentifier];
-      }] firstObject];
+        return [[samples select:^BOOL(HKSample* sample) {
+            return [[sample sampleType].identifier isEqual:typeIdentifier];
+        }] firstObject];
     };
-  HKSample* systolicSample =
+    HKSample* systolicSample =
     firstSampleOfType(HKQuantityTypeIdentifierBloodPressureSystolic);
-  HKSample* diastolicSample =
+    HKSample* diastolicSample =
     firstSampleOfType(HKQuantityTypeIdentifierBloodPressureDiastolic);
-  if (systolicSample && diastolicSample) return YES;
-  if (error) {
-    NSString* errorMessage = @"Missing Diastolic or Systolic sample";
-    NSDictionary* userInfo = @{ NSLocalizedDescriptionKey : errorMessage };
-    *error = [NSError errorWithDomain: OMHErrorDomain
-                                 code: OMHErrorCodeUnsupportedValues
-                             userInfo: userInfo];
-  }
-  return NO;
+    if (systolicSample && diastolicSample) return YES;
+    if (error) {
+        NSString* errorMessage = @"Missing Diastolic or Systolic sample";
+        NSDictionary* userInfo = @{ NSLocalizedDescriptionKey : errorMessage };
+        *error = [NSError errorWithDomain: OMHErrorDomain
+                                     code: OMHErrorCodeUnsupportedValues
+                                 userInfo: userInfo];
+    }
+    return NO;
 }
 - (id)bodyData {
-  NSString* unitString = @"mmHg";
-  HKUnit* unit = [HKUnit unitFromString:unitString];
-  HKCorrelation* sample = (HKCorrelation*)self.sample;
-  double (^valueForFirstSampleOfType)(NSString* typeIdentifier) =
+    NSString* unitString = @"mmHg";
+    HKUnit* unit = [HKUnit unitFromString:unitString];
+    HKCorrelation* sample = (HKCorrelation*)self.sample;
+    double (^valueForFirstSampleOfType)(NSString* typeIdentifier) =
     ^(NSString* typeIdentifier) {
-      HKQuantitySample* found =
+        HKQuantitySample* found =
         [[sample.objects select:^BOOL(HKSample* sample) {
-          return [[sample sampleType].identifier isEqual:typeIdentifier];
+            return [[sample sampleType].identifier isEqual:typeIdentifier];
         }] firstObject];
-      return [found.quantity doubleValueForUnit:unit];
+        return [found.quantity doubleValueForUnit:unit];
     };
-  double systolicValue =
+    double systolicValue =
     valueForFirstSampleOfType(HKQuantityTypeIdentifierBloodPressureSystolic);
-  double diastolicValue =
+    double diastolicValue =
     valueForFirstSampleOfType(HKQuantityTypeIdentifierBloodPressureDiastolic);
-  return @{
-    @"systolic_blood_pressure": @{
-      @"unit": unitString,
-      @"value": [NSNumber numberWithDouble: systolicValue]
-    },
-    @"diastolic_blood_pressure": @{
-      @"unit": unitString,
-      @"value": [NSNumber numberWithDouble: diastolicValue]
-    },
-    @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
-  };
+    return @{
+             @"systolic_blood_pressure": @{
+                     @"unit": unitString,
+                     @"value": [NSNumber numberWithDouble: systolicValue]
+                     },
+             @"diastolic_blood_pressure": @{
+                     @"unit": unitString,
+                     @"value": [NSNumber numberWithDouble: diastolicValue]
+                     },
+             @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+             };
 }
 - (NSString*)schemaName {
-  return @"blood-pressure";
+    return @"blood-pressure";
 }
 - (NSString*)schemaVersion {
-  return @"1.0";
+    return @"1.0";
 }
 - (NSString*)schemaNamespace{
     return @"omh";
@@ -490,12 +490,12 @@
     double value = [[quantitySample quantity] doubleValueForUnit:unit];
     
     return @{
-        @"body_mass_index": @{
-            @"value":[NSNumber numberWithDouble:value],
-            @"unit":@"kg/m2"
-        },
-        @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:quantitySample.startDate endDate:quantitySample.endDate]
-    };
+             @"body_mass_index": @{
+                     @"value":[NSNumber numberWithDouble:value],
+                     @"unit":@"kg/m2"
+                     },
+             @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:quantitySample.startDate endDate:quantitySample.endDate]
+             };
     
 }
 - (NSString*)schemaName {
@@ -727,10 +727,10 @@
     }
     
     return @{@"effective_time_frame":[OMHSerializer populateTimeFrameProperty:correlationSample.startDate endDate:correlationSample.endDate],
-                                                         @"correlation_type":[correlationSample.correlationType description],
-                                                         @"quantity_samples":quantitySampleArray,
-                                                         @"category_samples":categorySampleArray
-                                                         };
+             @"correlation_type":[correlationSample.correlationType description],
+             @"quantity_samples":quantitySampleArray,
+             @"category_samples":categorySampleArray
+             };
 }
 - (NSString*)schemaName {
     return @"hk-correlation";
