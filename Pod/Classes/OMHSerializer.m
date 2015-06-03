@@ -349,7 +349,7 @@
   if (sample.value == HKCategoryValueSleepAnalysisAsleep) return YES;
   if (error) {
     NSString* errorMessage =
-      @"Unsupported HKCategoryValueSleepAnalysis value: HKCategoryValueSleepAnalysisInBed";
+      @"HKCategoryValueSleepAnalysis value HKCategoryValueSleepAnalysisInBed uses OMHSerializerGenericCategorySample";
     NSDictionary* userInfo = @{ NSLocalizedDescriptionKey : errorMessage };
     *error = [NSError errorWithDomain: OMHErrorDomain
                                  code: OMHErrorCodeUnsupportedValues
@@ -482,9 +482,33 @@
 @interface OMHSerializerGenericQuantitySample : OMHSerializer; @end;
 @implementation OMHSerializerGenericQuantitySample
 
-//TODO: Check if there are any necessary details to implement here
 + (BOOL)canSerialize:(HKSample *)sample error:(NSError *__autoreleasing *)error {
-    return YES;
+    @try{
+        HKQuantitySample *quantitySample = (HKQuantitySample*)sample;
+        if([[quantitySample.quantityType description] containsString:@"HKQuantityType"]){
+            return YES;
+        }
+        if (error) {
+            NSString* errorMessage =
+            @"HKQuantitySamples should have a quantity type that begins with 'HKQuantityType'";
+            NSDictionary* userInfo = @{ NSLocalizedDescriptionKey : errorMessage };
+            *error = [NSError errorWithDomain: OMHErrorDomain
+                                         code: OMHErrorCodeIncorrectType
+                                     userInfo: userInfo];
+        }
+        return NO;
+    }
+    @catch (NSException *exception) {
+        if (error) {
+            NSString* errorMessage =
+            @"OMHSerializerGenericQuantitySample is used for HKQuantitySamples only";
+            NSDictionary* userInfo = @{ NSLocalizedDescriptionKey : errorMessage };
+            *error = [NSError errorWithDomain: OMHErrorDomain
+                                         code: OMHErrorCodeUnsupportedValues
+                                     userInfo: userInfo];
+        }
+        return NO;
+    }
 }
 - (id)bodyData {
     HKQuantitySample *quantitySample = (HKQuantitySample*)self.sample;
@@ -537,38 +561,69 @@
 @interface OMHSerializerGenericCategorySample : OMHSerializer; @end;
 @implementation OMHSerializerGenericCategorySample
 
-//TODO: Check to see if there are any necessary details to implement here, probably check for sleep and value settings otherwise it will explode
 + (BOOL)canSerialize:(HKSample *)sample error:(NSError *__autoreleasing *)error {
-    //check whether the category type is contained in the list of currently appropriate
-    return YES;
+    BOOL canSerialize = YES;
+    @try{
+        HKCategorySample *categorySample = (HKCategorySample*) sample;
+        if(![[categorySample.categoryType description] isEqualToString:HKCategoryTypeIdentifierSleepAnalysis]){
+            if (error) {
+                NSString* errorMessage = @"HKCategoryTypeIdentifierSleepAnalysis is the only category type currently supported in HealthKit";
+                NSDictionary* userInfo = @{ NSLocalizedDescriptionKey : errorMessage };
+                *error = [NSError errorWithDomain: OMHErrorDomain
+                                             code: OMHErrorCodeUnsupportedType
+                                         userInfo: userInfo];
+            }
+            canSerialize = NO;
+        }
+        
+        if(categorySample.value != HKCategoryValueSleepAnalysisInBed && categorySample.value != HKCategoryValueSleepAnalysisAsleep && canSerialize){
+            if (error) {
+                NSString* errorMessage = @"Sleep analysis category samples can only have values contained in the HKCategoryValueSleepAnalysis enum";
+                NSDictionary* userInfo = @{ NSLocalizedDescriptionKey : errorMessage };
+                *error = [NSError errorWithDomain: OMHErrorDomain
+                                             code: OMHErrorCodeUnsupportedValues
+                                         userInfo: userInfo];
+            }
+            canSerialize = NO;
+        }
+        
+        return canSerialize;
+    }
+    @catch(NSException *exception){
+        if (error) {
+            NSString* errorMessage =
+            @"OMHSerializerGenericCategorySample is used for HKCategorySamples only";
+            NSDictionary* userInfo = @{ NSLocalizedDescriptionKey : errorMessage };
+            *error = [NSError errorWithDomain: OMHErrorDomain
+                                         code: OMHErrorCodeIncorrectType
+                                     userInfo: userInfo];
+        }
+        return NO;
+    }
+    
+    
 }
 - (id)bodyData {
     HKCategorySample *categorySample = (HKCategorySample*) self.sample;
     NSString *schemaMappedValue = [NSString new];
-    if ([[categorySample.categoryType description] isEqualToString:HKCategoryTypeIdentifierSleepAnalysis]){
-        switch (categorySample.value){
-            case 0:
-                schemaMappedValue = @"InBed";
-                break;
-            case 1:
-                schemaMappedValue = @"Asleep";
-                break;
-        }
-    }
-    else{
-        NSException *e = [NSException
-                          exceptionWithName:@"SerializerCategoryTypeIncorrect"
-                          reason:@"Generic category sample serializer received incorrect category type"
-                          userInfo:nil];
-        @throw e;
+    
+    //Sleep analysis is currently the only supported HKCategorySample in HealthKit, so we can assume that values we receive will relate to sleep analysis
+    //Error checking for correct types is done in the canSerialize method.
+    switch (categorySample.value){
+        case HKCategoryValueSleepAnalysisInBed:
+            schemaMappedValue = @"InBed";
+            break;
+        case HKCategoryValueSleepAnalysisAsleep:
+            schemaMappedValue = @"Asleep";
+            break;
     }
     
     NSMutableDictionary *fullSerializedDictionary = [NSMutableDictionary new];
     [fullSerializedDictionary addEntriesFromDictionary:@{
-                                                    @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:categorySample.startDate endDate:categorySample.endDate],
-                                                    @"category_type": [[categorySample categoryType] description],
-                                                    @"category_value": schemaMappedValue
-                                                    }];
+                                                         @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:categorySample.startDate endDate:categorySample.endDate],
+                                                         @"category_type": [[categorySample categoryType] description],
+                                                         @"category_value": schemaMappedValue
+                                                         }];
     
     if(self.sample.metadata.count>0){
         [fullSerializedDictionary setObject:[OMHSerializer serializeMetadataArray:self.sample.metadata] forKey:@"metadata"];
@@ -592,7 +647,37 @@
 
 //TODO: Implement
 + (BOOL)canSerialize:(HKSample *)sample error:(NSError *__autoreleasing *)error {
+    @try {
+        HKCorrelation *correlationSample = (HKCorrelation*)sample;
+        if(![correlationSample.correlationType.description isEqualToString:HKCorrelationTypeIdentifierBloodPressure] &&
+           ![correlationSample.correlationType.description isEqualToString:HKCorrelationTypeIdentifierFood]){
+            
+            if (error) {
+                NSString* errorMessage =
+                [NSString stringWithFormat:@"%@ is not a supported correlation type in HealthKit",correlationSample.correlationType.description];
+                NSDictionary* userInfo = @{ NSLocalizedDescriptionKey : errorMessage };
+                *error = [NSError errorWithDomain: OMHErrorDomain
+                                             code: OMHErrorCodeUnsupportedValues
+                                         userInfo: userInfo];
+            }
+            
+            return NO;
+        }
+        
+    }
+    @catch (NSException *exception){
+        if (error) {
+            NSString* errorMessage =
+            @"OMHSerializerGenericCorrelation is used for HKCorrelation samples only";
+            NSDictionary* userInfo = @{ NSLocalizedDescriptionKey : errorMessage };
+            *error = [NSError errorWithDomain: OMHErrorDomain
+                                         code: OMHErrorCodeIncorrectType
+                                     userInfo: userInfo];
+        }
+        return NO;
+    }
     return YES;
+    
 }
 - (id)bodyData {
     HKCorrelation *correlationSample = (HKCorrelation*)self.sample;
@@ -651,6 +736,20 @@
 @implementation OMHSerializerGenericWorkout
 
 + (BOOL)canSerialize:(HKSample *)sample error:(NSError *__autoreleasing *)error {
+    @try{
+        HKWorkout *workoutSample = (HKWorkout*)sample;
+    }
+    @catch (NSException *exception){
+        if (error) {
+            NSString* errorMessage =
+            @"OMHSerializerGenericWorkout is used for HKWorkout samples only";
+            NSDictionary* userInfo = @{ NSLocalizedDescriptionKey : errorMessage };
+            *error = [NSError errorWithDomain: OMHErrorDomain
+                                         code: OMHErrorCodeIncorrectType
+                                     userInfo: userInfo];
+        }
+        return NO;
+    }
     return YES;
 }
 
