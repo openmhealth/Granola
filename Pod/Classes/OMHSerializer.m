@@ -1,11 +1,11 @@
 #import "OMHSerializer.h"
 #import "NSDate+RFC3339.h"
 #import <ObjectiveSugar/ObjectiveSugar.h>
-#import "OMHWorkoutEnumMap.h"
+#import "OMHHealthKitConstantsMapper.h"
 
 @interface OMHSerializer()
 @property (nonatomic, retain) HKSample* sample;
-+ (NSDictionary*)typeIdentifiersToClasses;
++ (NSDictionary*)typeIdentifiersWithOMHSchemaToClasses;
 + (BOOL)canSerialize:(HKSample*)sample error:(NSError**)error;
 + (NSException*)unimplementedException;
 @end
@@ -13,7 +13,8 @@
 
 @implementation OMHSerializer
 
-+ (NSDictionary*)typeIdentifiersToClasses {
++ (NSDictionary*)typeIdentifiersWithOMHSchemaToClasses {
+    //This list contains a mapping of HealthKit type identifiers to a schema if an OMH schema exists for that type.
   static NSDictionary* typeIdsToClasses = nil;
   if (typeIdsToClasses == nil) {
     typeIdsToClasses = @{
@@ -25,18 +26,14 @@
       HKQuantityTypeIdentifierActiveEnergyBurned: @"OMHSerializerEnergyBurned",
       HKQuantityTypeIdentifierBodyMassIndex: @"OMHSerializerBodyMassIndex",
       HKCategoryTypeIdentifierSleepAnalysis : @"OMHSerializerSleepAnalysis",
-      HKCorrelationTypeIdentifierBloodPressure: @"OMHSerializerBloodPressure",
-      HKQuantityTypeIdentifierDietaryBiotin: @"OMHSerializerGenericQuantitySample",
-      HKQuantityTypeIdentifierInhalerUsage: @"OMHSerializerGenericQuantitySample",
-      HKCorrelationTypeIdentifierFood: @"OMHSerializerGenericCorrelation",
-      HKWorkoutTypeIdentifier: @"OMHSerializerGenericWorkout"
+      HKCorrelationTypeIdentifierBloodPressure: @"OMHSerializerBloodPressure"
     };
   }
   return typeIdsToClasses;
 }
 
-+ (NSArray*)supportedTypeIdentifiers {
-  return [[self typeIdentifiersToClasses] allKeys];
++ (NSArray*)typeIdentifiersWithOMHSchema {
+  return [[self typeIdentifiersWithOMHSchemaToClasses] allKeys];
 }
 
 + (BOOL)canSerialize:(HKSample*)sample error:(NSError**)error {
@@ -56,9 +53,25 @@
 - (NSString*)jsonForSample:(HKSample*)sample error:(NSError**)error {
     NSParameterAssert(sample);
     // first, verify we support the sample type
-    NSArray* supportedTypeIdentifiers = [[self class] supportedTypeIdentifiers];
+    NSArray* supportedTypeIdentifiers = [[self class] typeIdentifiersWithOMHSchema];
     NSString* sampleTypeIdentifier = sample.sampleType.identifier;
-    if (![supportedTypeIdentifiers includes:sampleTypeIdentifier]) {
+    NSString* serializerClassName;
+    if ([supportedTypeIdentifiers includes:sampleTypeIdentifier]) {
+        serializerClassName = [[self class] typeIdentifiersWithOMHSchemaToClasses][sampleTypeIdentifier];
+    }
+    else if([sampleTypeIdentifier hasPrefix:@"HKQuantityTypeIdentifier"]){
+        serializerClassName = @"OMHSerializerGenericQuantitySample";
+    }
+    else if([sampleTypeIdentifier hasPrefix:@"HKCategoryTypeIdentifier"]){
+        serializerClassName = @"OMHSerializerGenericCategorySample";
+    }
+    else if([sampleTypeIdentifier hasPrefix:@"HKCorrelationTypeIdentifier"]){
+        serializerClassName = @"OMHSerializerGenericCorrelation";
+    }
+    else if([sampleTypeIdentifier hasPrefix:@"HKWorkoutTypeIdentifier"]){
+        serializerClassName = @"OMHSerializerGenericWorkout";
+    }
+    else{
         if (error) {
             NSString* errorMessage =
             [NSString stringWithFormat: @"Unsupported HKSample type: %@",
@@ -71,7 +84,7 @@
         return nil;
     }
     // if we support it, select appropriate subclass for sample
-    NSString* serializerClassName = [[self class] typeIdentifiersToClasses][sampleTypeIdentifier];
+    
     //For sleep analysis, the OMH schema does not capture an 'inBed' state, so if that value is set we need to use a generic category serializer
     //otherwise, it defaults to using the OMH schema for the 'asleep' state.
     if ([sampleTypeIdentifier isEqualToString:HKCategoryTypeIdentifierSleepAnalysis]){
@@ -605,19 +618,10 @@
 }
 - (id)bodyData {
     HKCategorySample *categorySample = (HKCategorySample*) self.sample;
-    NSString *schemaMappedValue = [NSString new];
     
     //Sleep analysis is currently the only supported HKCategorySample in HealthKit, so we can assume that values we receive will relate to sleep analysis
     //Error checking for correct types is done in the canSerialize method.
-    switch (categorySample.value){
-        case HKCategoryValueSleepAnalysisInBed:
-            schemaMappedValue = @"InBed";
-            break;
-        case HKCategoryValueSleepAnalysisAsleep:
-            schemaMappedValue = @"Asleep";
-            break;
-    }
-    
+    NSString *schemaMappedValue = [OMHHealthKitConstantsMapper stringForHKSleepAnalysisValue:categorySample.value];
     NSMutableDictionary *fullSerializedDictionary = [NSMutableDictionary new];
     [fullSerializedDictionary addEntriesFromDictionary:@{
                                                          @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:categorySample.startDate endDate:categorySample.endDate],
@@ -782,7 +786,7 @@
     
     [fullSerializedDictionary addEntriesFromDictionary:@{
                                                           @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:workoutSample.startDate endDate:workoutSample.endDate],
-                                                          @"activity_name":[OMHWorkoutEnumMap stringForHKWorkoutActivityType:workoutSample.workoutActivityType]
+                                                          @"activity_name":[OMHHealthKitConstantsMapper stringForHKWorkoutActivityType:workoutSample.workoutActivityType]
                                                           
                                                          }];
     if(self.sample.metadata.count>0){

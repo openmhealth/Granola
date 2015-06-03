@@ -2,7 +2,7 @@
 #import <VVJSONSchemaValidation/VVJSONSchema.h>
 #import <ObjectiveSugar/ObjectiveSugar.h>
 #import <Granola/OMHError.h>
-#import <Granola/OMHWorkoutEnumMap.h>
+#import <Granola/OMHHealthKitConstantsMapper.h>
 #import "OMHSampleFactory.h"
 #import "OMHSchemaStore.h"
 #import "NSDate+RFC3339.h"
@@ -113,7 +113,7 @@ void (^logTypeSupportTableString)() = ^{
     // types
     [typesList each:^(id typeName) {
       BOOL typeSupported =
-        [[OMHSerializer supportedTypeIdentifiers] includes:typeName];
+        [[OMHSerializer typeIdentifiersWithOMHSchema] includes:typeName];
       NSString* typeSupportedString =
         (typeSupported) ? @":white_check_mark:" : @"  ";
       [tableRows push:@[typeName, typeSupportedString]];
@@ -140,21 +140,25 @@ SpecBegin(OMHSerializer)
 describe(@"OMHSerializer", ^{
   //beforeAll(^{ logTypeSupportTableString(); });
 
-  NSArray* supportedTypeIdentifiers = [OMHSerializer supportedTypeIdentifiers];
-  NSString* supportedTypeIdentifier =  [supportedTypeIdentifiers firstObject];
-  NSString* unsupportedTypeIdentifier = HKQuantityTypeIdentifierNikeFuel;
+  NSArray* typeIdentifiersWithOMHSchema = [OMHSerializer typeIdentifiersWithOMHSchema];
+  NSString* supportedTypeIdentifier =  [typeIdentifiersWithOMHSchema firstObject];
+
+  NSArray* additionalTypeIdentifiersToTest = [NSMutableArray arrayWithArray:@[
+                                                                                HKQuantityTypeIdentifierDietaryBiotin,
+                                                                                HKCorrelationTypeIdentifierFood,
+                                                                                HKWorkoutTypeIdentifier
+                                                                            ]];
+    typeIdentifiersWithOMHSchema = [[[NSMutableArray arrayWithArray:additionalTypeIdentifiersToTest] arrayByAddingObjectsFromArray:typeIdentifiersWithOMHSchema] copy];
 
   describe(@"+supportedTypeIdentifiers ", ^{
     __block NSArray* subject;
     beforeEach(^{
-      subject = supportedTypeIdentifiers;
+      subject = typeIdentifiersWithOMHSchema;
     });
     it(@"includes supported types", ^{
       expect(subject).to.contain(supportedTypeIdentifier);
     });
-    it(@"excludes unsupported types", ^{
-      expect(subject).notTo.contain(unsupportedTypeIdentifier);
-    });
+
   });
 
   describe(@"-jsonForSample:error:", ^{
@@ -170,22 +174,8 @@ describe(@"OMHSerializer", ^{
         [instance jsonForSample:nil error:nil];
       }).to.raise(NSInternalInconsistencyException);
     });
-    context(@"with sample of unsupported type", ^{
-      beforeEach(^{
-        error = nil;
-        sample = [OMHSampleFactory typeIdentifier:unsupportedTypeIdentifier];
-        json = [instance jsonForSample:sample error:&error];
-      });
-      it(@"returns nil", ^{
-        expect(json).to.beNil();
-      });
-      it(@"populates error", ^{
-        expect(error).notTo.beNil();
-        expect(error.code).to.equal(OMHErrorCodeUnsupportedType);
-        expect(error.localizedDescription).to.contain(unsupportedTypeIdentifier);
-      });
-    });
-    [supportedTypeIdentifiers each:^(NSString* typeIdentifier){
+
+    [typeIdentifiersWithOMHSchema each:^(NSString* typeIdentifier){
       context([NSString stringWithFormat:
       @"with sample of supported type %@", typeIdentifier], ^{
         it(@"and supported values returns json result without error", ^{
@@ -403,22 +393,6 @@ describe(@"HKCategoryTypeIdentifierSleepAnalysis InBed", ^{
       }
     };
   });
-//  describe(@"-jsonForSample:error:", ^{
-//    it(@"returns nil and populates error if sample's value unsupported", ^{
-//      HKCategoryType* type =
-//        [HKObjectType categoryTypeForIdentifier:identifier];
-//      HKSample* sample =
-//        [HKCategorySample categorySampleWithType:type
-//                                           value:HKCategoryValueSleepAnalysisInBed
-//                                       startDate:[NSDate date]
-//                                         endDate:[NSDate date]];
-//      OMHSerializer* instance = [OMHSerializer new];
-//      NSError* error;
-//      NSString* json = [instance jsonForSample:sample error:&error];
-//        expect(json).notTo.beNil();
-//        expect(error).to.beNil();
-//    });
-//  });
 });
 
 describe(@"HKCategoryTypeIdentifierSleepAnalysis Asleep",^{
@@ -632,7 +606,7 @@ describe(@"HKWorkoutTypeIdentifier with no details", ^{
                          @"header.schema_id.namespace":@"granola",
                          @"body.effective_time_frame.time_interval.start_date_time": [activityStart RFC3339String],
                          @"body.effective_time_frame.time_interval.end_date_time": [activityEnd RFC3339String],
-                         @"body.activity_name":[OMHWorkoutEnumMap stringForHKWorkoutActivityType:HKWorkoutActivityTypeRunning]
+                         @"body.activity_name":[OMHHealthKitConstantsMapper stringForHKWorkoutActivityType:HKWorkoutActivityTypeRunning]
                          }
                  };
     });
@@ -662,7 +636,7 @@ describe(@"HKWorkoutTypeIdentifier with details", ^{
                          @"header.schema_id.namespace":@"granola",
                          @"body.effective_time_frame.time_interval.start_date_time": [activityStart RFC3339String],
                          @"body.effective_time_frame.time_interval.end_date_time": [activityEnd RFC3339String],
-                         @"body.activity_name":[OMHWorkoutEnumMap stringForHKWorkoutActivityType:HKWorkoutActivityTypeRunning],
+                         @"body.activity_name":[OMHHealthKitConstantsMapper stringForHKWorkoutActivityType:HKWorkoutActivityTypeRunning],
                          @"body.duration.value":@360.5,
                          @"body.duration.unit":@"sec",
                          @"body.kcal_burned.value":@([energyBurned doubleValueForUnit:[HKUnit unitFromString:@"kcal"]]),

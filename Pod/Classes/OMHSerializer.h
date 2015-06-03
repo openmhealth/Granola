@@ -4,7 +4,7 @@
 
 @interface OMHSerializer : NSObject
 
-+ (NSArray*)supportedTypeIdentifiers;
++ (NSArray*)typeIdentifiersWithOMHSchema;
 
 - (NSString*)jsonForSample:(HKSample*)sample error:(NSError**)error;
 

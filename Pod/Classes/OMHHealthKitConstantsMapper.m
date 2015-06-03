@@ -8,9 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import <HealthKit/HealthKit.h>
-#import "OMHWorkoutEnumMap.h"
+#import "OMHHealthKitConstantsMapper.h"
 
-@implementation OMHWorkoutEnumMap
+@implementation OMHHealthKitConstantsMapper
 + (NSString*)stringForHKWorkoutActivityType:(int) enumValue{
     switch( enumValue ){
         case HKWorkoutActivityTypeAmericanFootball:
@@ -133,5 +133,17 @@
             return @"";
     }
 }
+
++ (NSString*) stringForHKSleepAnalysisValue:(int) enumValue{
+    switch (enumValue){
+        case HKCategoryValueSleepAnalysisInBed:
+            return @"InBed";
+            break;
+        case HKCategoryValueSleepAnalysisAsleep:
+            return @"Asleep";
+            break;
+    }
+}
+
 @end
 
