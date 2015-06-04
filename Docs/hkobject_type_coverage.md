@@ -80,7 +80,7 @@
 |HKQuantityTypeIdentifierBloodPressureDiastolic|:white_check_mark:|[granola:hk-quantity-sample:1.0](https://github.com/openmhealth/schemas/blob/develop/schema/granola/hk-quantity-type-1.0.json)|
 |HKQuantityTypeIdentifierRespiratoryRate|:white_check_mark:|[granola:hk-quantity-sample:1.0](https://github.com/openmhealth/schemas/blob/develop/schema/granola/hk-quantity-type-1.0.json)|
 |*__Characteristics Identifiers__*|||
-|HKCharacteristicTypeIdentifierBiologicalSex|:white_check_mark:||
-|HKCharacteristicTypeIdentifierBloodType|:white_check_mark:||
-|HKCharacteristicTypeIdentifierDateOfBirth|:white_check_mark:||
+|HKCharacteristicTypeIdentifierBiologicalSex|||
+|HKCharacteristicTypeIdentifierBloodType|||
+|HKCharacteristicTypeIdentifierDateOfBirth|||
 
