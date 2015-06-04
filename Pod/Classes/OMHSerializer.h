@@ -22,6 +22,12 @@
 
 + (NSArray*)typeIdentifiersWithOMHSchema;
 
+/**
+ Serializes HealthKit samples into Open mHealth compliant json data points.
+ @param sample the HealthKit sample to be serialized
+ @param error an NSError that is passed by reference and can be checked to identify specific errors
+ @return a formatted json string containing the sample's data in a format that adheres to the appropriate Open mHealth schema
+ */
 - (NSString*)jsonForSample:(HKSample*)sample error:(NSError**)error;
 
 @end
