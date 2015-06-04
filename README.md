@@ -98,38 +98,10 @@ Upon running your code, the console would render the data sample as Open mHealth
 
 ### HKObjectType support
 
-The serializer doesn't yet support all of HealthKit's data types. The list of
-supported types is available through a class method:
+The serializer has support for all HealthKit samples (HKSample), either through curated Open mHealth schemas or through generic HealthKit schemas. The list of supported types along with their associated schemas is viewable [here](Docs/hkobject_type_coverage.md). The HKObjectType identifiers are pulled from the
+[HealthKit Constant Reference](https://developer.apple.com/library/ios/documentation/HealthKit/Reference/HealthKit_Constants). 
 
-```objective-c
-[OMHSerializer supportedTypeIdentifiers]
-//=> [HKQuantityTypeIdentifierStepCount, ...]
-```
-
-Attempting to serialize an HKObject of unsupported type or values returns `nil`
-and populates the provided error.
-
-```objective-c
-HKQuantitySample *sampleOfUnsupportedType = [results first];
-// create a serializer with the sample
-NSError* error = nil;
-OMHSerializer *serializer = [OMHSerializer new];
-NSString* jsonString = [serializer jsonForSample:sampleOfUnsupportedType
-                                           error:&error];
-if (serializer == nil) {
-  // handle failure
-  NSLog(@"%@", error.localizedDescription];
-} else {
-  // continue...
-}
-```
-
-The supported HKObjectType identifiers, pulled from the
-[HealthKit Constant Reference](https://developer.apple.com/library/ios/documentation/HealthKit/Reference/HealthKit_Constants),
-are summarized [here](Docs/hkobject_type_coverage.md). Note that the majority
-of these identifiers are not yet in use by most applications. 
-
-We're also working on a handful of generic schemas that support all HealthKit data types, e.g. a `hk-quantity-sample` schema. Granola will soon be updated to support these generic schemas. Over time, as curated schemas are developed that correspond to the HealthKit data represented by the generic schemas, the generic mappings will be replaced by mappings to the curated schemas.
+Over time, as curated schemas are developed that correspond to the HealthKit data represented by the generic schemas, the generic mappings will be replaced by mappings to the curated schemas.
 
 [Contact us](##contact) to request support for a particular type or
 [contribute](#contributing) support with a pull request.
@@ -159,4 +131,6 @@ Granola is available under the Apache 2 license. See the [LICENSE](/LICENSE) fil
 ## Authors
 
 Brent Hargrave ([@brenthargrave](http://twitter.com/brenthargrave))
+Chris Schaefbauer (chris.schaefbauer@openmhealth.org)
+Emerson Farrugia (emerson@openmhealth.org)
 
