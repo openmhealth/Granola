@@ -99,7 +99,7 @@ Upon running your code, the console would render the data sample as Open mHealth
 ### HKObjectType support
 
 The serializer has support for all HealthKit samples (HKSample), either through curated Open mHealth schemas or through generic HealthKit schemas. The list of supported types along with their associated schemas is viewable [here](Docs/hkobject_type_coverage.md). The HKObjectType identifiers are pulled from the
-[HealthKit Constant Reference](https://developer.apple.com/library/ios/documentation/HealthKit/Reference/HealthKit_Constants). 
+[HealthKit Constant Reference](https://developer.apple.com/library/ios/documentation/HealthKit/Reference/HealthKit_Constants/#//apple_ref/doc/uid/TP40014710-CH2-DontLinkElementID_3). 
 
 Over time, as curated schemas are developed that correspond to the HealthKit data represented by the generic schemas, the generic mappings will be replaced by mappings to the curated schemas.
 
