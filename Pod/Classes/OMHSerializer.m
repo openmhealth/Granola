@@ -832,10 +832,10 @@
 @implementation OMHSerializerGenericWorkout
 
 + (BOOL)canSerialize:(HKSample *)sample error:(NSError *__autoreleasing *)error {
-    @try{
-        HKWorkout *workoutSample = (HKWorkout*)sample;
+    if([sample isKindOfClass:[HKWorkout class]]){
+        return YES;
     }
-    @catch (NSException *exception){
+    else{
         if (error) {
             NSString* errorMessage =
             @"OMHSerializerGenericWorkout is used for HKWorkout samples only";
@@ -846,7 +846,7 @@
         }
         return NO;
     }
-    return YES;
+    
 }
 
 - (id)bodyData {

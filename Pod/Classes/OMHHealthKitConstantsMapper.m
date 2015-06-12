@@ -150,6 +150,14 @@
         case HKCategoryValueSleepAnalysisAsleep:
             return @"Asleep";
             break;
+        default:{
+            NSException *e = [NSException
+                              exceptionWithName:@"KCategoryValueSleepAnalysisInvalidValue"
+                              reason:@"KCategoryValueSleepAnalysis can only have a HKCategoryValueSleepAnalysisInBed or HKCategoryValueSleepAnalysisAsleep value"
+                              userInfo:nil];
+            @throw e;
+        }
+            
     }
 }
 
