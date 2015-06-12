@@ -130,7 +130,7 @@ Granola is available under the Apache 2 license. See the [LICENSE](/LICENSE) fil
 
 ## Authors
 
-Brent Hargrave ([@brenthargrave](http://twitter.com/brenthargrave))
-Chris Schaefbauer (chris.schaefbauer@openmhealth.org)
-Emerson Farrugia (emerson@openmhealth.org)
+Brent Hargrave ([@brenthargrave](http://twitter.com/brenthargrave))  
+Chris Schaefbauer (chris.schaefbauer@openmhealth.org)  
+Emerson Farrugia (emerson@openmhealth.org)  
 
