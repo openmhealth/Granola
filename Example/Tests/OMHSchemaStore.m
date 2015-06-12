@@ -30,16 +30,16 @@
 - (void)loadSchemas {
   _storage = [VVMutableJSONSchemaStorage storage];
   [@[
-    @"generic/schema-id",
-    @"generic/date-time",
-    @"generic/unit-value",
-    @"generic/duration-unit-value",
-    @"generic/part-of-day",
-    @"generic/time-interval",
-    @"generic/time-frame",
-    @"generic/header",
-    @"generic/data-point",
-    @"clinical/step-count"
+     @"omh/schema-id",
+     @"omh/date-time",
+     @"omh/unit-value",
+     @"omh/duration-unit-value",
+     @"omh/part-of-day",
+     @"omh/time-interval",
+     @"omh/time-frame",
+     @"omh/header",
+     @"omh/data-point",
+     @"omh/step-count"
   ] each:^(NSString* partialPath) {
     NSURL* schemaURI = [self schemaURIForPartialPath:partialPath];
     // add schema at URI
@@ -66,7 +66,7 @@
   NSString* dirname =
     [NSString stringWithFormat:@"schema/%@", components.firstObject];
   NSString* filename =
-    [NSString stringWithFormat:@"%@-1.0", components.lastObject];
+    [NSString stringWithFormat:@"%@-1.x", components.lastObject];
   NSBundle* bundle = [NSBundle bundleForClass:[self class]];
   NSURL* schemaURI =
     [bundle URLForResource:filename

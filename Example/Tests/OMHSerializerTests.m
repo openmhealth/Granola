@@ -214,7 +214,7 @@ sharedExamplesFor(@"AnySerializerForSupportedSample", ^(NSDictionary* data) {
     it(@"validates against data-point schema", ^{
       NSError* validationError = nil;
       BOOL valid = [OMHSchemaStore validateObject:object
-                              againstSchemaAtPath:@"generic/data-point"
+                              againstSchemaAtPath:@"omh/data-point"
                                         withError:&validationError];
       expect(valid).to.beTruthy();
     });
