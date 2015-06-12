@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Granola"
-  s.version          = "0.2.0"
+  s.version          = "0.2.0" 
   s.summary          = "A healthful serializer for your HealthKit data."
   s.homepage         = "https://github.com/openmhealth/Granola"
   s.license          = { :type => 'Apache 2.0',
