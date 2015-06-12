@@ -3,7 +3,7 @@ PODS:
   - Granola (0.1.0):
     - ObjectiveSugar (~> 1.1)
   - ObjectiveSugar (1.1.0)
-  - Specta (1.0.0)
+  - Specta (1.0.1)
   - VVJSONSchemaValidation (1.3.0)
 
 DEPENDENCIES:
@@ -20,7 +20,7 @@ SPEC CHECKSUMS:
   Expecta: 32604574add2c46a36f8d2f716b6c5736eb75024
   Granola: b87e978eeda2ae9091d32137124cd1b88ed6fa9c
   ObjectiveSugar: a6a25f23d657c19df0a0b972466d5b5ca9f5295c
-  Specta: 96fe05fe5c7348b5223f85e862904f6e832abb14
+  Specta: 097be314a75de103703a3bf9a529dc1a398509d7
   VVJSONSchemaValidation: a384962161691d152c02464e61a86b4014f27d7c
 
 COCOAPODS: 0.37.1

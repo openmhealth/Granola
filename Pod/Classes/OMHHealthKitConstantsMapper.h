@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+@interface OMHHealthKitConstantsMapper : NSObject
 
-@interface OMHSchemaStore : NSObject
-+ (BOOL)validateObject:(id)object
-   againstSchemaAtPath:(NSString*)path
-             withError:(NSError**)validationError;
-+ (NSArray*) schemaPartialPaths;
-
++ (NSString*) stringForHKWorkoutActivityType:(int) enumValue;
++ (NSString*) stringForHKSleepAnalysisValue:(int) enumValue;
++ (NSDictionary*) dictionaryForTypeIdentifiersToClasses;
 @end
 
