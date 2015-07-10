@@ -103,7 +103,7 @@ The serializer has support for all HealthKit samples (HKSample), either through 
 
 Over time, as curated schemas are developed that correspond to the HealthKit data represented by the generic schemas, the generic mappings will be replaced by mappings to the curated schemas.
 
-[Contact us](##contact) to request support for a particular type or
+[Contact us](#contact) to request support for a particular type or
 [contribute](#contributing) support with a pull request.
 
 
