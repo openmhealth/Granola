@@ -18,5 +18,7 @@
 
 + (NSString*) stringForHKWorkoutActivityType:(int) enumValue;
 + (NSString*) stringForHKSleepAnalysisValue:(int) enumValue;
++ (NSDictionary*) allSupportedTypeIdentifiersToClasses;
+
 @end
 
