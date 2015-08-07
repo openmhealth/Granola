@@ -398,6 +398,41 @@ describe(@"HKQuantityTypeIdentifierBloodGlucose with metadata", ^{
     });
 });
 
+describe(@"HKQuantityTypeIdentifierBloodGlucose with date as metadata", ^{
+    itShouldBehaveLike(@"AnySerializerForSupportedSample", ^{
+        NSString* unitString = @"mg/dL";
+        NSNumber* value = [NSNumber numberWithDouble:120];
+        NSString* expectedMetadataDateString = @"2015-06-28T05:06:09.100-06:00";
+        NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSXXX"];
+        NSDate *metadataDate = [formatter dateFromString:expectedMetadataDateString];
+        HKSample* sample =
+        [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierBloodGlucose
+                                   attrs:@{ @"value": value,
+                                            @"unitString": unitString,
+                                            @"metadata":@{
+                                                    @"HKMetaDataKeyDateCreated":metadataDate
+                                                    }
+                                            }];
+        return @{
+                 @"sample": sample,
+                 @"pathsToValues": @{
+                         @"header.schema_id.name": @"blood-glucose",
+                         @"header.schema_id.namespace":@"omh",
+                         @"body.blood_glucose.value": value,
+                         @"body.blood_glucose.unit": unitString,
+                         @"body.effective_time_frame.time_interval.start_date_time": [sample.startDate RFC3339String],
+                         @"body.effective_time_frame.time_interval.end_date_time": [sample.endDate RFC3339String],
+                         @"body.metadata.key":@[@"HKMetaDataKeyDateCreated"], //Because metadata value validation iterates over an array, these values must be in array form
+                         @"body.metadata.value":@[[metadataDate RFC3339String]]
+                         
+                         }
+                 };
+    });
+});
+
+
+
 describe(HKQuantityTypeIdentifierActiveEnergyBurned, ^{
     itShouldBehaveLike(@"AnySerializerForSupportedSample", ^{
         NSString* unitString = @"kcal";
