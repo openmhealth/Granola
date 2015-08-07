@@ -129,7 +129,7 @@ void (^logTypeSupportTableString)() = ^{
         // types
         [typesList each:^(id typeName) {
             BOOL typeSupported =
-            [[OMHSerializer typeIdentifiersWithOMHSchema] includes:typeName];
+            [[OMHSerializer supportedTypeIdentifiersWithOMHSchema] includes:typeName];
             NSString* typeSupportedString =
             (typeSupported) ? @":white_check_mark:" : @"  ";
             [tableRows push:@[typeName, typeSupportedString]];
@@ -156,11 +156,12 @@ SpecBegin(OMHSerializer)
 describe(@"OMHSerializer", ^{
     //beforeAll(^{ logTypeSupportTableString(); });
     
-    NSArray* typeIdentifiersWithOMHSchema = [OMHSerializer typeIdentifiersWithOMHSchema];
+    NSArray* typeIdentifiersWithOMHSchema = [OMHSerializer supportedTypeIdentifiersWithOMHSchema];
     NSString* supportedTypeIdentifier =  [typeIdentifiersWithOMHSchema firstObject];
     
     NSArray* additionalTypeIdentifiersToTest = [NSMutableArray arrayWithArray:@[
                                                                                 HKQuantityTypeIdentifierDietaryBiotin,
+                                                                                HKQuantityTypeIdentifierInhalerUsage,
                                                                                 HKCorrelationTypeIdentifierFood,
                                                                                 HKWorkoutTypeIdentifier
                                                                                 ]];
