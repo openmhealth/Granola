@@ -1,9 +1,9 @@
 PODS:
-  - Expecta (1.0.0)
-  - Granola (0.2.0):
+  - Expecta (1.0.2)
+  - Granola (0.2.1):
     - ObjectiveSugar (~> 1.1)
   - ObjectiveSugar (1.1.0)
-  - Specta (1.0.1)
+  - Specta (1.0.3)
   - VVJSONSchemaValidation (1.3.0)
 
 DEPENDENCIES:
@@ -17,10 +17,10 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Expecta: 32604574add2c46a36f8d2f716b6c5736eb75024
-  Granola: d7fc35065a9ef4a1d51a1e19c7ccf9f0395dcf16
+  Expecta: 54e8a3530add08f4f0208c111355eda7cde74a53
+  Granola: 5bb85def0694a19f8940dc14f8e6263a40cb4c9f
   ObjectiveSugar: a6a25f23d657c19df0a0b972466d5b5ca9f5295c
-  Specta: 097be314a75de103703a3bf9a529dc1a398509d7
+  Specta: cf3e4188cf35375c3ee2cd03f8db8f1f4ef98234
   VVJSONSchemaValidation: a384962161691d152c02464e61a86b4014f27d7c
 
 COCOAPODS: 0.37.1

@@ -20,7 +20,10 @@
 
 @interface OMHSerializer : NSObject
 
-+ (NSArray*)typeIdentifiersWithOMHSchema;
++ (NSArray*)supportedTypeIdentifiersWithOMHSchema;
+
++ (NSArray*)supportedTypeIdentifiers;
+
 
 /**
  Serializes HealthKit samples into Open mHealth compliant json data points.

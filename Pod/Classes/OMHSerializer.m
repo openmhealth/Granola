@@ -21,7 +21,6 @@
 
 @interface OMHSerializer()
 @property (nonatomic, retain) HKSample* sample;
-+ (NSDictionary*)typeIdentifiersWithOMHSchemaToClasses;
 + (BOOL)canSerialize:(HKSample*)sample error:(NSError**)error;
 + (NSException*)unimplementedException;
 @end
@@ -29,27 +28,26 @@
 
 @implementation OMHSerializer
 
-+ (NSDictionary*)typeIdentifiersWithOMHSchemaToClasses {
-    //This list contains a mapping of HealthKit type identifiers to a schema if an OMH schema exists for that type.
-    static NSDictionary* typeIdsToClasses = nil;
-    if (typeIdsToClasses == nil) {
-        typeIdsToClasses = @{
-                             HKQuantityTypeIdentifierHeight : @"OMHSerializerHeight",
-                             HKQuantityTypeIdentifierBodyMass : @"OMHSerializerWeight",
-                             HKQuantityTypeIdentifierStepCount : @"OMHSerializerStepCount",
-                             HKQuantityTypeIdentifierHeartRate : @"OMHSerializerHeartRate",
-                             HKQuantityTypeIdentifierBloodGlucose : @"OMHSerializerBloodGlucose",
-                             HKQuantityTypeIdentifierActiveEnergyBurned: @"OMHSerializerEnergyBurned",
-                             HKQuantityTypeIdentifierBodyMassIndex: @"OMHSerializerBodyMassIndex",
-                             HKCategoryTypeIdentifierSleepAnalysis : @"OMHSerializerSleepAnalysis", //Samples with Asleep value use this serializer, samples with InBed value use generic category serializer
-                             HKCorrelationTypeIdentifierBloodPressure: @"OMHSerializerBloodPressure"
-                             };
++ (NSArray*)supportedTypeIdentifiersWithOMHSchema {
+    static NSArray* OMHSchemaTypeIds = nil;
+    if(OMHSchemaTypeIds == nil){
+        OMHSchemaTypeIds = @[
+                                      HKQuantityTypeIdentifierHeight,
+                                      HKQuantityTypeIdentifierBodyMass,
+                                      HKQuantityTypeIdentifierStepCount,
+                                      HKQuantityTypeIdentifierHeartRate,
+                                      HKQuantityTypeIdentifierBloodGlucose,
+                                      HKQuantityTypeIdentifierActiveEnergyBurned,
+                                      HKQuantityTypeIdentifierBodyMassIndex,
+                                      HKCategoryTypeIdentifierSleepAnalysis, //Samples with Asleep value use this serializer, samples with InBed value use generic category serializer
+                                      HKCorrelationTypeIdentifierBloodPressure];
+    
     }
-    return typeIdsToClasses;
+    return OMHSchemaTypeIds;
 }
 
-+ (NSArray*)typeIdentifiersWithOMHSchema {
-    return [[self typeIdentifiersWithOMHSchemaToClasses] allKeys];
++ (NSArray*)supportedTypeIdentifiers {
+    return [[OMHHealthKitConstantsMapper allSupportedTypeIdentifiersToClasses] allKeys];
 }
 
 + (BOOL)canSerialize:(HKSample*)sample error:(NSError**)error {
@@ -75,23 +73,11 @@
 - (NSString*)jsonForSample:(HKSample*)sample error:(NSError**)error {
     NSParameterAssert(sample);
     // first, verify we support the sample type
-    NSArray* supportedTypeIdentifiers = [[self class] typeIdentifiersWithOMHSchema];
+    NSArray* supportedTypeIdentifiers = [[self class] supportedTypeIdentifiers];
     NSString* sampleTypeIdentifier = sample.sampleType.identifier;
     NSString* serializerClassName;
-    if ([supportedTypeIdentifiers includes:sampleTypeIdentifier]) {
-        serializerClassName = [[self class] typeIdentifiersWithOMHSchemaToClasses][sampleTypeIdentifier];
-    }
-    else if([sampleTypeIdentifier hasPrefix:@"HKQuantityTypeIdentifier"]){
-        serializerClassName = @"OMHSerializerGenericQuantitySample";
-    }
-    else if([sampleTypeIdentifier hasPrefix:@"HKCategoryTypeIdentifier"]){
-        serializerClassName = @"OMHSerializerGenericCategorySample";
-    }
-    else if([sampleTypeIdentifier hasPrefix:@"HKCorrelationTypeIdentifier"]){
-        serializerClassName = @"OMHSerializerGenericCorrelation";
-    }
-    else if([sampleTypeIdentifier hasPrefix:@"HKWorkoutTypeIdentifier"]){
-        serializerClassName = @"OMHSerializerGenericWorkout";
+    if ([supportedTypeIdentifiers includes:sampleTypeIdentifier]){
+        serializerClassName = [OMHHealthKitConstantsMapper allSupportedTypeIdentifiersToClasses][sampleTypeIdentifier];
     }
     else{
         if (error) {
@@ -160,7 +146,14 @@
     if(metadata){
         NSMutableArray *serializedArray = [NSMutableArray new];
         for (id key in metadata) {
-            [serializedArray addObject:@{@"key":key,@"value":[metadata valueForKey:key]}];
+            if ([[metadata valueForKey:key] isKindOfClass:[NSDate class]]){
+                NSDate *dateMetadataValue = [metadata valueForKey:key];
+                [serializedArray addObject:@{@"key":key,@"value":[dateMetadataValue RFC3339String]}];
+            }
+            else{
+                [serializedArray addObject:@{@"key":key,@"value":[metadata valueForKey:key]}];
+            }
+            
         }
         return @{@"metadata":[serializedArray copy]};
     }
