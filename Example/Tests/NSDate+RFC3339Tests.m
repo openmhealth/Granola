@@ -29,7 +29,7 @@ describe(@"NSDate RFC3339 Formatter", ^{
     
     it(@"-Generates the correct timestamp with time-numoffset",^{
         
-        NSString* expectedDateString = @"2015-06-28T05:06:09.100-06:00";
+        NSString* expectedDateString = @"2015-06-28T05:06:09.100-06:00"; // The offset here must be changed to your local timezone for the test to pass
         
         NSDateComponents* dateBuilder = [[NSDateComponents alloc] init];
         [dateBuilder setYear:2015];
@@ -39,7 +39,6 @@ describe(@"NSDate RFC3339 Formatter", ^{
         [dateBuilder setMinute:06];
         [dateBuilder setSecond:9];
         [dateBuilder setNanosecond:100*1000000];
-        //dateBuilder.timeZone = [NSTimeZone timeZoneWithName:@"America/Denver"];
         NSCalendar *gregorian = [[NSCalendar alloc]
                                  initWithCalendarIdentifier:NSGregorianCalendar];
         NSDate* date = [gregorian dateFromComponents:dateBuilder];
