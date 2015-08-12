@@ -121,11 +121,11 @@ Over time, as curated schemas are developed that correspond to the HealthKit dat
 [Contact us](#contact) to request support for a particular type or
 [contribute](#contributing) support with a pull request.
 
-### Timezones
+### Time zones
 
-The serializer uses the time zone of the device to set the UTC offset in timestamps. For an iOS app using Granola, this means that serialized data contains timestamps with the UTC offset of the device running it. Although these timestamps are correct, some data, especially older data, that is being serialized may be offset incorrectly if it was originally created by HealthKit in a different timezone than the device is in when Granola serializes it. For example, if a datapoint was originally created by HealthKit in San Francisco on June 1st, 2015 at 8:00am (-07:00), but then serialized three months later in New York, the timestamp would read 2015-06-01T11:00-04:00. These are technically the same point in time, however they are offset differently.
+The serializer uses the time zone of the device to set the UTC offset in timestamps. For an iOS app using Granola, this means that serialized data contains timestamps with the UTC offset of the device running it. Although these timestamps are correct, some data, especially older data, that is being serialized may be offset incorrectly if it was originally created by HealthKit in a different time zone than the device is in when Granola serializes it. For example, if a data point was originally created by HealthKit in San Francisco on June 1st, 2015 at 8:00am (-07:00), but then serialized three months later in New York, the timestamp would read 2015-06-01T11:00-04:00. These are technically the same point in time, however they are offset differently.
 
-In a future update, we plan to allow developers to specify the prefered timezone for serializing datapoints to give them control over how timestamps are serialized. 
+In a future update, we plan to allow developers to specify the prefered time zone for serializing data points to give them control over how timestamps are serialized. 
 
 ## Contact
 
