@@ -166,6 +166,7 @@
     if (allTypeIdsToClasses == nil) {
         allTypeIdsToClasses = @{
                                 HKQuantityTypeIdentifierActiveEnergyBurned: @"OMHSerializerEnergyBurned",
+                                HKQuantityTypeIdentifierBasalBodyTemperature: @"OMHSerializerGenericQuantitySample",
                                 HKQuantityTypeIdentifierBasalEnergyBurned: @"OMHSerializerGenericQuantitySample",
                                 HKQuantityTypeIdentifierBloodAlcoholContent: @"OMHSerializerGenericQuantitySample",
                                 HKQuantityTypeIdentifierBloodGlucose : @"OMHSerializerBloodGlucose",
@@ -212,6 +213,7 @@
                                 HKQuantityTypeIdentifierDietaryVitaminD: @"OMHSerializerGenericQuantitySample",
                                 HKQuantityTypeIdentifierDietaryVitaminE: @"OMHSerializerGenericQuantitySample",
                                 HKQuantityTypeIdentifierDietaryVitaminK: @"OMHSerializerGenericQuantitySample",
+                                HKQuantityTypeIdentifierDietaryWater: @"OMHSerializerGenericQuantitySample",
                                 HKQuantityTypeIdentifierDietaryZinc: @"OMHSerializerGenericQuantitySample",
                                 HKQuantityTypeIdentifierDistanceCycling: @"OMHSerializerGenericQuantitySample",
                                 HKQuantityTypeIdentifierDistanceWalkingRunning: @"OMHSerializerGenericQuantitySample",
@@ -230,6 +232,7 @@
                                 HKQuantityTypeIdentifierPeripheralPerfusionIndex: @"OMHSerializerGenericQuantitySample",
                                 HKQuantityTypeIdentifierRespiratoryRate: @"OMHSerializerGenericQuantitySample",
                                 HKQuantityTypeIdentifierStepCount : @"OMHSerializerStepCount",
+                                HKQuantityTypeIdentifierUVExposure: @"OMHSerializerGenericQuantitySample",
                                 HKCategoryTypeIdentifierSleepAnalysis : @"OMHSerializerSleepAnalysis", //Samples with Asleep value use this serializer, samples with InBed value use generic category serializer
                                 HKCorrelationTypeIdentifierBloodPressure: @"OMHSerializerBloodPressure",
                                 HKCorrelationTypeIdentifierFood: @"OMHSerializerGenericCorrelation",
