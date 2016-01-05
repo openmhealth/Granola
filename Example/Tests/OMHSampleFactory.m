@@ -39,18 +39,16 @@
         metadata = attrs[@"metadata"];
     }
     HKSample* sample = nil;
-    if (sampleTypeIdentifier == HKCategoryTypeIdentifierSleepAnalysis) {
+    if ([sampleTypeIdentifier hasPrefix:@"HKCategoryTypeIdentifier"]) {
         HKCategoryType* type =
         [HKObjectType categoryTypeForIdentifier:sampleTypeIdentifier];
-        int value = HKCategoryValueSleepAnalysisAsleep;
-        if(attrs[@"value"]){
-            NSString *valueStr = (NSString*)attrs[@"value"];
-            value = [valueStr integerValue];
-        }
+        NSNumber *defaultValue = [NSNumber numberWithInt:0];
+        NSNumber *value = or(attrs[@"value"], defaultValue);
+        //int value = HKCategoryValueSleepAnalysisAsleep;
         
         sample =
         [HKCategorySample categorySampleWithType:type
-                                           value:value
+                                           value:[value integerValue]
                                        startDate:start
                                          endDate:end
                                         metadata:metadata];

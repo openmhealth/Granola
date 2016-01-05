@@ -166,6 +166,7 @@ describe(@"OMHSerializer", ^{
                                                                                 HKQuantityTypeIdentifierDietaryWater,
                                                                                 HKQuantityTypeIdentifierInhalerUsage,
                                                                                 HKQuantityTypeIdentifierUVExposure,
+                                                                                HKCategoryTypeIdentifierAppleStandHour,
                                                                                 HKCorrelationTypeIdentifierFood,
                                                                                 HKWorkoutTypeIdentifier
                                                                                 ]];
@@ -850,6 +851,50 @@ describe(@"HKQuantityTypeIdentifierUVExposure with time interval", ^{
                          @"body.count":value,
                          @"body.effective_time_frame.time_interval.start_date_time":[start RFC3339String],
                          @"body.effective_time_frame.time_interval.end_date_time":[end RFC3339String]
+                         }
+                 };
+    });
+});
+
+describe(@"HKCategoryTypeIdentifierAppleStandHour Stood", ^{
+    
+    itShouldBehaveLike(@"AnySerializerForSupportedSample", ^{
+        NSDate* start = [NSDate date];
+        NSDate* end = [start dateByAddingTimeInterval:60*18];
+        HKSample* sample =
+        [OMHSampleFactory typeIdentifier:HKCategoryTypeIdentifierAppleStandHour
+                                   attrs:@{ @"start": start, @"end": end, @"value":@(HKCategoryValueAppleStandHourStood)}];
+        return @{
+                 @"sample": sample,
+                 @"pathsToValues": @{
+                         @"header.schema_id.name": @"hk-category-sample",
+                         @"header.schema_id.namespace":@"granola",
+                         @"body.category_value": @"Standing",
+                         @"body.category_type": HKCategoryTypeIdentifierAppleStandHour,
+                         @"body.effective_time_frame.time_interval.start_date_time": [start RFC3339String],
+                         @"body.effective_time_frame.time_interval.end_date_time": [end RFC3339String],
+                         }
+                 };
+    });
+});
+
+describe(@"HKCategoryTypeIdentifierAppleStandHour Idle", ^{
+    
+    itShouldBehaveLike(@"AnySerializerForSupportedSample", ^{
+        NSDate* start = [NSDate date];
+        NSDate* end = [start dateByAddingTimeInterval:60*18];
+        HKSample* sample =
+        [OMHSampleFactory typeIdentifier:HKCategoryTypeIdentifierAppleStandHour
+                                   attrs:@{ @"start": start, @"end": end, @"value":@(HKCategoryValueAppleStandHourIdle)}];
+        return @{
+                 @"sample": sample,
+                 @"pathsToValues": @{
+                         @"header.schema_id.name": @"hk-category-sample",
+                         @"header.schema_id.namespace":@"granola",
+                         @"body.category_value": @"Idle",
+                         @"body.category_type": HKCategoryTypeIdentifierAppleStandHour,
+                         @"body.effective_time_frame.time_interval.start_date_time": [start RFC3339String],
+                         @"body.effective_time_frame.time_interval.end_date_time": [end RFC3339String],
                          }
                  };
     });

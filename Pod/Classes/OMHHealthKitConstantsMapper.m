@@ -142,8 +142,8 @@
     }
 }
 
-+ (NSString*) stringForHKSleepAnalysisValue:(int) enumValue{
-    switch (enumValue){
++ (NSString*) stringForHKSleepAnalysisValue:(int) enumValue {
+    switch (enumValue) {
         case HKCategoryValueSleepAnalysisInBed:
             return @"InBed";
             break;
@@ -152,19 +152,34 @@
             break;
         default:{
             NSException *e = [NSException
-                              exceptionWithName:@"KCategoryValueSleepAnalysisInvalidValue"
-                              reason:@"KCategoryValueSleepAnalysis can only have a HKCategoryValueSleepAnalysisInBed or HKCategoryValueSleepAnalysisAsleep value"
+                              exceptionWithName:@"HKCategoryValueSleepAnalysisInvalidValue"
+                              reason:@"HKCategoryValueSleepAnalysis can only have a HKCategoryValueSleepAnalysisInBed or HKCategoryValueSleepAnalysisAsleep value"
                               userInfo:nil];
             @throw e;
         }
-            
+    }
+}
+
++ (NSString*) stringForHKAppleStandHourValue:(int) enumValue {
+    switch (enumValue) {
+        case HKCategoryValueAppleStandHourIdle:
+            return @"Idle";
+        case HKCategoryValueAppleStandHourStood:
+            return @"Standing";
+        default:{
+            NSException *e = [NSException
+                              exceptionWithName:@"HKCategoryValueAppleStandHourInvalidValue"
+                              reason:@"KCategoryValueAppleStandHour can only have a HKCategoryValueAppleStandHourIdle or HKCategoryValueAppleStandHourStood value"
+                              userInfo:nil];
+            @throw e;
+        }
     }
 }
 
 +  (NSDictionary*)allSupportedTypeIdentifiersToClasses {
-    static NSDictionary* allTypeIdsToClasses = nil;
-    if (allTypeIdsToClasses == nil) {
-        allTypeIdsToClasses = @{
+    static NSDictionary* typeIdsToClasses = nil;
+    if (typeIdsToClasses == nil) {
+        typeIdsToClasses = @{
                                 HKQuantityTypeIdentifierActiveEnergyBurned: @"OMHSerializerEnergyBurned",
                                 HKQuantityTypeIdentifierBasalBodyTemperature: @"OMHSerializerGenericQuantitySample",
                                 HKQuantityTypeIdentifierBasalEnergyBurned: @"OMHSerializerGenericQuantitySample",
@@ -234,15 +249,34 @@
                                 HKQuantityTypeIdentifierStepCount : @"OMHSerializerStepCount",
                                 HKQuantityTypeIdentifierUVExposure: @"OMHSerializerGenericQuantitySample",
                                 HKCategoryTypeIdentifierSleepAnalysis : @"OMHSerializerSleepAnalysis", //Samples with Asleep value use this serializer, samples with InBed value use generic category serializer
+                                HKCategoryTypeIdentifierAppleStandHour : @"OMHSerializerGenericCategorySample",
                                 HKCorrelationTypeIdentifierBloodPressure: @"OMHSerializerBloodPressure",
                                 HKCorrelationTypeIdentifierFood: @"OMHSerializerGenericCorrelation",
                                 HKWorkoutTypeIdentifier: @"OMHSerializerGenericWorkout"
                                 };
     }
+    
+    NSMutableDictionary *allTypeIdsToClasses = [NSMutableDictionary dictionaryWithDictionary:typeIdsToClasses];
+    
+    [allTypeIdsToClasses addEntriesFromDictionary:[self allSupportedCategoryTypeIdentifiersToClasses]];
+    
     return allTypeIdsToClasses;
         
 }
 
++  (NSDictionary*)allSupportedCategoryTypeIdentifiersToClasses {
+    
+    static NSDictionary* allCategoryTypeIdsToClasses = nil;
+    if (allCategoryTypeIdsToClasses == nil) {
+        allCategoryTypeIdsToClasses = @{
+                                
+                                HKCategoryTypeIdentifierSleepAnalysis : @"OMHSerializerSleepAnalysis", //Samples with Asleep value use this serializer, samples with InBed value use generic category serializer
+                                HKCategoryTypeIdentifierAppleStandHour : @"OMHSerializerGenericCategorySample"
+                                };
+    }
+    return allCategoryTypeIdsToClasses;
+
+}
 
 @end
 

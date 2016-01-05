@@ -655,23 +655,13 @@
     BOOL canSerialize = YES;
     @try{
         HKCategorySample *categorySample = (HKCategorySample*) sample;
-        if(![[categorySample.categoryType description] isEqualToString:HKCategoryTypeIdentifierSleepAnalysis]){
+        NSArray* categoryTypes = [[OMHHealthKitConstantsMapper allSupportedCategoryTypeIdentifiersToClasses] allKeys];
+        if(![categoryTypes containsObject:categorySample.categoryType.description]){
             if (error) {
                 NSString* errorMessage = @"HKCategoryTypeIdentifierSleepAnalysis is the only category type currently supported in HealthKit";
                 NSDictionary* userInfo = @{ NSLocalizedDescriptionKey : errorMessage };
                 *error = [NSError errorWithDomain: OMHErrorDomain
                                              code: OMHErrorCodeUnsupportedType
-                                         userInfo: userInfo];
-            }
-            canSerialize = NO;
-        }
-        
-        if(categorySample.value != HKCategoryValueSleepAnalysisInBed && categorySample.value != HKCategoryValueSleepAnalysisAsleep && canSerialize){
-            if (error) {
-                NSString* errorMessage = @"Sleep analysis category samples can only have values contained in the HKCategoryValueSleepAnalysis enum";
-                NSDictionary* userInfo = @{ NSLocalizedDescriptionKey : errorMessage };
-                *error = [NSError errorWithDomain: OMHErrorDomain
-                                             code: OMHErrorCodeUnsupportedValues
                                          userInfo: userInfo];
             }
             canSerialize = NO;
@@ -697,7 +687,7 @@
     
     //Sleep analysis is currently the only supported HKCategorySample in HealthKit, so we can assume that values we receive will relate to sleep analysis
     //Error checking for correct types is done in the canSerialize method.
-    NSString *schemaMappedValue = [OMHHealthKitConstantsMapper stringForHKSleepAnalysisValue:(int)categorySample.value];
+    NSString *schemaMappedValue = [self getCategoryValueForTypeWithValue:categorySample.categoryType categoryValue:categorySample.value];
     
     return @{
              @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:categorySample.startDate endDate:categorySample.endDate],
@@ -705,6 +695,25 @@
              @"category_value": schemaMappedValue
              };
 }
+
+- (NSString*)getCategoryValueForTypeWithValue: (HKCategoryType*) categoryType categoryValue:(NSInteger)categoryValue {
+    
+    if ( [categoryType.description isEqual:HKCategoryTypeIdentifierAppleStandHour.description] ) {
+        return [OMHHealthKitConstantsMapper stringForHKAppleStandHourValue:(int)categoryValue];
+    }
+    else if ([categoryType.description isEqual:HKCategoryTypeIdentifierSleepAnalysis.description]) {
+        return [OMHHealthKitConstantsMapper stringForHKSleepAnalysisValue:(int)categoryValue];
+    }
+    else{
+        NSException *e = [NSException
+                          exceptionWithName:@"InvalidHKCategoryType"
+                          reason:@"Incorrect category type parameter for method."
+                          userInfo:nil];
+        @throw e;
+    }
+    
+}
+
 - (NSString*)schemaName {
     return @"hk-category-sample";
 }
