@@ -143,9 +143,11 @@
                  HKQuantityTypeIdentifierBloodPressureDiastolic,
                  HKQuantityTypeIdentifierBodyMassIndex,
                  HKQuantityTypeIdentifierDietaryBiotin,
+                 HKQuantityTypeIdentifierDietaryWater,
                  HKQuantityTypeIdentifierInhalerUsage,
                  HKQuantityTypeIdentifierDietaryCarbohydrates,
-                 HKQuantityTypeIdentifierDietaryEnergyConsumed
+                 HKQuantityTypeIdentifierDietaryEnergyConsumed,
+                 HKQuantityTypeIdentifierUVExposure
                  ] includes:sampleTypeIdentifier]) {
         
         NSString* defaultUnitString = nil;
@@ -163,6 +165,8 @@
             defaultUnitString = @"mmHg";
         } else if (sampleTypeIdentifier == HKQuantityTypeIdentifierDietaryBiotin) {
             defaultUnitString = @"mcg";
+        } else if (sampleTypeIdentifier == HKQuantityTypeIdentifierDietaryWater) {
+            defaultUnitString = @"L";
         }
         else {
             defaultUnitString = @"count";

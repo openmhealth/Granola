@@ -43,6 +43,7 @@ void (^logTypeSupportTableString)() = ^{
                                    ],
                            @"Vital Signs Identifiers": @[
                                    HKQuantityTypeIdentifierHeartRate,
+                                   HKQuantityTypeIdentifierBasalBodyTemperature,
                                    HKQuantityTypeIdentifierBodyTemperature,
                                    HKQuantityTypeIdentifierBloodPressureSystolic,
                                    HKQuantityTypeIdentifierBloodPressureDiastolic,
@@ -98,6 +99,7 @@ void (^logTypeSupportTableString)() = ^{
                                    HKQuantityTypeIdentifierDietaryVitaminD,
                                    HKQuantityTypeIdentifierDietaryVitaminE,
                                    HKQuantityTypeIdentifierDietaryVitaminK,
+                                   HKQuantityTypeIdentifierDietaryWater,
                                    HKQuantityTypeIdentifierDietaryZinc
                                    ],
                            @"Sleep Identifiers": @[
@@ -161,7 +163,9 @@ describe(@"OMHSerializer", ^{
     
     NSArray* additionalTypeIdentifiersToTest = [NSMutableArray arrayWithArray:@[
                                                                                 HKQuantityTypeIdentifierDietaryBiotin,
+                                                                                HKQuantityTypeIdentifierDietaryWater,
                                                                                 HKQuantityTypeIdentifierInhalerUsage,
+                                                                                HKQuantityTypeIdentifierUVExposure,
                                                                                 HKCorrelationTypeIdentifierFood,
                                                                                 HKWorkoutTypeIdentifier
                                                                                 ]];
@@ -797,6 +801,55 @@ describe(HKCorrelationTypeIdentifierBloodPressure, ^{
                          @"body.diastolic_blood_pressure.value": diastolicValue,
                          @"body.diastolic_blood_pressure.unit": @"mmHg",
                          @"body.effective_time_frame.date_time": [sampledAt RFC3339String]
+                         }
+                 };
+    });
+});
+
+describe(@"HKQuantityTypeIdentifierDietaryWater with datetime", ^{
+    itShouldBehaveLike(@"AnySerializerForSupportedSample",^{
+        NSDate *start = [NSDate date];
+        NSNumber *value = [NSNumber numberWithFloat:24.3];
+        NSString *unitString = @"L";
+        HKSample *sample = [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierDietaryWater
+                                                      attrs:@{@"value":value,
+                                                              @"unitString":unitString,
+                                                              @"start":start,
+                                                              @"end":start}];
+        return @{
+                 @"sample":sample,
+                 @"pathsToValues": @{
+                         @"header.schema_id.name": @"hk-quantity-sample",
+                         @"header.schema_id.namespace":@"granola",
+                         @"body.quantity_type":[HKQuantityTypeIdentifierDietaryWater description],
+                         @"body.unit_value.value":value,
+                         @"body.unit_value.unit":unitString,
+                         @"body.effective_time_frame.date_time":[start RFC3339String],
+                         }
+                 };
+    });
+});
+
+describe(@"HKQuantityTypeIdentifierUVExposure with time interval", ^{
+    itShouldBehaveLike(@"AnySerializerForSupportedSample",^{
+        NSDate *start = [NSDate date];
+        NSDate *end = [start dateByAddingTimeInterval:3600];
+        NSNumber *value = [NSNumber numberWithFloat:7];
+        NSString *unitString = @"count";
+        HKSample *sample = [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierUVExposure
+                                                      attrs:@{@"value":value,
+                                                              @"unitString":unitString,
+                                                              @"start":start,
+                                                              @"end":end}];
+        return @{
+                 @"sample":sample,
+                 @"pathsToValues": @{
+                         @"header.schema_id.name": @"hk-quantity-sample",
+                         @"header.schema_id.namespace":@"granola",
+                         @"body.quantity_type":[HKQuantityTypeIdentifierUVExposure description],
+                         @"body.count":value,
+                         @"body.effective_time_frame.time_interval.start_date_time":[start RFC3339String],
+                         @"body.effective_time_frame.time_interval.end_date_time":[end RFC3339String]
                          }
                  };
     });
