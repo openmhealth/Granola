@@ -169,7 +169,67 @@
         default:{
             NSException *e = [NSException
                               exceptionWithName:@"HKCategoryValueAppleStandHourInvalidValue"
-                              reason:@"KCategoryValueAppleStandHour can only have a HKCategoryValueAppleStandHourIdle or HKCategoryValueAppleStandHourStood value"
+                              reason:@"HKCategoryValueAppleStandHour can only have a HKCategoryValueAppleStandHourIdle or HKCategoryValueAppleStandHourStood value"
+                              userInfo:nil];
+            @throw e;
+        }
+    }
+}
+
++ (NSString*) stringForHKCervicalMucusQualityValue:(int) enumValue {
+    switch (enumValue) {
+        case HKCategoryValueCervicalMucusQualityCreamy:
+            return @"Creamy";
+        case HKCategoryValueCervicalMucusQualityDry:
+            return @"Dry";
+        case HKCategoryValueCervicalMucusQualityEggWhite:
+            return @"Egg white";
+        case HKCategoryValueCervicalMucusQualitySticky:
+            return @"Sticky";
+        case HKCategoryValueCervicalMucusQualityWatery:
+            return @"Watery";
+        default:{
+            NSException *e = [NSException
+                              exceptionWithName:@"HKCategoryValueCervicalMucusQualityInvalidValue"
+                              reason:@"HKCategoryValueCervicalMucusQuality can only have a value specified in the HKCategoryValueCervicalMucusQuality enum"
+                              userInfo:nil];
+            @throw e;
+        }
+    }
+}
+
++ (NSString*) stringForHKMenstrualFlowQualityValue:(int) enumValue {
+    switch (enumValue) {
+        case HKCategoryValueMenstrualFlowUnspecified:
+            return @"Unspecified";
+        case HKCategoryValueMenstrualFlowLight:
+            return @"Light";
+        case HKCategoryValueMenstrualFlowMedium:
+            return @"Medium";
+        case HKCategoryValueMenstrualFlowHeavy:
+            return @"Heavy";
+        default:{
+            NSException *e = [NSException
+                              exceptionWithName:@"HKCategoryValueMenstrualFlowInvalidValue"
+                              reason:@"HKCategoryValueMenstrualFlow can only have a value specified in the HKCategoryValueMenstrualFlow enum"
+                              userInfo:nil];
+            @throw e;
+        }
+    }
+}
+
++ (NSString*) stringForHKOvulationTestResultValue:(int) enumValue {
+    switch (enumValue) {
+        case HKCategoryValueOvulationTestResultNegative:
+            return @"Negative";
+        case HKCategoryValueOvulationTestResultPositive:
+            return @"Positive";
+        case HKCategoryValueOvulationTestResultIndeterminate:
+            return @"Indeterminate";
+        default:{
+            NSException *e = [NSException
+                              exceptionWithName:@"HKCategoryValueOvulationTestResultInvalidValue"
+                              reason:@"HKCategoryValueOvulationTestResult can only have a value specified in the HKCategoryValueOvulationTestResult enum"
                               userInfo:nil];
             @throw e;
         }
@@ -269,9 +329,13 @@
     static NSDictionary* allCategoryTypeIdsToClasses = nil;
     if (allCategoryTypeIdsToClasses == nil) {
         allCategoryTypeIdsToClasses = @{
-                                
                                 HKCategoryTypeIdentifierSleepAnalysis : @"OMHSerializerSleepAnalysis", //Samples with Asleep value use this serializer, samples with InBed value use generic category serializer
-                                HKCategoryTypeIdentifierAppleStandHour : @"OMHSerializerGenericCategorySample"
+                                HKCategoryTypeIdentifierAppleStandHour : @"OMHSerializerGenericCategorySample",
+                                HKCategoryTypeIdentifierCervicalMucusQuality : @"OMHSerializerGenericCategorySample",
+                                HKCategoryTypeIdentifierIntermenstrualBleeding: @"OMHSerializerGenericCategorySample",
+                                HKCategoryTypeIdentifierMenstrualFlow: @"OMHSerializerGenericCategorySample",
+                                HKCategoryTypeIdentifierOvulationTestResult: @"OMHSerializerGenericCategorySample",
+                                HKCategoryTypeIdentifierSexualActivity: @"OMHSerializerGenericCategorySample"
                                 };
     }
     return allCategoryTypeIdsToClasses;

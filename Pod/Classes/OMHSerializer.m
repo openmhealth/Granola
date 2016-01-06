@@ -658,7 +658,7 @@
         NSArray* categoryTypes = [[OMHHealthKitConstantsMapper allSupportedCategoryTypeIdentifiersToClasses] allKeys];
         if(![categoryTypes containsObject:categorySample.categoryType.description]){
             if (error) {
-                NSString* errorMessage = @"HKCategoryTypeIdentifierSleepAnalysis is the only category type currently supported in HealthKit";
+                NSString* errorMessage = @"The category type is not currently supported.";
                 NSDictionary* userInfo = @{ NSLocalizedDescriptionKey : errorMessage };
                 *error = [NSError errorWithDomain: OMHErrorDomain
                                              code: OMHErrorCodeUnsupportedType
@@ -685,7 +685,6 @@
 - (id)bodyData {
     HKCategorySample *categorySample = (HKCategorySample*) self.sample;
     
-    //Sleep analysis is currently the only supported HKCategorySample in HealthKit, so we can assume that values we receive will relate to sleep analysis
     //Error checking for correct types is done in the canSerialize method.
     NSString *schemaMappedValue = [self getCategoryValueForTypeWithValue:categorySample.categoryType categoryValue:categorySample.value];
     
@@ -698,11 +697,26 @@
 
 - (NSString*)getCategoryValueForTypeWithValue: (HKCategoryType*) categoryType categoryValue:(NSInteger)categoryValue {
     
-    if ( [categoryType.description isEqual:HKCategoryTypeIdentifierAppleStandHour.description] ) {
+    if ( [categoryType.description isEqualToString:HKCategoryTypeIdentifierAppleStandHour.description] ) {
         return [OMHHealthKitConstantsMapper stringForHKAppleStandHourValue:(int)categoryValue];
     }
-    else if ([categoryType.description isEqual:HKCategoryTypeIdentifierSleepAnalysis.description]) {
+    else if ([categoryType.description isEqualToString:HKCategoryTypeIdentifierSleepAnalysis.description]) {
         return [OMHHealthKitConstantsMapper stringForHKSleepAnalysisValue:(int)categoryValue];
+    }
+    else if ([categoryType.description isEqualToString:HKCategoryTypeIdentifierCervicalMucusQuality.description]) {
+        return [OMHHealthKitConstantsMapper stringForHKCervicalMucusQualityValue:(int)categoryValue];
+    }
+    else if ([categoryType.description isEqualToString:HKCategoryTypeIdentifierIntermenstrualBleeding]) {
+        return @"Intermenstrual bleeding";
+    }
+    else if ([categoryType.description isEqualToString:HKCategoryTypeIdentifierMenstrualFlow]) {
+        return [OMHHealthKitConstantsMapper stringForHKMenstrualFlowQualityValue:(int)categoryValue];
+    }
+    else if ([categoryType.description isEqualToString:HKCategoryTypeIdentifierOvulationTestResult]) {
+        return [OMHHealthKitConstantsMapper stringForHKOvulationTestResultValue:(int)categoryValue];
+    }
+    else if ([categoryType.description isEqualToString:HKCategoryTypeIdentifierSexualActivity]) {
+        return @"Sexual activity";
     }
     else{
         NSException *e = [NSException

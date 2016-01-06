@@ -34,6 +34,7 @@ void (^logTypeSupportTableString)() = ^{
                                    HKQuantityTypeIdentifierLeanBodyMass,
                                    ],
                            @"Fitness Identifiers": @[
+                                   HKCategoryTypeIdentifierAppleStandHour,
                                    HKQuantityTypeIdentifierStepCount,
                                    HKQuantityTypeIdentifierDistanceWalkingRunning,
                                    HKQuantityTypeIdentifierDistanceCycling,
@@ -116,6 +117,13 @@ void (^logTypeSupportTableString)() = ^{
                                    ],
                            @"Workout Identifier": @[
                                    HKWorkoutTypeIdentifier
+                                   ],
+                           @"Sexual and Reproductive Health Identifier": @[
+                                   HKCategoryTypeIdentifierCervicalMucusQuality,
+                                   HKCategoryTypeIdentifierIntermenstrualBleeding,
+                                   HKCategoryTypeIdentifierMenstrualFlow,
+                                   HKCategoryTypeIdentifierOvulationTestResult,
+                                   HKCategoryTypeIdentifierSexualActivity
                                    ]
                            };
     NSMutableArray* tableRows = [NSMutableArray array];
@@ -167,6 +175,11 @@ describe(@"OMHSerializer", ^{
                                                                                 HKQuantityTypeIdentifierInhalerUsage,
                                                                                 HKQuantityTypeIdentifierUVExposure,
                                                                                 HKCategoryTypeIdentifierAppleStandHour,
+                                                                                HKCategoryTypeIdentifierCervicalMucusQuality,
+                                                                                HKCategoryTypeIdentifierIntermenstrualBleeding,
+                                                                                HKCategoryTypeIdentifierMenstrualFlow,
+                                                                                HKCategoryTypeIdentifierOvulationTestResult,
+                                                                                HKCategoryTypeIdentifierSexualActivity,
                                                                                 HKCorrelationTypeIdentifierFood,
                                                                                 HKWorkoutTypeIdentifier
                                                                                 ]];
@@ -872,7 +885,7 @@ describe(@"HKCategoryTypeIdentifierAppleStandHour Stood", ^{
                          @"body.category_value": @"Standing",
                          @"body.category_type": HKCategoryTypeIdentifierAppleStandHour,
                          @"body.effective_time_frame.time_interval.start_date_time": [start RFC3339String],
-                         @"body.effective_time_frame.time_interval.end_date_time": [end RFC3339String],
+                         @"body.effective_time_frame.time_interval.end_date_time": [end RFC3339String]
                          }
                  };
     });
@@ -894,10 +907,124 @@ describe(@"HKCategoryTypeIdentifierAppleStandHour Idle", ^{
                          @"body.category_value": @"Idle",
                          @"body.category_type": HKCategoryTypeIdentifierAppleStandHour,
                          @"body.effective_time_frame.time_interval.start_date_time": [start RFC3339String],
-                         @"body.effective_time_frame.time_interval.end_date_time": [end RFC3339String],
+                         @"body.effective_time_frame.time_interval.end_date_time": [end RFC3339String]
                          }
                  };
     });
 });
+
+describe(@"HKCategoryTypeIdentifierCervicalMucusQuality Egg White", ^{
+    
+    itShouldBehaveLike(@"AnySerializerForSupportedSample", ^{
+        NSDate* start = [NSDate date];
+        NSDate* end = [start dateByAddingTimeInterval:60*18];
+        HKSample* sample =
+        [OMHSampleFactory typeIdentifier:HKCategoryTypeIdentifierCervicalMucusQuality
+                                   attrs:@{ @"start": start, @"end": end, @"value":@(HKCategoryValueCervicalMucusQualityEggWhite)}];
+        return @{
+                 @"sample": sample,
+                 @"pathsToValues": @{
+                         @"header.schema_id.name": @"hk-category-sample",
+                         @"header.schema_id.namespace":@"granola",
+                         @"body.category_value": @"Egg white",
+                         @"body.category_type": HKCategoryTypeIdentifierCervicalMucusQuality,
+                         @"body.effective_time_frame.time_interval.start_date_time": [start RFC3339String],
+                         @"body.effective_time_frame.time_interval.end_date_time": [end RFC3339String]
+                         }
+                 };
+    });
+});
+
+describe(@"HKCategoryTypeIdentifierIntermenstrualBleeding", ^{
+    
+    itShouldBehaveLike(@"AnySerializerForSupportedSample", ^{
+        NSDate* start = [NSDate date];
+        NSDate* end = [start dateByAddingTimeInterval:60*18];
+        HKSample* sample =
+        [OMHSampleFactory typeIdentifier:HKCategoryTypeIdentifierIntermenstrualBleeding
+                                   attrs:@{ @"start": start, @"end": end, @"value":@(HKCategoryValueNotApplicable)}];
+        return @{
+                 @"sample": sample,
+                 @"pathsToValues": @{
+                         @"header.schema_id.name": @"hk-category-sample",
+                         @"header.schema_id.namespace":@"granola",
+                         @"body.category_value": @"Intermenstrual bleeding",
+                         @"body.category_type": HKCategoryTypeIdentifierIntermenstrualBleeding,
+                         @"body.effective_time_frame.time_interval.start_date_time": [start RFC3339String],
+                         @"body.effective_time_frame.time_interval.end_date_time": [end RFC3339String]
+                         }
+                 };
+    });
+});
+
+describe(@"HKCategoryTypeIdentifierMenstrualFlow medium", ^{
+    
+    itShouldBehaveLike(@"AnySerializerForSupportedSample", ^{
+        NSDate* start = [NSDate date];
+        NSDate* end = [start dateByAddingTimeInterval:60*18];
+        HKSample* sample =
+        [OMHSampleFactory typeIdentifier:HKCategoryTypeIdentifierMenstrualFlow
+                                   attrs:@{ @"start": start, @"end": end, @"value":@(HKCategoryValueMenstrualFlowMedium)}];
+        return @{
+                 @"sample": sample,
+                 @"pathsToValues": @{
+                         @"header.schema_id.name": @"hk-category-sample",
+                         @"header.schema_id.namespace":@"granola",
+                         @"body.category_value": @"Medium",
+                         @"body.category_type": HKCategoryTypeIdentifierMenstrualFlow,
+                         @"body.effective_time_frame.time_interval.start_date_time": [start RFC3339String],
+                         @"body.effective_time_frame.time_interval.end_date_time": [end RFC3339String],
+                         @"body.metadata.key": @[HKMetadataKeyMenstrualCycleStart],
+                         @"body.metadata.value": @[@true]
+                         }
+                 };
+    });
+});
+
+describe(@"HKCategoryTypeIdentifierOvulationTestResult negative", ^{
+    
+    itShouldBehaveLike(@"AnySerializerForSupportedSample", ^{
+        NSDate* start = [NSDate date];
+        NSDate* end = [start dateByAddingTimeInterval:60*18];
+        HKSample* sample =
+        [OMHSampleFactory typeIdentifier:HKCategoryTypeIdentifierOvulationTestResult
+                                   attrs:@{ @"start": start, @"end": end, @"value":@(HKCategoryValueOvulationTestResultNegative)}];
+        return @{
+                 @"sample": sample,
+                 @"pathsToValues": @{
+                         @"header.schema_id.name": @"hk-category-sample",
+                         @"header.schema_id.namespace":@"granola",
+                         @"body.category_value": @"Negative",
+                         @"body.category_type": HKCategoryTypeIdentifierOvulationTestResult,
+                         @"body.effective_time_frame.time_interval.start_date_time": [start RFC3339String],
+                         @"body.effective_time_frame.time_interval.end_date_time": [end RFC3339String]
+                         }
+                 };
+    });
+});
+
+describe(@"HKCategoryTypeIdentifierSexualActivity", ^{
+    
+    itShouldBehaveLike(@"AnySerializerForSupportedSample", ^{
+        NSDate* start = [NSDate date];
+        NSDate* end = [start dateByAddingTimeInterval:60*18];
+        HKSample* sample =
+        [OMHSampleFactory typeIdentifier:HKCategoryTypeIdentifierSexualActivity
+                                   attrs:@{ @"start": start, @"end": end, @"value":@(HKCategoryValueNotApplicable)}];
+        return @{
+                 @"sample": sample,
+                 @"pathsToValues": @{
+                         @"header.schema_id.name": @"hk-category-sample",
+                         @"header.schema_id.namespace":@"granola",
+                         @"body.category_value": @"Sexual activity",
+                         @"body.category_type": HKCategoryTypeIdentifierSexualActivity,
+                         @"body.effective_time_frame.time_interval.start_date_time": [start RFC3339String],
+                         @"body.effective_time_frame.time_interval.end_date_time": [end RFC3339String]
+                         }
+                 };
+    });
+});
+
+
 SpecEnd
 

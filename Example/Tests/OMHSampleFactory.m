@@ -43,8 +43,26 @@
         HKCategoryType* type =
         [HKObjectType categoryTypeForIdentifier:sampleTypeIdentifier];
         NSNumber *defaultValue = [NSNumber numberWithInt:0];
+        
+        // Apple starts their category enums at different values, for some reproductive health enums, it starts at 1 instead of 0
+        if ([type.description isEqualToString:HKCategoryTypeIdentifierCervicalMucusQuality] || [type.description isEqualToString:HKCategoryTypeIdentifierOvulationTestResult] || [type.description isEqualToString:HKCategoryTypeIdentifierMenstrualFlow]){
+            
+            defaultValue = [NSNumber numberWithInt:1];
+        }
+        
         NSNumber *value = or(attrs[@"value"], defaultValue);
         //int value = HKCategoryValueSleepAnalysisAsleep;
+        
+        if ([type.description isEqualToString:HKCategoryTypeIdentifierMenstrualFlow]) {
+            
+            NSMutableDictionary *menstrualStartMetadata = [NSMutableDictionary dictionaryWithDictionary: @{ HKMetadataKeyMenstrualCycleStart : @true}];
+            
+            if (metadata !=nil){
+                [menstrualStartMetadata addEntriesFromDictionary:metadata];
+            }
+
+            metadata = menstrualStartMetadata;
+        }
         
         sample =
         [HKCategorySample categorySampleWithType:type
