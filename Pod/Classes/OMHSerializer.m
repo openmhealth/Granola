@@ -40,6 +40,7 @@
                                       HKQuantityTypeIdentifierActiveEnergyBurned,
                                       HKQuantityTypeIdentifierBasalEnergyBurned,
                                       HKQuantityTypeIdentifierBodyMassIndex,
+                                      HKQuantityTypeIdentifierBodyFatPercentage,
                                       HKQuantityTypeIdentifierOxygenSaturation,
                                       HKCategoryTypeIdentifierSleepAnalysis, //Samples with Asleep value use this serializer, samples with InBed value use generic category serializer
                                       HKCorrelationTypeIdentifierBloodPressure
@@ -489,6 +490,37 @@
     return @"omh";
 }
 @end
+
+@interface OMHSerializerBodyFatPercentage : OMHSerializer; @end;
+@implementation OMHSerializerBodyFatPercentage
++ (BOOL)canSerialize:(HKQuantitySample*)sample error:(NSError**)error {
+    return YES;
+}
+- (id)bodyData {
+    NSString* unitString = @"%";
+    HKUnit* unit = [HKUnit unitFromString:unitString];
+    float value =
+    [[(HKQuantitySample*)self.sample quantity] doubleValueForUnit:unit];
+    return @{
+             @"body_fat_percentage": @{
+                     @"value": [NSNumber numberWithDouble:value],
+                     @"unit": unitString
+                     },
+             @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+             
+             };
+}
+- (NSString*)schemaName {
+    return @"body-fat-percentage";
+}
+- (NSString*)schemaVersion {
+    return @"1.0";
+}
+- (NSString*)schemaNamespace{
+    return @"omh";
+}
+@end
+
 
 /**
  Serializer component to map data from HKCorrelation samples of the HKCorrelationTypeIdentifierBloodPressure type to the properties in the

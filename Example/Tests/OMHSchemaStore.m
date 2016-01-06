@@ -120,6 +120,7 @@
                                @"omh/physical-activity",
                                @"omh/kcal-unit-value",
                                @"omh/calories-burned",
+                               @"omh/body-fat-percentage",
                                @"omh/oxygen-saturation",
                                @"granola/hk-metadata",
                                @"granola/hk-quantity-type",

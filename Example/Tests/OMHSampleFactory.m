@@ -164,7 +164,8 @@
                  HKQuantityTypeIdentifierDietaryCarbohydrates,
                  HKQuantityTypeIdentifierDietaryEnergyConsumed,
                  HKQuantityTypeIdentifierUVExposure,
-                 HKQuantityTypeIdentifierOxygenSaturation
+                 HKQuantityTypeIdentifierOxygenSaturation,
+                 HKQuantityTypeIdentifierBodyFatPercentage
                  ] includes:sampleTypeIdentifier]) {
         
         NSString* defaultUnitString = nil;
@@ -184,7 +185,7 @@
             defaultUnitString = @"mcg";
         } else if (sampleTypeIdentifier == HKQuantityTypeIdentifierDietaryWater) {
             defaultUnitString = @"L";
-        } else if (sampleTypeIdentifier == HKQuantityTypeIdentifierOxygenSaturation) {
+        } else if (sampleTypeIdentifier == HKQuantityTypeIdentifierOxygenSaturation || sampleTypeIdentifier == HKQuantityTypeIdentifierBodyFatPercentage) {
             defaultUnitString = @"%";
         }
         else {

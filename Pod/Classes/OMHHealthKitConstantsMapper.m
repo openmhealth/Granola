@@ -294,7 +294,7 @@
                                         HKQuantityTypeIdentifierBloodGlucose : @"OMHSerializerBloodGlucose",
                                         HKQuantityTypeIdentifierBloodPressureDiastolic: @"OMHSerializerGenericQuantitySample",
                                         HKQuantityTypeIdentifierBloodPressureSystolic: @"OMHSerializerGenericQuantitySample",
-                                        HKQuantityTypeIdentifierBodyFatPercentage: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierBodyFatPercentage: @"OMHSerializerBodyFatPercentage",
                                         HKQuantityTypeIdentifierBodyMass : @"OMHSerializerWeight",
                                         HKQuantityTypeIdentifierBodyMassIndex: @"OMHSerializerBodyMassIndex",
                                         HKQuantityTypeIdentifierBodyTemperature: @"OMHSerializerBodyMassIndex",
