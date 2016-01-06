@@ -655,23 +655,13 @@
     BOOL canSerialize = YES;
     @try{
         HKCategorySample *categorySample = (HKCategorySample*) sample;
-        if(![[categorySample.categoryType description] isEqualToString:HKCategoryTypeIdentifierSleepAnalysis]){
+        NSArray* categoryTypes = [[OMHHealthKitConstantsMapper allSupportedCategoryTypeIdentifiersToClasses] allKeys];
+        if(![categoryTypes containsObject:categorySample.categoryType.description]){
             if (error) {
-                NSString* errorMessage = @"HKCategoryTypeIdentifierSleepAnalysis is the only category type currently supported in HealthKit";
+                NSString* errorMessage = @"The category type is not currently supported.";
                 NSDictionary* userInfo = @{ NSLocalizedDescriptionKey : errorMessage };
                 *error = [NSError errorWithDomain: OMHErrorDomain
                                              code: OMHErrorCodeUnsupportedType
-                                         userInfo: userInfo];
-            }
-            canSerialize = NO;
-        }
-        
-        if(categorySample.value != HKCategoryValueSleepAnalysisInBed && categorySample.value != HKCategoryValueSleepAnalysisAsleep && canSerialize){
-            if (error) {
-                NSString* errorMessage = @"Sleep analysis category samples can only have values contained in the HKCategoryValueSleepAnalysis enum";
-                NSDictionary* userInfo = @{ NSLocalizedDescriptionKey : errorMessage };
-                *error = [NSError errorWithDomain: OMHErrorDomain
-                                             code: OMHErrorCodeUnsupportedValues
                                          userInfo: userInfo];
             }
             canSerialize = NO;
@@ -695,9 +685,8 @@
 - (id)bodyData {
     HKCategorySample *categorySample = (HKCategorySample*) self.sample;
     
-    //Sleep analysis is currently the only supported HKCategorySample in HealthKit, so we can assume that values we receive will relate to sleep analysis
     //Error checking for correct types is done in the canSerialize method.
-    NSString *schemaMappedValue = [OMHHealthKitConstantsMapper stringForHKSleepAnalysisValue:(int)categorySample.value];
+    NSString *schemaMappedValue = [self getCategoryValueForTypeWithValue:categorySample.categoryType categoryValue:categorySample.value];
     
     return @{
              @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:categorySample.startDate endDate:categorySample.endDate],
@@ -705,6 +694,42 @@
              @"category_value": schemaMappedValue
              };
 }
+
+- (NSString*)getCategoryValueForTypeWithValue: (HKCategoryType*) categoryType categoryValue:(NSInteger)categoryValue {
+    
+    if ( [categoryType.description isEqualToString:HKCategoryTypeIdentifierAppleStandHour.description] ) {
+        return [OMHHealthKitConstantsMapper stringForHKAppleStandHourValue:(int)categoryValue];
+    }
+    else if ([categoryType.description isEqualToString:HKCategoryTypeIdentifierSleepAnalysis.description]) {
+        return [OMHHealthKitConstantsMapper stringForHKSleepAnalysisValue:(int)categoryValue];
+    }
+    else if ([categoryType.description isEqualToString:HKCategoryTypeIdentifierCervicalMucusQuality.description]) {
+        return [OMHHealthKitConstantsMapper stringForHKCervicalMucusQualityValue:(int)categoryValue];
+    }
+    else if ([categoryType.description isEqualToString:HKCategoryTypeIdentifierIntermenstrualBleeding]) {
+        // Samples of this type represent the presence of intermenstrual bleeding and as such does not have a categorical value. HealthKit specifies that the value field for this type is "HKCategoryValueNotApplicable" which is a nonsensical value, so we use the name of the represented measure as the value.
+        return @"Intermenstrual bleeding";
+    }
+    else if ([categoryType.description isEqualToString:HKCategoryTypeIdentifierMenstrualFlow]) {
+        return [OMHHealthKitConstantsMapper stringForHKMenstrualFlowQualityValue:(int)categoryValue];
+    }
+    else if ([categoryType.description isEqualToString:HKCategoryTypeIdentifierOvulationTestResult]) {
+        return [OMHHealthKitConstantsMapper stringForHKOvulationTestResultValue:(int)categoryValue];
+    }
+    else if ([categoryType.description isEqualToString:HKCategoryTypeIdentifierSexualActivity]) {
+        // Samples of this type represent times during which sexual activity occurred. This means that during the time frame of each sample, sexual activity was occurring. As such, this measure does not have a categorical value. HealthKit specifies that the value field for this type is "HKCategoryValueNotApplicable" which is a nonsensical value, so we use the name of the represented measure as the value.
+        return @"Sexual activity";
+    }
+    else{
+        NSException *e = [NSException
+                          exceptionWithName:@"InvalidHKCategoryType"
+                          reason:@"Incorrect category type parameter for method."
+                          userInfo:nil];
+        @throw e;
+    }
+    
+}
+
 - (NSString*)schemaName {
     return @"hk-category-sample";
 }
