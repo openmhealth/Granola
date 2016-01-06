@@ -1049,6 +1049,31 @@ describe(@"HKQuantityTypeIdentifierOxygenSaturation with time_interval", ^{
     });
 });
 
+describe(@"HKQuantityTypeIdentifierBasalEnergyBurned with time_interval", ^{
+    itShouldBehaveLike(@"AnySerializerForSupportedSample",^{
+        NSDate *start = [NSDate date];
+        NSDate *end = [start dateByAddingTimeInterval:3600];
+        NSNumber *value = [NSNumber numberWithFloat:453.5];
+        NSString *unitString = @"kcal";
+        HKSample *sample = [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierBasalEnergyBurned
+                                                      attrs:@{@"value":value,
+                                                              @"unitString":unitString,
+                                                              @"start":start,
+                                                              @"end":end}];
+        return @{
+                 @"sample":sample,
+                 @"pathsToValues": @{
+                         @"header.schema_id.name": @"calories-burned",
+                         @"header.schema_id.namespace":@"omh",
+                         @"body.kcal_burned.value": value,
+                         @"body.kcal_burned.unit": unitString,
+                         @"body.effective_time_frame.time_interval.start_date_time": [sample.startDate RFC3339String],
+                         @"body.effective_time_frame.time_interval.end_date_time": [sample.endDate RFC3339String]
+                         }
+                 };
+    });
+});
+
 
 SpecEnd
 

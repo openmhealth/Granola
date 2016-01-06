@@ -38,6 +38,7 @@
                                       HKQuantityTypeIdentifierHeartRate,
                                       HKQuantityTypeIdentifierBloodGlucose,
                                       HKQuantityTypeIdentifierActiveEnergyBurned,
+                                      HKQuantityTypeIdentifierBasalEnergyBurned,
                                       HKQuantityTypeIdentifierBodyMassIndex,
                                       HKQuantityTypeIdentifierOxygenSaturation,
                                       HKCategoryTypeIdentifierSleepAnalysis, //Samples with Asleep value use this serializer, samples with InBed value use generic category serializer
