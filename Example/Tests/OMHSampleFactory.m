@@ -163,7 +163,8 @@
                  HKQuantityTypeIdentifierInhalerUsage,
                  HKQuantityTypeIdentifierDietaryCarbohydrates,
                  HKQuantityTypeIdentifierDietaryEnergyConsumed,
-                 HKQuantityTypeIdentifierUVExposure
+                 HKQuantityTypeIdentifierUVExposure,
+                 HKQuantityTypeIdentifierOxygenSaturation
                  ] includes:sampleTypeIdentifier]) {
         
         NSString* defaultUnitString = nil;
@@ -183,6 +184,8 @@
             defaultUnitString = @"mcg";
         } else if (sampleTypeIdentifier == HKQuantityTypeIdentifierDietaryWater) {
             defaultUnitString = @"L";
+        } else if (sampleTypeIdentifier == HKQuantityTypeIdentifierOxygenSaturation) {
+            defaultUnitString = @"%";
         }
         else {
             defaultUnitString = @"count";

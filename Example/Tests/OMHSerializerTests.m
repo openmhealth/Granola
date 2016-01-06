@@ -989,6 +989,7 @@ describe(@"HKCategoryTypeIdentifierOvulationTestResult negative", ^{
         HKSample* sample =
         [OMHSampleFactory typeIdentifier:HKCategoryTypeIdentifierOvulationTestResult
                                    attrs:@{ @"start": start, @"end": end, @"value":@(HKCategoryValueOvulationTestResultNegative)}];
+        
         return @{
                  @"sample": sample,
                  @"pathsToValues": @{
@@ -1020,6 +1021,29 @@ describe(@"HKCategoryTypeIdentifierSexualActivity", ^{
                          @"body.category_type": HKCategoryTypeIdentifierSexualActivity,
                          @"body.effective_time_frame.time_interval.start_date_time": [start RFC3339String],
                          @"body.effective_time_frame.time_interval.end_date_time": [end RFC3339String]
+                         }
+                 };
+    });
+});
+
+describe(@"HKQuantityTypeIdentifierOxygenSaturation with time_interval", ^{
+    itShouldBehaveLike(@"AnySerializerForSupportedSample",^{
+        NSDate *start = [NSDate date];
+        NSNumber *value = [NSNumber numberWithFloat:96.1];
+        NSString *unitString = @"%";
+        HKSample *sample = [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierOxygenSaturation
+                                                      attrs:@{@"value":value,
+                                                              @"unitString":unitString,
+                                                              @"start":start,
+                                                              @"end":start}];
+        return @{
+                 @"sample":sample,
+                 @"pathsToValues": @{
+                         @"header.schema_id.name": @"oxygen-saturation",
+                         @"header.schema_id.namespace":@"omh",
+                         @"body.oxygen_saturation.value":value,
+                         @"body.oxygen_saturation.unit":unitString,
+                         @"body.effective_time_frame.date_time":[start RFC3339String]
                          }
                  };
     });

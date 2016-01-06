@@ -39,8 +39,10 @@
                                       HKQuantityTypeIdentifierBloodGlucose,
                                       HKQuantityTypeIdentifierActiveEnergyBurned,
                                       HKQuantityTypeIdentifierBodyMassIndex,
+                                      HKQuantityTypeIdentifierOxygenSaturation,
                                       HKCategoryTypeIdentifierSleepAnalysis, //Samples with Asleep value use this serializer, samples with InBed value use generic category serializer
-                                      HKCorrelationTypeIdentifierBloodPressure];
+                                      HKCorrelationTypeIdentifierBloodPressure
+                                      ];
     
     }
     return OMHSchemaTypeIds;
@@ -401,6 +403,39 @@
 }
 - (NSString*)schemaName {
     return @"calories-burned";
+}
+- (NSString*)schemaVersion {
+    return @"1.0";
+}
+- (NSString*)schemaNamespace{
+    return @"omh";
+}
+@end
+
+/**
+ 
+ */
+@interface OMHSerializerOxygenSaturation : OMHSerializer; @end;
+@implementation OMHSerializerOxygenSaturation
++ (BOOL)canSerialize:(HKQuantitySample*)sample error:(NSError**)error {
+    return YES;
+}
+- (id)bodyData {
+    NSString* unitString = @"%";
+    HKUnit* unit = [HKUnit unitFromString:unitString];
+    float value =
+    [[(HKQuantitySample*)self.sample quantity] doubleValueForUnit:unit];
+    return @{
+             @"oxygen_saturation": @{
+                     @"value": [NSNumber numberWithDouble:value],
+                     @"unit": unitString
+                     },
+             @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+             
+             };
+}
+- (NSString*)schemaName {
+    return @"oxygen-saturation";
 }
 - (NSString*)schemaVersion {
     return @"1.0";
