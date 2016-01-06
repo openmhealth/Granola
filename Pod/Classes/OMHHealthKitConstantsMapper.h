@@ -20,12 +20,12 @@
 + (NSString*) stringForHKSleepAnalysisValue:(int) enumValue;
 + (NSString*) stringForHKAppleStandHourValue:(int) enumValue;
 + (NSString*) stringForHKCervicalMucusQualityValue:(int) enumValue;
-+ (NSString*) stringForHKMenstrualFlowQualityValue:(int) enumValue;
++ (NSString*) stringForHKMenstrualFlowValue:(int) enumValue;
 + (NSString*) stringForHKOvulationTestResultValue:(int) enumValue;
 + (NSDictionary*) allSupportedTypeIdentifiersToClasses;
 + (NSDictionary*) allSupportedCategoryTypeIdentifiersToClasses;
-+ (NSDictionary*)allSupportedCorrelationTypeIdentifiersToClass;
-+ (NSDictionary*)allSupportedQuantityTypeIdentifiersToClass;
++ (NSDictionary*) allSupportedCorrelationTypeIdentifiersToClass;
++ (NSDictionary*) allSupportedQuantityTypeIdentifiersToClass;
 
 @end
 

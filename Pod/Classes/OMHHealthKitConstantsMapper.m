@@ -137,8 +137,13 @@
             return @"HKWorkoutActivityTypeYoga";
         case HKWorkoutActivityTypeOther:
             return @"HKWorkoutActivityTypeOther";
-        default:
-            return @"";
+        default:{
+            NSException *e = [NSException
+                              exceptionWithName:@"HKWorkoutActivityTypeInvalidValue"
+                              reason:@"HKWorkoutActivityType can only have a value from the HKWorkoutActivityType enum"
+                              userInfo:nil];
+            @throw e;
+        }
     }
 }
 
@@ -198,7 +203,7 @@
     }
 }
 
-+ (NSString*) stringForHKMenstrualFlowQualityValue:(int) enumValue {
++ (NSString*) stringForHKMenstrualFlowValue:(int) enumValue {
     switch (enumValue) {
         case HKCategoryValueMenstrualFlowUnspecified:
             return @"Unspecified";

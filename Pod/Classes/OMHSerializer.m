@@ -813,7 +813,7 @@
         return @"Intermenstrual bleeding";
     }
     else if ([categoryType.description isEqualToString:HKCategoryTypeIdentifierMenstrualFlow]) {
-        return [OMHHealthKitConstantsMapper stringForHKMenstrualFlowQualityValue:(int)categoryValue];
+        return [OMHHealthKitConstantsMapper stringForHKMenstrualFlowValue:(int)categoryValue];
     }
     else if ([categoryType.description isEqualToString:HKCategoryTypeIdentifierOvulationTestResult]) {
         return [OMHHealthKitConstantsMapper stringForHKOvulationTestResultValue:(int)categoryValue];
@@ -869,7 +869,6 @@
             
             return NO;
         }
-        
     }
     @catch (NSException *exception){
         if (error) {
@@ -966,7 +965,6 @@
         }
         return NO;
     }
-    
 }
 
 - (id)bodyData {
