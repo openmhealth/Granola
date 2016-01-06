@@ -707,6 +707,7 @@
         return [OMHHealthKitConstantsMapper stringForHKCervicalMucusQualityValue:(int)categoryValue];
     }
     else if ([categoryType.description isEqualToString:HKCategoryTypeIdentifierIntermenstrualBleeding]) {
+        // Samples of this type represent the presence of intermenstrual bleeding and as such does not have a categorical value. HealthKit specifies that the value field for this type is "HKCategoryValueNotApplicable" which is a nonsensical value, so we use the name of the represented measure as the value.
         return @"Intermenstrual bleeding";
     }
     else if ([categoryType.description isEqualToString:HKCategoryTypeIdentifierMenstrualFlow]) {
@@ -716,6 +717,7 @@
         return [OMHHealthKitConstantsMapper stringForHKOvulationTestResultValue:(int)categoryValue];
     }
     else if ([categoryType.description isEqualToString:HKCategoryTypeIdentifierSexualActivity]) {
+        // Samples of this type represent times during which sexual activity occurred. This means that during the time frame of each sample, sexual activity was occurring. As such, this measure does not have a categorical value. HealthKit specifies that the value field for this type is "HKCategoryValueNotApplicable" which is a nonsensical value, so we use the name of the represented measure as the value.
         return @"Sexual activity";
     }
     else{

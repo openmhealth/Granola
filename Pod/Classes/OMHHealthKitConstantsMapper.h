@@ -24,6 +24,8 @@
 + (NSString*) stringForHKOvulationTestResultValue:(int) enumValue;
 + (NSDictionary*) allSupportedTypeIdentifiersToClasses;
 + (NSDictionary*) allSupportedCategoryTypeIdentifiersToClasses;
++ (NSDictionary*)allSupportedCorrelationTypeIdentifiersToClass;
++ (NSDictionary*)allSupportedQuantityTypeIdentifiersToClass;
 
 @end
 
