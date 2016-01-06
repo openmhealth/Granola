@@ -51,10 +51,10 @@
         }
         
         NSNumber *value = or(attrs[@"value"], defaultValue);
-        //int value = HKCategoryValueSleepAnalysisAsleep;
         
         if ([type.description isEqualToString:HKCategoryTypeIdentifierMenstrualFlow]) {
             
+            // Menstrual flow category samples require an HKMetadataKeyMenstrualCycleStart entry. Without it, HealthKit will throw an exception.
             NSMutableDictionary *menstrualStartMetadata = [NSMutableDictionary dictionaryWithDictionary: @{ HKMetadataKeyMenstrualCycleStart : @true}];
             
             if (metadata !=nil){
