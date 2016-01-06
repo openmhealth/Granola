@@ -122,6 +122,7 @@
                                @"omh/calories-burned",
                                @"omh/body-fat-percentage",
                                @"omh/oxygen-saturation",
+                               @"omh/respiratory-rate",
                                @"granola/hk-metadata",
                                @"granola/hk-quantity-type",
                                @"granola/hk-quantity-sample",

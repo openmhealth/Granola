@@ -352,7 +352,7 @@
                                         HKQuantityTypeIdentifierOxygenSaturation: @"OMHSerializerOxygenSaturation",
                                         HKQuantityTypeIdentifierPeakExpiratoryFlowRate: @"OMHSerializerGenericQuantitySample",
                                         HKQuantityTypeIdentifierPeripheralPerfusionIndex: @"OMHSerializerGenericQuantitySample",
-                                        HKQuantityTypeIdentifierRespiratoryRate: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierRespiratoryRate: @"OMHSerializerRespiratoryRate",
                                         HKQuantityTypeIdentifierStepCount : @"OMHSerializerStepCount",
                                         HKQuantityTypeIdentifierUVExposure: @"OMHSerializerGenericQuantitySample"
                                         };

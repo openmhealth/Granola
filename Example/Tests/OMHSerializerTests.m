@@ -1099,6 +1099,31 @@ describe(@"HKQuantityTypeIdentifierBodyFatPercentage with time_interval", ^{
     });
 });
 
+describe(@"HKQuantityTypeIdentifierRespiratoryRate with time_interval", ^{
+    itShouldBehaveLike(@"AnySerializerForSupportedSample",^{
+        NSDate *start = [NSDate date];
+        NSDate *end = [start dateByAddingTimeInterval:3600];
+        NSNumber *value = [NSNumber numberWithFloat:23.2];
+        NSString *unitString = @"count/min";
+        HKSample *sample = [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierRespiratoryRate
+                                                      attrs:@{@"value":value,
+                                                              @"unitString":unitString,
+                                                              @"start":start,
+                                                              @"end":end}];
+        return @{
+                 @"sample":sample,
+                 @"pathsToValues": @{
+                         @"header.schema_id.name": @"respiratory-rate",
+                         @"header.schema_id.namespace":@"omh",
+                         @"body.respiratory_rate.value": value,
+                         @"body.respiratory_rate.unit": @"breaths/min",
+                         @"body.effective_time_frame.time_interval.start_date_time": [sample.startDate RFC3339String],
+                         @"body.effective_time_frame.time_interval.end_date_time": [sample.endDate RFC3339String]
+                         }
+                 };
+    });
+});
+
 
 SpecEnd
 

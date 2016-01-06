@@ -165,7 +165,8 @@
                  HKQuantityTypeIdentifierDietaryEnergyConsumed,
                  HKQuantityTypeIdentifierUVExposure,
                  HKQuantityTypeIdentifierOxygenSaturation,
-                 HKQuantityTypeIdentifierBodyFatPercentage
+                 HKQuantityTypeIdentifierBodyFatPercentage,
+                 HKQuantityTypeIdentifierRespiratoryRate
                  ] includes:sampleTypeIdentifier]) {
         
         NSString* defaultUnitString = nil;
@@ -173,7 +174,7 @@
             defaultUnitString = @"cm";
         } else if (sampleTypeIdentifier == HKQuantityTypeIdentifierBodyMass) {
             defaultUnitString = @"lb";
-        } else if (sampleTypeIdentifier == HKQuantityTypeIdentifierHeartRate) {
+        } else if (sampleTypeIdentifier == HKQuantityTypeIdentifierHeartRate || sampleTypeIdentifier == HKQuantityTypeIdentifierRespiratoryRate) {
             defaultUnitString = @"count/min";
         } else if (sampleTypeIdentifier == HKQuantityTypeIdentifierBloodGlucose) {
             defaultUnitString = @"mg/dL";
