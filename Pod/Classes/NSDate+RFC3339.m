@@ -18,24 +18,29 @@
 
 @implementation NSDate (RFC3339)
 
-+ (NSDateFormatter*)RFC3339Formatter {
-    static NSDateFormatter* formatter = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        formatter = [[NSDateFormatter alloc] init];
-        NSLocale* locale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
-        [formatter setLocale:locale];
-        [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSXXX"];
-    });
++ (NSDateFormatter*)RFC3339Formatter:(NSTimeZone*)timezone {
+    
+    NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+    
+    NSLocale* locale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
+    
+    formatter.timeZone = timezone;
+    formatter.locale = locale;
+    formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
+    
     return formatter;
 }
 
 - (NSString *)RFC3339String {
-    return [[[self class] RFC3339Formatter] stringFromDate:self];
+    return [[[self class] RFC3339Formatter:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]] stringFromDate:self];
 }
 
-+ (NSDate*)fromRFC3339String:(NSString*)dateString {
-    return [[self RFC3339Formatter] dateFromString:dateString];
+- (NSString *)RFC3339String:(NSTimeZone*)timezone {
+    return [[[self class] RFC3339Formatter:timezone] stringFromDate:self];
+}
+
++ (NSDate*)fromRFC3339String:(NSString*)dateString timezone:(NSTimeZone*)timezone {
+    return [[self RFC3339Formatter:timezone] dateFromString:dateString];
 }
 
 @end

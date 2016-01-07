@@ -20,7 +20,11 @@
 
 - (NSString *)RFC3339String;
 
-+ (NSDate*)fromRFC3339String:(NSString*)dateString;
+- (NSString *)RFC3339String:(NSTimeZone*)timezone;
+
++ (NSDate*)fromRFC3339String:(NSString*)dateString timezone:(NSTimeZone*)timezone;
+
+
 
 @end
 

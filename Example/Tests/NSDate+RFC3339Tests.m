@@ -21,32 +21,62 @@
 SpecBegin(NSDate)
 describe(@"NSDate RFC3339 Formatter", ^{
     __block NSString* offsetString;
+    __block NSInteger offsetHours;
+    __block NSCalendar* calendar;
+    __block NSDateComponents* dateBuilder;
     
     beforeAll(^{
         long offsetint = [[NSTimeZone localTimeZone] secondsFromGMT] / 3600;
         offsetString = [NSString stringWithFormat:@"%ld",offsetint];
+        calendar = [[NSCalendar alloc]
+                                 initWithCalendarIdentifier:NSGregorianCalendar];
+        offsetHours = 6*60*60; // +06:00 offset
+        dateBuilder = [[NSDateComponents alloc] init];
+        
+        dateBuilder.year = 2015;
+        dateBuilder.day = 28;
+        dateBuilder.month = 6;
+        dateBuilder.hour = 8;
+        dateBuilder.minute = 6;
+        dateBuilder.second = 9;
+        dateBuilder.nanosecond = 100*1000000;
+        
     });
     
-    it(@"-Generates the correct timestamp with time-numoffset",^{
+    it(@"should create timestamps with 'Z' offset when time zone information not provided",^{
         
-        NSString* expectedDateString = @"2015-06-28T05:06:09.100-06:00"; // The offset here must be changed to your local timezone for the test to pass
+        NSString* expectedDateString = @"2015-06-28T02:06:09.100Z";
         
-        NSDateComponents* dateBuilder = [[NSDateComponents alloc] init];
-        [dateBuilder setYear:2015];
-        [dateBuilder setDay:28];
-        [dateBuilder setMonth:06];
-        [dateBuilder setHour:05];
-        [dateBuilder setMinute:06];
-        [dateBuilder setSecond:9];
-        [dateBuilder setNanosecond:100*1000000];
-        NSCalendar *gregorian = [[NSCalendar alloc]
-                                 initWithCalendarIdentifier:NSGregorianCalendar];
-        NSDate* date = [gregorian dateFromComponents:dateBuilder];
+        dateBuilder.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:offsetHours];
+        
+        NSDate* date = [calendar dateFromComponents:dateBuilder];
         NSString* testDateString = [date RFC3339String];
         expect(testDateString).to.equal(expectedDateString);
-        
     });
     
+    it(@"should create timestamps with correct offset when date is created in UTC and time zone information is provided",^{
+        
+        NSString* expectedDateString = @"2015-06-28T14:06:09.100+06:00";
+        
+        dateBuilder.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
+        
+        NSDate* date = [calendar dateFromComponents:dateBuilder];
+        NSString* testDateString = [date RFC3339String:[NSTimeZone timeZoneForSecondsFromGMT:offsetHours]];
+        expect(testDateString).to.equal(expectedDateString);
+    });
+    
+    it(@"should create timestamps with correct offset when date is created in offset from UTC and time zone information provided",^{
+        
+        NSString* expectedDateString = @"2015-06-28T08:06:09.100+06:00";
+        
+        NSTimeZone* timezone = [NSTimeZone timeZoneForSecondsFromGMT:offsetHours];
+        
+        dateBuilder.timeZone = timezone;
+        
+        NSDate* date = [calendar dateFromComponents:dateBuilder];
+        NSString* testDateString = [date RFC3339String:timezone];
+        expect(testDateString).to.equal(expectedDateString);
+    });
     
 });
 SpecEnd
