@@ -43,5 +43,9 @@
     return [[self RFC3339Formatter:timezone] dateFromString:dateString];
 }
 
++ (NSDate*)fromRFC3339String:(NSString*)dateString {
+    return [[self RFC3339Formatter:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]] dateFromString:dateString];
+}
+
 @end
 

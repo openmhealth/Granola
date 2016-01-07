@@ -19,29 +19,31 @@
 #import "NSDate+RFC3339.h"
 
 SpecBegin(NSDate)
-describe(@"NSDate RFC3339 Formatter", ^{
-    __block NSString* offsetString;
-    __block NSInteger offsetHours;
-    __block NSCalendar* calendar;
-    __block NSDateComponents* dateBuilder;
+
+__block NSString* offsetString;
+__block NSInteger offsetHours;
+__block NSCalendar* calendar;
+__block NSDateComponents* dateBuilder;
+
+beforeAll(^{
+    long offsetint = [[NSTimeZone localTimeZone] secondsFromGMT] / 3600;
+    offsetString = [NSString stringWithFormat:@"%ld",offsetint];
+    calendar = [[NSCalendar alloc]
+                initWithCalendarIdentifier:NSGregorianCalendar];
+    offsetHours = 6*60*60; // +06:00 offset
+    dateBuilder = [[NSDateComponents alloc] init];
     
-    beforeAll(^{
-        long offsetint = [[NSTimeZone localTimeZone] secondsFromGMT] / 3600;
-        offsetString = [NSString stringWithFormat:@"%ld",offsetint];
-        calendar = [[NSCalendar alloc]
-                                 initWithCalendarIdentifier:NSGregorianCalendar];
-        offsetHours = 6*60*60; // +06:00 offset
-        dateBuilder = [[NSDateComponents alloc] init];
-        
-        dateBuilder.year = 2015;
-        dateBuilder.day = 28;
-        dateBuilder.month = 6;
-        dateBuilder.hour = 8;
-        dateBuilder.minute = 6;
-        dateBuilder.second = 9;
-        dateBuilder.nanosecond = 100*1000000;
-        
-    });
+    dateBuilder.year = 2015;
+    dateBuilder.day = 28;
+    dateBuilder.month = 6;
+    dateBuilder.hour = 8;
+    dateBuilder.minute = 6;
+    dateBuilder.second = 9;
+    dateBuilder.nanosecond = 100000000;
+    
+});
+
+describe(@"NSDate RFC3339 Formatter RFC3339String", ^{
     
     it(@"should create timestamps with 'Z' offset when time zone information not provided",^{
         
@@ -77,6 +79,35 @@ describe(@"NSDate RFC3339 Formatter", ^{
         NSString* testDateString = [date RFC3339String:timezone];
         expect(testDateString).to.equal(expectedDateString);
     });
+    
+});
+
+describe(@"NSDate RFC3339 Formatter fromRFC3339String", ^{
+    
+    it(@"should create correct date when time zone information is not provided", ^{
+       
+        NSString* testDateString = @"2015-06-28T14:06:09.100+06:00";
+        
+        dateBuilder.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
+        NSDate* expectedDate = [calendar dateFromComponents:dateBuilder];
+        
+        NSDate* testDate = [NSDate fromRFC3339String:testDateString];
+    
+        expect(testDate).to.equal(expectedDate);
+    });
+    
+    it(@"should create correct date when time zone information is provided", ^{
+       
+        NSString* testDateString = @"2015-06-28T08:06:09.100+06:00";
+        
+        dateBuilder.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:offsetHours];
+        NSDate* expectedDate = [calendar dateFromComponents:dateBuilder];
+        
+        NSDate* testDate = [NSDate fromRFC3339String:testDateString timezone:[NSTimeZone timeZoneForSecondsFromGMT:offsetHours]];
+        
+        expect(testDate).to.equal(expectedDate);
+    });
+    
     
 });
 SpecEnd
