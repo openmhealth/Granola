@@ -149,6 +149,7 @@
 				6003F5AB195388D20070C39A /* Frameworks */,
 				6003F5AC195388D20070C39A /* Resources */,
 				73CB77E6952EC974E87629D9 /* Copy Pods Resources */,
+				7600D7E921862BC74D05369B /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -233,6 +234,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Granola/Pods-Granola-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7600D7E921862BC74D05369B /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Granola/Pods-Granola-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
