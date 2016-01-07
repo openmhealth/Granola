@@ -637,8 +637,6 @@ describe(@"HKQuantityTypeIdentifierInhalerUsage with date_time", ^{
 
 describe(HKCorrelationTypeIdentifierFood,^{
     itShouldBehaveLike(@"AnySerializerForSupportedSample", ^{
-        //energyConsumedQuantitySample = nil;
-        //carbConsumedQuantitySample = nil;
         NSDate *sampleDate = [NSDate date];
         NSLog(@"In Correlation, sampleDate: %@",[sampleDate description]);
         NSNumber *calorieValue = [NSNumber numberWithDouble:105];

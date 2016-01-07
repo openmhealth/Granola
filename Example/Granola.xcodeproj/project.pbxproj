@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2E945AD21B753D1400A1FEB0 /* NSDate+RFC3339Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E945AD11B753D1400A1FEB0 /* NSDate+RFC3339Tests.m */; };
 		6003F5B0195388D20070C39A /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F5AF195388D20070C39A /* XCTest.framework */; };
 		6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -22,6 +23,7 @@
 		0713970833C99FFE3A26765F /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		0CABD26178AD457AEB783167 /* libPods-Granola.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Granola.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1497BA18A434AE1495648DE8 /* Granola.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Granola.podspec; path = ../Granola.podspec; sourceTree = "<group>"; };
+		2E945AD11B753D1400A1FEB0 /* NSDate+RFC3339Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+RFC3339Tests.m"; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* Granola.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Granola.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -108,6 +110,7 @@
 				9E272AB01ADEFF1B007DE4ED /* OMHSampleFactory.m */,
 				9E272AB21ADF523F007DE4ED /* OMHSchemaStore.h */,
 				9E272AB31ADF523F007DE4ED /* OMHSchemaStore.m */,
+				2E945AD11B753D1400A1FEB0 /* NSDate+RFC3339Tests.m */,
 				6003F5B6195388D20070C39A /* Supporting Files */,
 			);
 			path = Tests;
@@ -146,6 +149,7 @@
 				6003F5AB195388D20070C39A /* Frameworks */,
 				6003F5AC195388D20070C39A /* Resources */,
 				73CB77E6952EC974E87629D9 /* Copy Pods Resources */,
+				7600D7E921862BC74D05369B /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -232,6 +236,21 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Granola/Pods-Granola-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		7600D7E921862BC74D05369B /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Granola/Pods-Granola-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -241,6 +260,7 @@
 			files = (
 				6003F5BC195388D20070C39A /* OMHSerializerTests.m in Sources */,
 				9E272AB11ADEFF1B007DE4ED /* OMHSampleFactory.m in Sources */,
+				2E945AD21B753D1400A1FEB0 /* NSDate+RFC3339Tests.m in Sources */,
 				9E272AB41ADF523F007DE4ED /* OMHSchemaStore.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
