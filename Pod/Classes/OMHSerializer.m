@@ -130,7 +130,27 @@
     return arrayWithSplitUnitAndValue[1];
 }
 
-+ (NSDictionary*) populateTimeFrameProperty:(NSDate*)startDate endDate:(NSDate*)endDate {
+- (NSDictionary*) populateTimeFrameProperty:(NSDate*)startDate endDate:(NSDate*)endDate {
+    
+    NSString* timeZoneString = [self.sample.metadata objectForKey:HKMetadataKeyTimeZone];
+    
+    if (timeZoneString != nil) {
+        NSTimeZone* timeZone = [NSTimeZone timeZoneWithName:timeZoneString];
+        if ([startDate isEqualToDate:endDate]) {
+            return @{
+                     @"date_time":[startDate RFC3339String:timeZone]
+                     };
+        }
+        else {
+            return  @{
+                      @"time_interval": @{
+                              @"start_date_time": [startDate RFC3339String:timeZone],
+                              @"end_date_time": [endDate RFC3339String:timeZone]
+                              }
+                      };
+        }
+    }
+    
     if ([startDate isEqualToDate:endDate]) {
         return @{
                  @"date_time":[startDate RFC3339String]
@@ -225,7 +245,7 @@
     [[(HKQuantitySample*)self.sample quantity] doubleValueForUnit:unit];
     return @{
              @"step_count": [NSNumber numberWithDouble:value],
-             @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+             @"effective_time_frame": [self populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
              };
 }
 - (NSString*)schemaName {
@@ -260,7 +280,7 @@
                      @"value": [NSNumber numberWithDouble:value],
                      @"unit": unitString
                      },
-             @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+             @"effective_time_frame": [self populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
              };
 }
 - (NSString*)schemaName {
@@ -295,7 +315,7 @@
                      @"value": [NSNumber numberWithDouble:value],
                      @"unit": unitString
                      },
-             @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+             @"effective_time_frame": [self populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
              };
 }
 - (NSString*)schemaName {
@@ -329,7 +349,7 @@
                      @"value": [NSNumber numberWithDouble:value],
                      @"unit": @"beats/min"
                      },
-             @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+             @"effective_time_frame":[self populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
              };
 }
 - (NSString*)schemaName {
@@ -364,7 +384,7 @@
                      @"value": [NSNumber numberWithDouble:value],
                      @"unit": unitString
                      },
-             @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+             @"effective_time_frame": [self populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
              };
 }
 - (NSString*)schemaName {
@@ -399,7 +419,7 @@
                      @"value": [NSNumber numberWithDouble:value],
                      @"unit": unitString
                      },
-             @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+             @"effective_time_frame": [self populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
              
              };
 }
@@ -434,7 +454,7 @@
                      @"value": [NSNumber numberWithDouble:value],
                      @"unit": unitString
                      },
-             @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+             @"effective_time_frame": [self populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
              
              };
 }
@@ -469,7 +489,7 @@
                      @"value": [NSNumber numberWithDouble:value],
                      @"unit": @"breaths/min"
                      },
-             @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+             @"effective_time_frame": [self populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
              
              };
 }
@@ -515,7 +535,7 @@
                      @"value": value,
                      @"unit": @"sec"
                      },
-             @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+             @"effective_time_frame":[self populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
              };
 }
 - (NSString*)schemaName {
@@ -549,7 +569,7 @@
                      @"value": [NSNumber numberWithDouble:value],
                      @"unit": unitString
                      },
-             @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+             @"effective_time_frame": [self populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
              
              };
 }
@@ -620,7 +640,7 @@
                      @"unit": unitString,
                      @"value": [NSNumber numberWithDouble: diastolicValue]
                      },
-             @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+             @"effective_time_frame": [self populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
              };
 }
 - (NSString*)schemaName {
@@ -659,7 +679,7 @@
                      @"value":[NSNumber numberWithDouble:value],
                      @"unit":@"kg/m2"
                      },
-             @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:quantitySample.startDate endDate:quantitySample.endDate]
+             @"effective_time_frame":[self populateTimeFrameProperty:quantitySample.startDate endDate:quantitySample.endDate]
              };
     
 }
@@ -736,7 +756,7 @@
     NSDictionary *partialSerializedDictionary =
     @{
       @"quantity_type":[quantitySample quantityType].description,
-      @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:quantitySample.startDate endDate:quantitySample.endDate]
+      @"effective_time_frame":[self populateTimeFrameProperty:quantitySample.startDate endDate:quantitySample.endDate]
       } ;
     NSMutableDictionary *fullSerializedDictionary = [partialSerializedDictionary mutableCopy];
     [fullSerializedDictionary addEntriesFromDictionary:serializedUnitValues];
@@ -800,7 +820,7 @@
     NSString *schemaMappedValue = [self getCategoryValueForTypeWithValue:categorySample.categoryType categoryValue:categorySample.value];
     
     return @{
-             @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:categorySample.startDate endDate:categorySample.endDate],
+             @"effective_time_frame":[self populateTimeFrameProperty:categorySample.startDate endDate:categorySample.endDate],
              @"category_type": [categorySample categoryType].description,
              @"category_value": schemaMappedValue
              };
@@ -933,7 +953,7 @@
         }
     }
     
-    return @{@"effective_time_frame":[OMHSerializer populateTimeFrameProperty:correlationSample.startDate endDate:correlationSample.endDate],
+    return @{@"effective_time_frame":[self populateTimeFrameProperty:correlationSample.startDate endDate:correlationSample.endDate],
              @"correlation_type":correlationSample.correlationType.description,
              @"quantity_samples":quantitySampleArray,
              @"category_samples":categorySampleArray
@@ -992,7 +1012,7 @@
     }
     
     [fullSerializedDictionary addEntriesFromDictionary:@{
-                                                         @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:workoutSample.startDate endDate:workoutSample.endDate],
+                                                         @"effective_time_frame":[self populateTimeFrameProperty:workoutSample.startDate endDate:workoutSample.endDate],
                                                          @"activity_name":[OMHHealthKitConstantsMapper stringForHKWorkoutActivityType:workoutSample.workoutActivityType]
                                                          
                                                          }];

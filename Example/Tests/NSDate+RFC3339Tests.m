@@ -30,12 +30,11 @@ __block float hour;
 beforeAll(^{
     offsetNumber = [[NSTimeZone defaultTimeZone] secondsFromGMT] / 3600;
     
-    calendar = [[NSCalendar alloc]
-                initWithCalendarIdentifier:NSGregorianCalendar];
+    calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
     
     hour = 60*60;
     offsetHours = 6*hour; // +06:00 offset
-    dateBuilder = [[NSDateComponents alloc] init];
+    dateBuilder = [NSDateComponents new];
     
     dateBuilder.year = 2015;
     dateBuilder.day = 28;

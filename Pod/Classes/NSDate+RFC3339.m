@@ -18,13 +18,13 @@
 
 @implementation NSDate (RFC3339)
 
-+ (NSDateFormatter*)RFC3339Formatter:(NSTimeZone*)timezone {
++ (NSDateFormatter*)RFC3339Formatter:(NSTimeZone*)timeZone {
     
     NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
     
     NSLocale* locale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
     
-    formatter.timeZone = timezone;
+    formatter.timeZone = timeZone;
     formatter.locale = locale;
     formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
     
@@ -35,12 +35,12 @@
     return [[[self class] RFC3339Formatter:[NSTimeZone defaultTimeZone]] stringFromDate:self];
 }
 
-- (NSString *)RFC3339String:(NSTimeZone*)timezone {
-    return [[[self class] RFC3339Formatter:timezone] stringFromDate:self];
+- (NSString *)RFC3339String:(NSTimeZone*)timeZone {
+    return [[[self class] RFC3339Formatter:timeZone] stringFromDate:self];
 }
 
-+ (NSDate*)fromRFC3339String:(NSString*)dateString timezone:(NSTimeZone*)timezone {
-    return [[self RFC3339Formatter:timezone] dateFromString:dateString];
++ (NSDate*)fromRFC3339String:(NSString*)dateString timeZone:(NSTimeZone*)timeZone {
+    return [[self RFC3339Formatter:timeZone] dateFromString:dateString];
 }
 
 + (NSDate*)fromRFC3339String:(NSString*)dateString {
