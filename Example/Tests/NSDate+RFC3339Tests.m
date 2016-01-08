@@ -114,8 +114,10 @@ describe(@"NSDate RFC3339 Formatter fromRFC3339String", ^{
         NSDate* expectedDate = [calendar dateFromComponents:dateBuilder];
         
         NSDate* testDate = [NSDate fromRFC3339String:testDateString];
+        
+        expect([testDate isEqualToRFC3339Date:expectedDate]).to.beTruthy();
     
-        expect(testDate).to.equal(expectedDate);
+        //expect(testDate).to.equal(expectedDate);
     });
     
     it(@"should create correct date when time zone information is provided", ^{
@@ -125,9 +127,9 @@ describe(@"NSDate RFC3339 Formatter fromRFC3339String", ^{
         dateBuilder.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:offsetHours];
         NSDate* expectedDate = [calendar dateFromComponents:dateBuilder];
         
-        NSDate* testDate = [NSDate fromRFC3339String:testDateString timezone:[NSTimeZone timeZoneForSecondsFromGMT:offsetHours]];
+        NSDate* testDate = [NSDate fromRFC3339String:testDateString timeZone:[NSTimeZone timeZoneForSecondsFromGMT:offsetHours]];
         
-        expect(testDate).to.equal(expectedDate);
+        expect([testDate isEqualToRFC3339Date:expectedDate]).to.beTruthy();
     });
 });
 

@@ -20,13 +20,13 @@
 
 - (NSString *)RFC3339String;
 
-- (NSString *)RFC3339String:(NSTimeZone*)timezone;
+- (NSString *)RFC3339String:(NSTimeZone*)timeZone;
 
 + (NSDate*)fromRFC3339String:(NSString*)dateString;
 
-+ (NSDate*)fromRFC3339String:(NSString*)dateString timezone:(NSTimeZone*)timezone;
++ (NSDate*)fromRFC3339String:(NSString*)dateString timeZone:(NSTimeZone*)timeZone;
 
-
+- (BOOL)isEqualToRFC3339Date:(NSDate *)otherDate;
 
 @end
 
