@@ -677,7 +677,8 @@ describe(HKCorrelationTypeIdentifierFood,^{
                          @"body.quantity_samples.effective_time_frame.date_time": @[[sampleDate RFC3339String],[sampleDate RFC3339String]],
                          @"body.quantity_samples.unit_value.value": @[carbValue,calorieValue],
                          @"body.quantity_samples.unit_value.unit": @[carbUnitString,calorieUnitString],
-                         @"body.quantity_samples.quantity_type": @[[HKQuantityTypeIdentifierDietaryCarbohydrates description],[HKQuantityTypeIdentifierDietaryEnergyConsumed description]]
+                         @"body.quantity_samples.quantity_type": @[[HKQuantityTypeIdentifierDietaryCarbohydrates description],
+                                                                   [HKQuantityTypeIdentifierDietaryEnergyConsumed description]]
                          
                          
                          }
@@ -1207,8 +1208,10 @@ describe(@"Sample with HKMetadataKeyTimeZone metadata", ^{
         
         id jsonObject = deserializedJsonForSample(sample);
         
-        expect([jsonObject valueForKeyPath:@"body.effective_time_frame.time_interval.start_date_time"]).to.contain(@"2015-06-28T11:06:00.000+03:00");
-        expect([jsonObject valueForKeyPath:@"body.effective_time_frame.time_interval.end_date_time"]).to.contain(@"2015-06-28T12:06:00.000+03:00");
+        expect([jsonObject
+                valueForKeyPath:@"body.effective_time_frame.time_interval.start_date_time"]).to.contain(@"2015-06-28T11:06:00.000+03:00");
+        expect([jsonObject
+                valueForKeyPath:@"body.effective_time_frame.time_interval.end_date_time"]).to.contain(@"2015-06-28T12:06:00.000+03:00");
     });
 });
 

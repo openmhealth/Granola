@@ -48,7 +48,7 @@ beforeAll(^{
 
 describe(@"NSDate RFC3339 Formatter RFC3339String", ^{
     
-    it(@"should create timestamps with default time zone when time zone information is not provided",^{
+    it(@"should create timestamps with default time zone when time zone is not provided",^{
         
         NSString* expectedDateString = @"2015-06-28T09:06:09.100+06:00";
         
@@ -62,7 +62,7 @@ describe(@"NSDate RFC3339 Formatter RFC3339String", ^{
         expect(testDateString).to.equal(expectedDateString);
     });
     
-    it(@"should create timestamps with correct offset when date is created in UTC and time zone information is provided",^{
+    it(@"should create timestamps with correct offset when date is created in UTC and time zone is provided",^{
         
         NSString* expectedDateString = @"2015-06-28T14:06:09.100+06:00";
         
@@ -73,7 +73,7 @@ describe(@"NSDate RFC3339 Formatter RFC3339String", ^{
         expect(testDateString).to.equal(expectedDateString);
     });
     
-    it(@"should create timestamps with correct offset when date is created in offset from UTC and time zone information provided",^{
+    it(@"should create timestamps with correct offset when date is created in offset from UTC and time zone provided",^{
         
         NSString* expectedDateString = @"2015-06-28T08:06:09.100+06:00";
         
@@ -85,6 +85,22 @@ describe(@"NSDate RFC3339 Formatter RFC3339String", ^{
         NSString* testDateString = [date RFC3339String:timezone];
         expect(testDateString).to.equal(expectedDateString);
     });
+    
+    it(@"should create timestamps with correct fractional offset when date is created in offset from UTC and fractional time zone provided",
+       ^{
+           NSString* expectedDateString = @"2015-06-28T13:36:09.100+05:30";
+           
+           dateBuilder.timeZone = [NSTimeZone timeZoneWithAbbreviation: @"UTC"];
+           
+           // +05:30 with not DST
+           NSTimeZone* timezone = [NSTimeZone timeZoneWithName:@"Asia/Kolkata"];
+           
+           NSDate* date = [calendar dateFromComponents:dateBuilder];
+           NSString* testDateString = [date RFC3339String:timezone];
+           expect(testDateString).to.equal(expectedDateString);
+           
+       }
+    );
     
 });
 
