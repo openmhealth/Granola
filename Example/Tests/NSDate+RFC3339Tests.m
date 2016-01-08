@@ -24,13 +24,17 @@ __block NSString* offsetString;
 __block NSInteger offsetHours;
 __block NSCalendar* calendar;
 __block NSDateComponents* dateBuilder;
+__block float offsetNumber;
+__block float hour;
 
 beforeAll(^{
-    long offsetint = [[NSTimeZone localTimeZone] secondsFromGMT] / 3600;
-    offsetString = [NSString stringWithFormat:@"%ld",offsetint];
+    offsetNumber = [[NSTimeZone defaultTimeZone] secondsFromGMT] / 3600;
+    
     calendar = [[NSCalendar alloc]
                 initWithCalendarIdentifier:NSGregorianCalendar];
-    offsetHours = 6*60*60; // +06:00 offset
+    
+    hour = 60*60;
+    offsetHours = 6*hour; // +06:00 offset
     dateBuilder = [[NSDateComponents alloc] init];
     
     dateBuilder.year = 2015;
@@ -45,13 +49,16 @@ beforeAll(^{
 
 describe(@"NSDate RFC3339 Formatter RFC3339String", ^{
     
-    it(@"should create timestamps with 'Z' offset when time zone information not provided",^{
+    it(@"should create timestamps with default time zone when time zone information is not provided",^{
         
-        NSString* expectedDateString = @"2015-06-28T02:06:09.100Z";
+        NSString* expectedDateString = @"2015-06-28T09:06:09.100+06:00";
         
-        dateBuilder.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:offsetHours];
+        dateBuilder.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:(offsetHours-(1*hour))];
         
         NSDate* date = [calendar dateFromComponents:dateBuilder];
+        
+        [NSTimeZone setDefaultTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:offsetHours]];
+        
         NSString* testDateString = [date RFC3339String];
         expect(testDateString).to.equal(expectedDateString);
     });
@@ -87,7 +94,7 @@ describe(@"NSDate RFC3339 Formatter fromRFC3339String", ^{
     it(@"should create correct date when time zone information is not provided", ^{
        
         NSString* testDateString = @"2015-06-28T14:06:09.100+06:00";
-        
+
         dateBuilder.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
         NSDate* expectedDate = [calendar dateFromComponents:dateBuilder];
         
@@ -107,8 +114,7 @@ describe(@"NSDate RFC3339 Formatter fromRFC3339String", ^{
         
         expect(testDate).to.equal(expectedDate);
     });
-    
-    
 });
+
 SpecEnd
 
