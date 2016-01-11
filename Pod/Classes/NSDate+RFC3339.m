@@ -47,6 +47,16 @@
     return [[self RFC3339Formatter:[NSTimeZone defaultTimeZone]] dateFromString:dateString];
 }
 
+/**
+ * NSDateFormatter has a strange behavior in that it only operates at the millisecond level and truncates number information after a certain
+ * point (see http://stackoverflow.com/questions/23684727/nsdateformatter-milliseconds-bug). This leads to strange behavior when creating 
+ * dates using the nanoseconds property and using the RFC3339DateFormatter to transform between the string representation and the date 
+ * representation. We found nanosecond differences in comparing some dates created with the fromRFC3339String method and what was expected. 
+ * In exploring this, we found that transforming dates created with the fromRFC3339String method back into strings and compare them allowed
+ * the comparison to be done at the millisecond level and used the correct rounding to address the issue. 
+ *
+ * We recommend using this method when comparing a date created with the fromRFC3339String to another date.
+ */
 - (BOOL)isEqualToRFC3339Date:(NSDate *)otherDate {
     NSString* otherDateString = [otherDate RFC3339String];
     return [otherDateString isEqualToString:[self RFC3339String]];
