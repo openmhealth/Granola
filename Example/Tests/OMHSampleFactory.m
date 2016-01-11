@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Open mHealth
+ * Copyright 2016 Open mHealth
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -163,7 +163,10 @@
                  HKQuantityTypeIdentifierInhalerUsage,
                  HKQuantityTypeIdentifierDietaryCarbohydrates,
                  HKQuantityTypeIdentifierDietaryEnergyConsumed,
-                 HKQuantityTypeIdentifierUVExposure
+                 HKQuantityTypeIdentifierUVExposure,
+                 HKQuantityTypeIdentifierOxygenSaturation,
+                 HKQuantityTypeIdentifierBodyFatPercentage,
+                 HKQuantityTypeIdentifierRespiratoryRate
                  ] includes:sampleTypeIdentifier]) {
         
         NSString* defaultUnitString = nil;
@@ -171,7 +174,7 @@
             defaultUnitString = @"cm";
         } else if (sampleTypeIdentifier == HKQuantityTypeIdentifierBodyMass) {
             defaultUnitString = @"lb";
-        } else if (sampleTypeIdentifier == HKQuantityTypeIdentifierHeartRate) {
+        } else if (sampleTypeIdentifier == HKQuantityTypeIdentifierHeartRate || sampleTypeIdentifier == HKQuantityTypeIdentifierRespiratoryRate) {
             defaultUnitString = @"count/min";
         } else if (sampleTypeIdentifier == HKQuantityTypeIdentifierBloodGlucose) {
             defaultUnitString = @"mg/dL";
@@ -183,6 +186,8 @@
             defaultUnitString = @"mcg";
         } else if (sampleTypeIdentifier == HKQuantityTypeIdentifierDietaryWater) {
             defaultUnitString = @"L";
+        } else if (sampleTypeIdentifier == HKQuantityTypeIdentifierOxygenSaturation || sampleTypeIdentifier == HKQuantityTypeIdentifierBodyFatPercentage) {
+            defaultUnitString = @"%";
         }
         else {
             defaultUnitString = @"count";

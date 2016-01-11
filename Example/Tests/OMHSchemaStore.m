@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Open mHealth
+ * Copyright 2016 Open mHealth
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -120,6 +120,9 @@
                                @"omh/physical-activity",
                                @"omh/kcal-unit-value",
                                @"omh/calories-burned",
+                               @"omh/body-fat-percentage",
+                               @"omh/oxygen-saturation",
+                               @"omh/respiratory-rate",
                                @"granola/hk-metadata",
                                @"granola/hk-quantity-type",
                                @"granola/hk-quantity-sample",

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Open mHealth
+ * Copyright 2016 Open mHealth
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -137,8 +137,13 @@
             return @"HKWorkoutActivityTypeYoga";
         case HKWorkoutActivityTypeOther:
             return @"HKWorkoutActivityTypeOther";
-        default:
-            return @"";
+        default:{
+            NSException *e = [NSException
+                              exceptionWithName:@"HKWorkoutActivityTypeInvalidValue"
+                              reason:@"HKWorkoutActivityType can only have a value from the HKWorkoutActivityType enum"
+                              userInfo:nil];
+            @throw e;
+        }
     }
 }
 
@@ -198,7 +203,7 @@
     }
 }
 
-+ (NSString*) stringForHKMenstrualFlowQualityValue:(int) enumValue {
++ (NSString*) stringForHKMenstrualFlowValue:(int) enumValue {
     switch (enumValue) {
         case HKCategoryValueMenstrualFlowUnspecified:
             return @"Unspecified";
@@ -289,12 +294,12 @@
         allQuantityTypeIdsToClasses = @{
                                         HKQuantityTypeIdentifierActiveEnergyBurned: @"OMHSerializerEnergyBurned",
                                         HKQuantityTypeIdentifierBasalBodyTemperature: @"OMHSerializerGenericQuantitySample",
-                                        HKQuantityTypeIdentifierBasalEnergyBurned: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierBasalEnergyBurned: @"OMHSerializerEnergyBurned",
                                         HKQuantityTypeIdentifierBloodAlcoholContent: @"OMHSerializerGenericQuantitySample",
                                         HKQuantityTypeIdentifierBloodGlucose : @"OMHSerializerBloodGlucose",
                                         HKQuantityTypeIdentifierBloodPressureDiastolic: @"OMHSerializerGenericQuantitySample",
                                         HKQuantityTypeIdentifierBloodPressureSystolic: @"OMHSerializerGenericQuantitySample",
-                                        HKQuantityTypeIdentifierBodyFatPercentage: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierBodyFatPercentage: @"OMHSerializerBodyFatPercentage",
                                         HKQuantityTypeIdentifierBodyMass : @"OMHSerializerWeight",
                                         HKQuantityTypeIdentifierBodyMassIndex: @"OMHSerializerBodyMassIndex",
                                         HKQuantityTypeIdentifierBodyTemperature: @"OMHSerializerBodyMassIndex",
@@ -349,10 +354,10 @@
                                         HKQuantityTypeIdentifierLeanBodyMass: @"OMHSerializerGenericQuantitySample",
                                         HKQuantityTypeIdentifierNikeFuel: @"OMHSerializerGenericQuantitySample",
                                         HKQuantityTypeIdentifierNumberOfTimesFallen: @"OMHSerializerGenericQuantitySample",
-                                        HKQuantityTypeIdentifierOxygenSaturation: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierOxygenSaturation: @"OMHSerializerOxygenSaturation",
                                         HKQuantityTypeIdentifierPeakExpiratoryFlowRate: @"OMHSerializerGenericQuantitySample",
                                         HKQuantityTypeIdentifierPeripheralPerfusionIndex: @"OMHSerializerGenericQuantitySample",
-                                        HKQuantityTypeIdentifierRespiratoryRate: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierRespiratoryRate: @"OMHSerializerRespiratoryRate",
                                         HKQuantityTypeIdentifierStepCount : @"OMHSerializerStepCount",
                                         HKQuantityTypeIdentifierUVExposure: @"OMHSerializerGenericQuantitySample"
                                         };

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Open mHealth
+ * Copyright 2016 Open mHealth
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,9 +38,14 @@
                                       HKQuantityTypeIdentifierHeartRate,
                                       HKQuantityTypeIdentifierBloodGlucose,
                                       HKQuantityTypeIdentifierActiveEnergyBurned,
+                                      HKQuantityTypeIdentifierBasalEnergyBurned,
                                       HKQuantityTypeIdentifierBodyMassIndex,
+                                      HKQuantityTypeIdentifierBodyFatPercentage,
+                                      HKQuantityTypeIdentifierOxygenSaturation,
+                                      HKQuantityTypeIdentifierRespiratoryRate,
                                       HKCategoryTypeIdentifierSleepAnalysis, //Samples with Asleep value use this serializer, samples with InBed value use generic category serializer
-                                      HKCorrelationTypeIdentifierBloodPressure];
+                                      HKCorrelationTypeIdentifierBloodPressure
+                                      ];
     
     }
     return OMHSchemaTypeIds;
@@ -82,8 +87,7 @@
     else{
         if (error) {
             NSString* errorMessage =
-            [NSString stringWithFormat: @"Unsupported HKSample type: %@",
-             sampleTypeIdentifier];
+            [NSString stringWithFormat: @"Unsupported HKSample type: %@", sampleTypeIdentifier];
             NSDictionary* userInfo = @{ NSLocalizedDescriptionKey : errorMessage };
             *error = [NSError errorWithDomain: OMHErrorDomain
                                          code: OMHErrorCodeUnsupportedType
@@ -108,8 +112,7 @@
     }
     // instantiate a serializer
     OMHSerializer* serializer = [[serializerClass alloc] initWithSample:sample];
-    NSData* jsonData =
-    [NSJSONSerialization dataWithJSONObject:[serializer data]
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:[serializer data]
                                     options:NSJSONWritingPrettyPrinted
                                       error:error];
     if (!jsonData) {
@@ -120,19 +123,40 @@
     return jsonString;
 }
 
-+ (NSString*)parseUnitFromQuantity:(HKQuantity*)quantity{
-    NSString *quantityDescription = [quantity description];
-    NSArray *array = [quantityDescription componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    return [array objectAtIndex:1];
++ (NSString*)parseUnitFromQuantity:(HKQuantity*)quantity {
+    NSArray *arrayWithSplitUnitAndValue = [quantity.description
+                                           componentsSeparatedByCharactersInSet:[NSCharacterSet
+                                                                                 whitespaceCharacterSet]];
+    return arrayWithSplitUnitAndValue[1];
 }
 
-+ (NSDictionary*) populateTimeFrameProperty:(NSDate*)startDate endDate:(NSDate*)endDate{
-    if ([startDate isEqualToDate:endDate]){
+- (NSDictionary*) populateTimeFrameProperty:(NSDate*)startDate endDate:(NSDate*)endDate {
+    
+    NSString* timeZoneString = [self.sample.metadata objectForKey:HKMetadataKeyTimeZone];
+    
+    if (timeZoneString != nil) {
+        NSTimeZone* timeZone = [NSTimeZone timeZoneWithName:timeZoneString];
+        if ([startDate isEqualToDate:endDate]) {
+            return @{
+                     @"date_time":[startDate RFC3339String:timeZone]
+                     };
+        }
+        else {
+            return  @{
+                      @"time_interval": @{
+                              @"start_date_time": [startDate RFC3339String:timeZone],
+                              @"end_date_time": [endDate RFC3339String:timeZone]
+                              }
+                      };
+        }
+    }
+    
+    if ([startDate isEqualToDate:endDate]) {
         return @{
                  @"date_time":[startDate RFC3339String]
                  };
     }
-    else{
+    else {
         return  @{
                   @"time_interval": @{
                           @"start_date_time": [startDate RFC3339String],
@@ -142,8 +166,8 @@
     }
 }
 
-+ (NSDictionary*) serializeMetadataArray:(NSDictionary*)metadata{
-    if(metadata){
++ (NSDictionary*) serializeMetadataArray:(NSDictionary*)metadata {
+    if(metadata) {
         NSMutableArray *serializedArray = [NSMutableArray new];
         for (id key in metadata) {
             if ([[metadata valueForKey:key] isKindOfClass:[NSDate class]]){
@@ -206,9 +230,9 @@
 
 /**
  Serializer component to map data from HKQuantitySample samples of the HKQuantityTypeIdentifierStepCount type to the properties in the
- body of the Open mHealth step-count schema ( http://www.openmhealth.org/developers/schemas/#step-count ). This serialization mapper
- is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKQuantityTypeIdentifierStepCount type sample,
- which constructs the full json data point that adheres to the Open mHealth data-point and step-count schemas.
+ body of the Open mHealth [step-count schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_step-count). 
+ This serialization mapper is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKQuantityTypeIdentifierStepCount
+ type sample, which constructs the full json data point that adheres to the Open mHealth data-point and step-count schemas.
  */
 @interface OMHSerializerStepCount : OMHSerializer; @end;
 @implementation OMHSerializerStepCount
@@ -221,7 +245,7 @@
     [[(HKQuantitySample*)self.sample quantity] doubleValueForUnit:unit];
     return @{
              @"step_count": [NSNumber numberWithDouble:value],
-             @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+             @"effective_time_frame": [self populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
              };
 }
 - (NSString*)schemaName {
@@ -237,9 +261,9 @@
 
 /**
  Serializer component to map data from HKQuantitySample samples of the HKQuantityTypeIdentifierHeight type to the properties in the
- body of the Open mHealth body-height schema ( http://www.openmhealth.org/developers/schemas/#body-height ). This serialization mapper
- is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKQuantityTypeIdentifierHeight type sample,
- which constructs the full json data point that adheres to the Open mHealth data-point and body-height schemas.
+ body of the Open mHealth [body-height schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_body-height). 
+ This serialization mapper is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKQuantityTypeIdentifierHeight 
+ type sample, which constructs the full json data point that adheres to the Open mHealth data-point and body-height schemas.
  */
 @interface OMHSerializerHeight : OMHSerializer; @end;
 @implementation OMHSerializerHeight
@@ -256,7 +280,7 @@
                      @"value": [NSNumber numberWithDouble:value],
                      @"unit": unitString
                      },
-             @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+             @"effective_time_frame": [self populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
              };
 }
 - (NSString*)schemaName {
@@ -272,9 +296,9 @@
 
 /**
  Serializer component to map data from HKQuantitySample samples of the HKQuantityTypeIdentifierBodyMass type to the properties in the
- body of the Open mHealth body-weight schema ( http://www.openmhealth.org/developers/schemas/#body-weight ). This serialization mapper
- is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKQuantityTypeIdentifierBodyMass type sample,
- which constructs the full json data point that adheres to the Open mHealth data-point and body-weight schemas.
+ body of the Open mHealth [body-weight schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_body-weight). 
+ This serialization mapper is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKQuantityTypeIdentifierBodyMass 
+ type sample, which constructs the full json data point that adheres to the Open mHealth data-point and body-weight schemas.
  */
 @interface OMHSerializerWeight : OMHSerializer; @end;
 @implementation OMHSerializerWeight
@@ -291,7 +315,7 @@
                      @"value": [NSNumber numberWithDouble:value],
                      @"unit": unitString
                      },
-             @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+             @"effective_time_frame": [self populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
              };
 }
 - (NSString*)schemaName {
@@ -307,9 +331,9 @@
 
 /**
  Serializer component to map data from HKQuantitySample samples of the HKQuantityTypeIdentifierHeartRate type to the properties in the
- body of the Open mHealth heart-rate schema ( http://www.openmhealth.org/developers/schemas/#heart-rate ). This serialization mapper
- is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKQuantityTypeIdentifierHeartRate type sample,
- which constructs the full json data point that adheres to the Open mHealth data-point and heart-rate schemas.
+ body of the Open mHealth [heart-rate schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_heart-rate).
+ This serialization mapper is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKQuantityTypeIdentifierHeartRate 
+ type sample, which constructs the full json data point that adheres to the Open mHealth data-point and heart-rate schemas.
  */
 @interface OMHSerializerHeartRate : OMHSerializer; @end;
 @implementation OMHSerializerHeartRate
@@ -325,7 +349,7 @@
                      @"value": [NSNumber numberWithDouble:value],
                      @"unit": @"beats/min"
                      },
-             @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+             @"effective_time_frame":[self populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
              };
 }
 - (NSString*)schemaName {
@@ -341,9 +365,9 @@
 
 /**
  Serializer component to map data from HKQuantitySample samples of the HKQuantityTypeIdentifierBloodGlucose type to the properties in the
- body of the Open mHealth blood-glucose schema ( http://www.openmhealth.org/developers/schemas/#blood-glucose ). This serialization mapper
- is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKQuantityTypeIdentifierBloodGlucose type sample,
- which constructs the full json data point that adheres to the Open mHealth data-point and blood-glucose schemas.
+ body of the Open mHealth [blood-glucose schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_blood-glucose). 
+ This serialization mapper is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKQuantityTypeIdentifierBloodGlucose 
+ type sample, which constructs the full json data point that adheres to the Open mHealth data-point and blood-glucose schemas.
  */
 @interface OMHSerializerBloodGlucose : OMHSerializer; @end;
 @implementation OMHSerializerBloodGlucose
@@ -360,7 +384,7 @@
                      @"value": [NSNumber numberWithDouble:value],
                      @"unit": unitString
                      },
-             @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+             @"effective_time_frame": [self populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
              };
 }
 - (NSString*)schemaName {
@@ -375,10 +399,10 @@
 @end
 
 /**
- Serializer component to map data from HKQuantitySample samples of the HKQuantityTypeIdentifierActiveEnergyBurned type to the properties in the
- body of the Open mHealth calories-burned schema ( http://www.openmhealth.org/developers/schemas/#calories-burned ). This serialization mapper
- is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKQuantityTypeIdentifierActiveEnergyBurned type sample,
- which constructs the full json data point that adheres to the Open mHealth data-point and calories-burned schemas.
+ Serializer component to map data from HKQuantitySample samples of the HKQuantityTypeIdentifierActiveEnergyBurned type to the properties in 
+ the body of the Open mHealth [calories-burned schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_calories-burned). 
+ This serialization mapper is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKQuantityTypeIdentifierActiveEnergyBurned
+ type sample, which constructs the full json data point that adheres to the Open mHealth data-point and calories-burned schemas.
  */
 @interface OMHSerializerEnergyBurned : OMHSerializer; @end;
 @implementation OMHSerializerEnergyBurned
@@ -395,7 +419,7 @@
                      @"value": [NSNumber numberWithDouble:value],
                      @"unit": unitString
                      },
-             @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+             @"effective_time_frame": [self populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
              
              };
 }
@@ -411,10 +435,81 @@
 @end
 
 /**
+ Serializer component to map data from HKQuantitySample samples of the HKQuantityTypeIdentifierOxygenSaturation type to the properties in 
+ the  body of the Open mHealth [oxygen-saturation schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_oxygen-saturation)
+ This serialization mapper constructs the full json data point that adheres to the Open mHealth data-point and oxygen-saturation schemas.
+ */
+@interface OMHSerializerOxygenSaturation : OMHSerializer; @end;
+@implementation OMHSerializerOxygenSaturation
++ (BOOL)canSerialize:(HKQuantitySample*)sample error:(NSError**)error {
+    return YES;
+}
+- (id)bodyData {
+    NSString* unitString = @"%";
+    HKUnit* unit = [HKUnit unitFromString:unitString];
+    float value =
+    [[(HKQuantitySample*)self.sample quantity] doubleValueForUnit:unit];
+    return @{
+             @"oxygen_saturation": @{
+                     @"value": [NSNumber numberWithDouble:value],
+                     @"unit": unitString
+                     },
+             @"effective_time_frame": [self populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+             
+             };
+}
+- (NSString*)schemaName {
+    return @"oxygen-saturation";
+}
+- (NSString*)schemaVersion {
+    return @"1.0";
+}
+- (NSString*)schemaNamespace{
+    return @"omh";
+}
+@end
+
+/**
+ Serializer component to map data from HKQuantitySample samples of the HKQuantityTypeIdentifierRespiratoryRate type to the properties in
+ the  body of the Open mHealth [respiratory-rate schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_respiratory-rate)
+ This serialization mapper constructs the full json data point that adheres to the Open mHealth data-point and respiratory-rate schemas.
+ */
+@interface OMHSerializerRespiratoryRate : OMHSerializer; @end;
+@implementation OMHSerializerRespiratoryRate
++ (BOOL)canSerialize:(HKQuantitySample*)sample error:(NSError**)error {
+    return YES;
+}
+- (id)bodyData {
+    NSString* unitString = @"count/min";
+    HKUnit* unit = [HKUnit unitFromString:unitString];
+    float value =
+    [[(HKQuantitySample*)self.sample quantity] doubleValueForUnit:unit];
+    return @{
+             @"respiratory_rate": @{
+                     @"value": [NSNumber numberWithDouble:value],
+                     @"unit": @"breaths/min"
+                     },
+             @"effective_time_frame": [self populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+             
+             };
+}
+- (NSString*)schemaName {
+    return @"respiratory-rate";
+}
+- (NSString*)schemaVersion {
+    return @"1.0";
+}
+- (NSString*)schemaNamespace{
+    return @"omh";
+}
+@end
+
+/**
  Serializer component to map data from HKCategory samples of the HKCategoryValueSleepAnalysis type with the value HKCategoryValueSleepAnalysisAsleep
- to the properties in the body of the Open mHealth sleep-duration schema ( http://www.openmhealth.org/developers/schemas/#sleep-duration ). This
- serialization mapper is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKCategoryValueSleepAnalysis
- type sample, which constructs the full json data point that adheres to the Open mHealth data-point and sleep-duration schemas. HKCategoryValueSleepAnalysis
+ to the properties in the body of the Open mHealth 
+ [sleep-duration schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_sleep-duration). This serialization 
+ mapper is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKCategoryValueSleepAnalysis type sample, 
+ which constructs the full json data point that adheres to the Open mHealth data-point and sleep-duration schemas. HKCategoryValueSleepAnalysis
  samples with the value, HKCategoryValueSleepAnalysisInBed, will be mapped using OMHSerializerGenericCategorySample.
  */
 @interface OMHSerializerSleepAnalysis : OMHSerializer; @end;
@@ -440,7 +535,7 @@
                      @"value": value,
                      @"unit": @"sec"
                      },
-             @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+             @"effective_time_frame":[self populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
              };
 }
 - (NSString*)schemaName {
@@ -455,10 +550,46 @@
 @end
 
 /**
+ Serializer component to map data from HKQuantitySample samples of the HKQuantityTypeIdentifierBodyFatPercentage type to the properties in
+ the  body of the Open mHealth [body-fat-percentage schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_body-fat-percentage)
+ This serialization mapper constructs the full json data point that adheres to the Open mHealth data-point and body-fat-percentage schemas.
+ */
+@interface OMHSerializerBodyFatPercentage : OMHSerializer; @end;
+@implementation OMHSerializerBodyFatPercentage
++ (BOOL)canSerialize:(HKQuantitySample*)sample error:(NSError**)error {
+    return YES;
+}
+- (id)bodyData {
+    NSString* unitString = @"%";
+    HKUnit* unit = [HKUnit unitFromString:unitString];
+    float value =
+    [[(HKQuantitySample*)self.sample quantity] doubleValueForUnit:unit];
+    return @{
+             @"body_fat_percentage": @{
+                     @"value": [NSNumber numberWithDouble:value],
+                     @"unit": unitString
+                     },
+             @"effective_time_frame": [self populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+             
+             };
+}
+- (NSString*)schemaName {
+    return @"body-fat-percentage";
+}
+- (NSString*)schemaVersion {
+    return @"1.0";
+}
+- (NSString*)schemaNamespace{
+    return @"omh";
+}
+@end
+
+
+/**
  Serializer component to map data from HKCorrelation samples of the HKCorrelationTypeIdentifierBloodPressure type to the properties in the
- body of the Open mHealth blood-pressure schema ( http://www.openmhealth.org/developers/schemas/#blood-pressure ). This serialization mapper
- is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKCorrelationTypeIdentifierBloodPressure type sample,
- which constructs the full json data point that adheres to the Open mHealth data-point and blood-pressure schemas.
+ body of the Open mHealth [blood-pressure schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_blood-pressure). 
+ This serialization mapper is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKCorrelationTypeIdentifierBloodPressure 
+ type sample, which constructs the full json data point that adheres to the Open mHealth data-point and blood-pressure schemas.
  */
 @interface OMHSerializerBloodPressure : OMHSerializer; @end;
 @implementation OMHSerializerBloodPressure
@@ -509,7 +640,7 @@
                      @"unit": unitString,
                      @"value": [NSNumber numberWithDouble: diastolicValue]
                      },
-             @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+             @"effective_time_frame": [self populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
              };
 }
 - (NSString*)schemaName {
@@ -525,9 +656,9 @@
 
 /**
  Serializer component to map data from HKQuantitySamples of the HKQuantityTypeIdentifierBodyMassIndex type to the properties in the
- body of the Open mHealth body-mass-index schema ( http://www.openmhealth.org/developers/schemas/#body-mass-index ). This serialization mapper  
- is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKQuantityTypeIdentifierBodyMassIndex type sample, 
- which constructs the full json data point that adheres to the Open mHealth data-point and body-mass-index schemas.
+ body of the Open mHealth [body-mass-index schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_body-mass-index). 
+ This serialization mapper is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKQuantityTypeIdentifierBodyMassIndex 
+ type sample, [which constructs the full json data point that adheres to the Open mHealth data-point and body-mass-index schemas.
  */
 @interface OMHSerializerBodyMassIndex : OMHSerializer; @end;
 @implementation OMHSerializerBodyMassIndex
@@ -548,7 +679,7 @@
                      @"value":[NSNumber numberWithDouble:value],
                      @"unit":@"kg/m2"
                      },
-             @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:quantitySample.startDate endDate:quantitySample.endDate]
+             @"effective_time_frame":[self populateTimeFrameProperty:quantitySample.startDate endDate:quantitySample.endDate]
              };
     
 }
@@ -564,10 +695,10 @@
 @end
 
 /**
- Serializer component to map data from HKQuantitySample to the properties in the body of the Open mHealth hk-quantity-sample schema
- ( https://github.com/openmhealth/schemas/blob/feature/health-kit/schema/granola/hk-quantity-type-1.0.json ). This serialization mapper
- is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKQuantitySample, which constructs the full
- json data point that adheres to the Open mHealth data-point and hk-quantity-sample schemas.
+ Serializer component to map data from HKQuantitySample to the properties in the body of the Open mHealth 
+ [hk-quantity-sample schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-quantity-sample). This
+ serialization mapper is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKQuantitySample, which 
+ constructs the full json data point that adheres to the Open mHealth data-point and hk-quantity-sample schemas.
  */
 @interface OMHSerializerGenericQuantitySample : OMHSerializer; @end;
 @implementation OMHSerializerGenericQuantitySample
@@ -624,8 +755,8 @@
     
     NSDictionary *partialSerializedDictionary =
     @{
-      @"quantity_type":[[quantitySample quantityType] description] ,
-      @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:quantitySample.startDate endDate:quantitySample.endDate]
+      @"quantity_type":[quantitySample quantityType].description,
+      @"effective_time_frame":[self populateTimeFrameProperty:quantitySample.startDate endDate:quantitySample.endDate]
       } ;
     NSMutableDictionary *fullSerializedDictionary = [partialSerializedDictionary mutableCopy];
     [fullSerializedDictionary addEntriesFromDictionary:serializedUnitValues];
@@ -643,10 +774,10 @@
 @end
 
 /**
- Serializer component to map data from HKCategorySamples to the properties in the body of the Open mHealth hk-category-sample schema
- ( https://github.com/openmhealth/schemas/blob/feature/health-kit/schema/granola/hk-category-sample-1.0.json ). This serialization mapper
- is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKCategorySample, which constructs the full
- json data point that adheres to the Open mHealth data-point and hk-category-sample schemas.
+ Serializer component to map data from HKCategorySamples to the properties in the body of the Open mHealth 
+ [hk-category-sample schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-category-sample).
+ This serialization mapper is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKCategorySample, which
+ constructs the full json data point that adheres to the Open mHealth data-point and hk-category-sample schemas.
  */
 @interface OMHSerializerGenericCategorySample : OMHSerializer; @end;
 @implementation OMHSerializerGenericCategorySample
@@ -689,8 +820,8 @@
     NSString *schemaMappedValue = [self getCategoryValueForTypeWithValue:categorySample.categoryType categoryValue:categorySample.value];
     
     return @{
-             @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:categorySample.startDate endDate:categorySample.endDate],
-             @"category_type": [[categorySample categoryType] description],
+             @"effective_time_frame":[self populateTimeFrameProperty:categorySample.startDate endDate:categorySample.endDate],
+             @"category_type": [categorySample categoryType].description,
              @"category_value": schemaMappedValue
              };
 }
@@ -711,7 +842,7 @@
         return @"Intermenstrual bleeding";
     }
     else if ([categoryType.description isEqualToString:HKCategoryTypeIdentifierMenstrualFlow]) {
-        return [OMHHealthKitConstantsMapper stringForHKMenstrualFlowQualityValue:(int)categoryValue];
+        return [OMHHealthKitConstantsMapper stringForHKMenstrualFlowValue:(int)categoryValue];
     }
     else if ([categoryType.description isEqualToString:HKCategoryTypeIdentifierOvulationTestResult]) {
         return [OMHHealthKitConstantsMapper stringForHKOvulationTestResultValue:(int)categoryValue];
@@ -742,10 +873,10 @@
 @end
 
 /**
- Serializer component to map data from HKCorrelation to the properties in the body of the Open mHealth hk-correlation schema
- ( https://github.com/openmhealth/schemas/blob/feature/health-kit/schema/granola/hk-correlation-1.0.json ). This serialization mapper
- is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKCorrelation sample, which constructs the full
- json data point that adheres to the Open mHealth data-point and hk-correlation schemas.
+ Serializer component to map data from HKCorrelation to the properties in the body of the Open mHealth 
+ [hk-correlation schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-correlation). This 
+ serialization mapper is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKCorrelation sample, which 
+ constructs the full json data point that adheres to the Open mHealth data-point and hk-correlation schemas.
  */
 @interface OMHSerializerGenericCorrelation : OMHSerializer; @end;
 @implementation OMHSerializerGenericCorrelation
@@ -767,7 +898,6 @@
             
             return NO;
         }
-        
     }
     @catch (NSException *exception){
         if (error) {
@@ -781,8 +911,8 @@
         return NO;
     }
     return YES;
-    
 }
+
 - (id)bodyData {
     HKCorrelation *correlationSample = (HKCorrelation*)self.sample;
     
@@ -823,8 +953,8 @@
         }
     }
     
-    return @{@"effective_time_frame":[OMHSerializer populateTimeFrameProperty:correlationSample.startDate endDate:correlationSample.endDate],
-             @"correlation_type":[correlationSample.correlationType description],
+    return @{@"effective_time_frame":[self populateTimeFrameProperty:correlationSample.startDate endDate:correlationSample.endDate],
+             @"correlation_type":correlationSample.correlationType.description,
              @"quantity_samples":quantitySampleArray,
              @"category_samples":categorySampleArray
              };
@@ -841,9 +971,9 @@
 @end
 
 /**
- Serializer component to map data from HKWorkout to the properties in the body of the Open mHealth hk-workout schema
- ( https://github.com/openmhealth/schemas/blob/feature/health-kit/schema/granola/hk-workout-1.0.json ). This serialization mapper
- is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKWorkout sample, which constructs the full
+ Serializer component to map data from HKWorkout to the properties in the body of the Open mHealth 
+ [hk-workout schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-workout). This serialization
+ mapper is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKWorkout sample, which constructs the full
  json data point that adheres to the Open mHealth data-point and hk-workout schemas.
  */
 @interface OMHSerializerGenericWorkout : OMHSerializer; @end
@@ -864,7 +994,6 @@
         }
         return NO;
     }
-    
 }
 
 - (id)bodyData {
@@ -883,7 +1012,7 @@
     }
     
     [fullSerializedDictionary addEntriesFromDictionary:@{
-                                                         @"effective_time_frame":[OMHSerializer populateTimeFrameProperty:workoutSample.startDate endDate:workoutSample.endDate],
+                                                         @"effective_time_frame":[self populateTimeFrameProperty:workoutSample.startDate endDate:workoutSample.endDate],
                                                          @"activity_name":[OMHHealthKitConstantsMapper stringForHKWorkoutActivityType:workoutSample.workoutActivityType]
                                                          
                                                          }];

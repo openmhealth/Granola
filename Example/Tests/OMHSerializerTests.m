@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Open mHealth
+ * Copyright 2016 Open mHealth
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -588,7 +588,6 @@ describe(@"HKQuantityTypeIdentifierDietaryBiotin with meta_data", ^{
                                                               @"end":end,
                                                               @"metadata":@{
                                                                       HKMetadataKeyWasTakenInLab:@YES,
-                                                                      HKMetadataKeyTimeZone:@"CST",
                                                                       HKMetadataKeyReferenceRangeLowerLimit:referenceLowValue
                                                                       }
                                                               }];
@@ -602,8 +601,8 @@ describe(@"HKQuantityTypeIdentifierDietaryBiotin with meta_data", ^{
                          @"body.unit_value.unit":unitString,
                          @"body.effective_time_frame.time_interval.start_date_time":[start RFC3339String],
                          @"body.effective_time_frame.time_interval.end_date_time":[end RFC3339String],
-                         @"body.metadata.key":@[HKMetadataKeyWasTakenInLab.description,HKMetadataKeyTimeZone.description, HKMetadataKeyReferenceRangeLowerLimit.description],
-                         @"body.metadata.value":@[@YES,@"CST",referenceLowValue]
+                         @"body.metadata.key":@[HKMetadataKeyWasTakenInLab.description, HKMetadataKeyReferenceRangeLowerLimit.description],
+                         @"body.metadata.value":@[@YES, referenceLowValue]
                          }
                  };
         
@@ -678,7 +677,8 @@ describe(HKCorrelationTypeIdentifierFood,^{
                          @"body.quantity_samples.effective_time_frame.date_time": @[[sampleDate RFC3339String],[sampleDate RFC3339String]],
                          @"body.quantity_samples.unit_value.value": @[carbValue,calorieValue],
                          @"body.quantity_samples.unit_value.unit": @[carbUnitString,calorieUnitString],
-                         @"body.quantity_samples.quantity_type": @[[HKQuantityTypeIdentifierDietaryCarbohydrates description],[HKQuantityTypeIdentifierDietaryEnergyConsumed description]]
+                         @"body.quantity_samples.quantity_type": @[[HKQuantityTypeIdentifierDietaryCarbohydrates description],
+                                                                   [HKQuantityTypeIdentifierDietaryEnergyConsumed description]]
                          
                          
                          }
@@ -987,6 +987,7 @@ describe(@"HKCategoryTypeIdentifierOvulationTestResult negative", ^{
         HKSample* sample =
         [OMHSampleFactory typeIdentifier:HKCategoryTypeIdentifierOvulationTestResult
                                    attrs:@{ @"start": start, @"end": end, @"value":@(HKCategoryValueOvulationTestResultNegative)}];
+        
         return @{
                  @"sample": sample,
                  @"pathsToValues": @{
@@ -1023,6 +1024,196 @@ describe(@"HKCategoryTypeIdentifierSexualActivity", ^{
     });
 });
 
+describe(@"HKQuantityTypeIdentifierOxygenSaturation with time_interval", ^{
+    itShouldBehaveLike(@"AnySerializerForSupportedSample",^{
+        NSDate *start = [NSDate date];
+        NSNumber *value = [NSNumber numberWithFloat:96.1];
+        NSString *unitString = @"%";
+        HKSample *sample = [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierOxygenSaturation
+                                                      attrs:@{@"value":value,
+                                                              @"unitString":unitString,
+                                                              @"start":start,
+                                                              @"end":start}];
+        return @{
+                 @"sample":sample,
+                 @"pathsToValues": @{
+                         @"header.schema_id.name": @"oxygen-saturation",
+                         @"header.schema_id.namespace":@"omh",
+                         @"body.oxygen_saturation.value":value,
+                         @"body.oxygen_saturation.unit":unitString,
+                         @"body.effective_time_frame.date_time":[start RFC3339String]
+                         }
+                 };
+    });
+});
+
+describe(@"HKQuantityTypeIdentifierBasalEnergyBurned with time_interval", ^{
+    itShouldBehaveLike(@"AnySerializerForSupportedSample",^{
+        NSDate *start = [NSDate date];
+        NSDate *end = [start dateByAddingTimeInterval:3600];
+        NSNumber *value = [NSNumber numberWithFloat:453.5];
+        NSString *unitString = @"kcal";
+        HKSample *sample = [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierBasalEnergyBurned
+                                                      attrs:@{@"value":value,
+                                                              @"unitString":unitString,
+                                                              @"start":start,
+                                                              @"end":end}];
+        return @{
+                 @"sample":sample,
+                 @"pathsToValues": @{
+                         @"header.schema_id.name": @"calories-burned",
+                         @"header.schema_id.namespace":@"omh",
+                         @"body.kcal_burned.value": value,
+                         @"body.kcal_burned.unit": unitString,
+                         @"body.effective_time_frame.time_interval.start_date_time": [sample.startDate RFC3339String],
+                         @"body.effective_time_frame.time_interval.end_date_time": [sample.endDate RFC3339String]
+                         }
+                 };
+    });
+});
+
+describe(@"HKQuantityTypeIdentifierBodyFatPercentage with time_interval", ^{
+    itShouldBehaveLike(@"AnySerializerForSupportedSample",^{
+        NSDate *start = [NSDate date];
+        NSDate *end = [start dateByAddingTimeInterval:3600];
+        NSNumber *value = [NSNumber numberWithFloat:23.2];
+        NSString *unitString = @"%";
+        HKSample *sample = [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierBodyFatPercentage
+                                                      attrs:@{@"value":value,
+                                                              @"unitString":unitString,
+                                                              @"start":start,
+                                                              @"end":end}];
+        return @{
+                 @"sample":sample,
+                 @"pathsToValues": @{
+                         @"header.schema_id.name": @"body-fat-percentage",
+                         @"header.schema_id.namespace":@"omh",
+                         @"body.body_fat_percentage.value": value,
+                         @"body.body_fat_percentage.unit": unitString,
+                         @"body.effective_time_frame.time_interval.start_date_time": [sample.startDate RFC3339String],
+                         @"body.effective_time_frame.time_interval.end_date_time": [sample.endDate RFC3339String]
+                         }
+                 };
+    });
+});
+
+describe(@"HKQuantityTypeIdentifierRespiratoryRate with time_interval", ^{
+    itShouldBehaveLike(@"AnySerializerForSupportedSample",^{
+        NSDate *start = [NSDate date];
+        NSDate *end = [start dateByAddingTimeInterval:3600];
+        NSNumber *value = [NSNumber numberWithFloat:23.2];
+        NSString *unitString = @"count/min";
+        HKSample *sample = [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierRespiratoryRate
+                                                      attrs:@{@"value":value,
+                                                              @"unitString":unitString,
+                                                              @"start":start,
+                                                              @"end":end}];
+        return @{
+                 @"sample":sample,
+                 @"pathsToValues": @{
+                         @"header.schema_id.name": @"respiratory-rate",
+                         @"header.schema_id.namespace":@"omh",
+                         @"body.respiratory_rate.value": value,
+                         @"body.respiratory_rate.unit": @"breaths/min",
+                         @"body.effective_time_frame.time_interval.start_date_time": [sample.startDate RFC3339String],
+                         @"body.effective_time_frame.time_interval.end_date_time": [sample.endDate RFC3339String]
+                         }
+                 };
+    });
+});
+
+describe(@"HKQuantityTypeIdentifierRespiratoryRate with time_interval", ^{
+    itShouldBehaveLike(@"AnySerializerForSupportedSample",^{
+        NSDate *start = [NSDate date];
+        NSDate *end = [start dateByAddingTimeInterval:3600];
+        NSNumber *value = [NSNumber numberWithFloat:23.2];
+        NSString *unitString = @"count/min";
+        HKSample *sample = [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierRespiratoryRate
+                                                      attrs:@{@"value":value,
+                                                              @"unitString":unitString,
+                                                              @"start":start,
+                                                              @"end":end}];
+        return @{
+                 @"sample":sample,
+                 @"pathsToValues": @{
+                         @"header.schema_id.name": @"respiratory-rate",
+                         @"header.schema_id.namespace":@"omh",
+                         @"body.respiratory_rate.value": value,
+                         @"body.respiratory_rate.unit": @"breaths/min",
+                         @"body.effective_time_frame.time_interval.start_date_time": [sample.startDate RFC3339String],
+                         @"body.effective_time_frame.time_interval.end_date_time": [sample.endDate RFC3339String]
+                         }
+                 };
+    });
+});
+
+describe(@"HKQuantityTypeIdentifierRespiratoryRate with time_interval with metadata", ^{
+    itShouldBehaveLike(@"AnySerializerForSupportedSample",^{
+        NSDate *start = [NSDate date];
+        NSDate *end = [start dateByAddingTimeInterval:3600];
+        NSNumber *value = [NSNumber numberWithFloat:23.2];
+        NSString *unitString = @"count/min";
+        HKSample *sample = [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierRespiratoryRate
+                                                      attrs:@{@"value":value,
+                                                              @"unitString":unitString,
+                                                              @"start":start,
+                                                              @"end":end,
+                                                              @"metadata":@{
+                                                                      HKMetadataKeyWasUserEntered:@YES
+                                                                      }
+                                                              }];
+        return @{
+                 @"sample":sample,
+                 @"pathsToValues": @{
+                         @"header.schema_id.name": @"respiratory-rate",
+                         @"header.schema_id.namespace":@"omh",
+                         @"body.respiratory_rate.value": value,
+                         @"body.respiratory_rate.unit": @"breaths/min",
+                         @"body.effective_time_frame.time_interval.start_date_time": [sample.startDate RFC3339String],
+                         @"body.effective_time_frame.time_interval.end_date_time": [sample.endDate RFC3339String],
+                         @"body.metadata.key":@[HKMetadataKeyWasUserEntered],
+                         @"body.metadata.value":@[@YES]
+                         }
+                 };
+    });
+});
+
+describe(@"Sample with HKMetadataKeyTimeZone metadata", ^{
+    it(@"Should use the time zone value associated with the HKMetadataKeyTimeZone key",^{
+        NSCalendar* calendar = [[NSCalendar alloc]
+                                    initWithCalendarIdentifier:NSGregorianCalendar];
+        
+        NSDateComponents* dateBuilder = [NSDateComponents new];
+        
+        dateBuilder.year = 2015;
+        dateBuilder.day = 28;
+        dateBuilder.month = 6;
+        dateBuilder.hour = 8;
+        dateBuilder.minute = 6;
+        dateBuilder.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
+        
+        NSDate* start = [calendar dateFromComponents:dateBuilder];
+        
+        dateBuilder.hour = 9;
+        
+        NSDate* end = [calendar dateFromComponents:dateBuilder];
+        
+        HKSample* sample = [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierDietaryBiotin
+                                                      attrs:@{@"start":start,
+                                                              @"end":end,
+                                                              @"metadata":@{
+                                                                      HKMetadataKeyTimeZone:@"Asia/Kuwait"
+                                                                      }
+                                                              }];
+        
+        id jsonObject = deserializedJsonForSample(sample);
+        
+        expect([jsonObject
+                valueForKeyPath:@"body.effective_time_frame.time_interval.start_date_time"]).to.contain(@"2015-06-28T11:06:00.000+03:00");
+        expect([jsonObject
+                valueForKeyPath:@"body.effective_time_frame.time_interval.end_date_time"]).to.contain(@"2015-06-28T12:06:00.000+03:00");
+    });
+});
 
 SpecEnd
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Open mHealth
+ * Copyright 2016 Open mHealth
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,35 +19,137 @@
 #import "NSDate+RFC3339.h"
 
 SpecBegin(NSDate)
-describe(@"NSDate RFC3339 Formatter", ^{
-    __block NSString* offsetString;
+
+__block NSString* offsetString;
+__block NSInteger offsetHours;
+__block NSCalendar* calendar;
+__block NSDateComponents* dateBuilder;
+__block float offsetNumber;
+__block float hour;
+
+beforeAll(^{
+    offsetNumber = [[NSTimeZone defaultTimeZone] secondsFromGMT] / 3600;
     
-    beforeAll(^{
-        long offsetint = [[NSTimeZone localTimeZone] secondsFromGMT] / 3600;
-        offsetString = [NSString stringWithFormat:@"%ld",offsetint];
-    });
+    calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
     
-    it(@"-Generates the correct timestamp with time-numoffset",^{
-        
-        NSString* expectedDateString = @"2015-06-28T05:06:09.100-06:00"; // The offset here must be changed to your local timezone for the test to pass
-        
-        NSDateComponents* dateBuilder = [[NSDateComponents alloc] init];
-        [dateBuilder setYear:2015];
-        [dateBuilder setDay:28];
-        [dateBuilder setMonth:06];
-        [dateBuilder setHour:05];
-        [dateBuilder setMinute:06];
-        [dateBuilder setSecond:9];
-        [dateBuilder setNanosecond:100*1000000];
-        NSCalendar *gregorian = [[NSCalendar alloc]
-                                 initWithCalendarIdentifier:NSGregorianCalendar];
-        NSDate* date = [gregorian dateFromComponents:dateBuilder];
-        NSString* testDateString = [date RFC3339String];
-        expect(testDateString).to.equal(expectedDateString);
-        
-    });
+    hour = 60*60;
+    offsetHours = 6*hour; // +06:00 offset
+    dateBuilder = [NSDateComponents new];
     
+    dateBuilder.year = 2015;
+    dateBuilder.day = 28;
+    dateBuilder.month = 6;
+    dateBuilder.hour = 8;
+    dateBuilder.minute = 6;
+    dateBuilder.second = 9;
+    dateBuilder.nanosecond = 100000000;
     
 });
+
+describe(@"NSDate RFC3339 Formatter RFC3339String", ^{
+    
+    it(@"should create timestamps with default time zone when time zone is not provided",^{
+        
+        NSString* expectedDateString = @"2015-06-28T09:06:09.100+06:00";
+        
+        dateBuilder.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:(offsetHours-(1*hour))];
+        
+        NSDate* date = [calendar dateFromComponents:dateBuilder];
+        
+        [NSTimeZone setDefaultTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:offsetHours]];
+        
+        NSString* testDateString = [date RFC3339String];
+        expect(testDateString).to.equal(expectedDateString);
+    });
+    
+    it(@"should create timestamps with correct offset when date is created in UTC and time zone is provided",^{
+        
+        NSString* expectedDateString = @"2015-06-28T14:06:09.100+06:00";
+        
+        dateBuilder.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
+        
+        NSDate* date = [calendar dateFromComponents:dateBuilder];
+        NSString* testDateString = [date RFC3339String:[NSTimeZone timeZoneForSecondsFromGMT:offsetHours]];
+        expect(testDateString).to.equal(expectedDateString);
+    });
+    
+    it(@"should create timestamps with correct offset when date is created in offset from UTC and time zone provided",^{
+        
+        NSString* expectedDateString = @"2015-06-28T08:06:09.100+06:00";
+        
+        NSTimeZone* timezone = [NSTimeZone timeZoneForSecondsFromGMT:offsetHours];
+        
+        dateBuilder.timeZone = timezone;
+        
+        NSDate* date = [calendar dateFromComponents:dateBuilder];
+        NSString* testDateString = [date RFC3339String:timezone];
+        expect(testDateString).to.equal(expectedDateString);
+    });
+    
+    it(@"should create timestamps with correct fractional offset when date is created in offset from UTC and fractional time zone provided",
+       ^{
+           NSString* expectedDateString = @"2015-06-28T13:36:09.100+05:30";
+           
+           dateBuilder.timeZone = [NSTimeZone timeZoneWithAbbreviation: @"UTC"];
+           
+           // +05:30 with not DST
+           NSTimeZone* timezone = [NSTimeZone timeZoneWithName:@"Asia/Kolkata"];
+           
+           NSDate* date = [calendar dateFromComponents:dateBuilder];
+           NSString* testDateString = [date RFC3339String:timezone];
+           expect(testDateString).to.equal(expectedDateString);
+       }
+    );
+    
+});
+
+describe(@"NSDate RFC3339 Formatter fromRFC3339String", ^{
+    
+    it(@"should create correct date when time zone information is not provided", ^{
+       
+        NSString* testDateString = @"2015-06-28T14:06:09.100+06:00";
+
+        dateBuilder.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
+        NSDate* expectedDate = [calendar dateFromComponents:dateBuilder];
+        
+        NSDate* testDate = [NSDate fromRFC3339String:testDateString];
+        
+        expect([testDate isEqualToRFC3339Date:expectedDate]).to.beTruthy();
+    });
+    
+    it(@"should create correct date when time zone information is provided", ^{
+       
+        NSString* testDateString = @"2015-06-28T08:06:09.100+06:00";
+        
+        dateBuilder.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:offsetHours];
+        NSDate* expectedDate = [calendar dateFromComponents:dateBuilder];
+        
+        NSDate* testDate = [NSDate fromRFC3339String:testDateString timeZone:[NSTimeZone timeZoneForSecondsFromGMT:offsetHours]];
+        
+        expect([testDate isEqualToRFC3339Date:expectedDate]).to.beTruthy();
+    });
+    
+    it(@"should create correct date when no milliseconds or nanoseconds are provided", ^{
+        
+        NSString* testDateString = @"2015-06-28T08:06:09.000+06:00";
+        
+        NSDateComponents* dateBuilder = [NSDateComponents new];
+        
+        dateBuilder.year = 2015;
+        dateBuilder.day = 28;
+        dateBuilder.month = 6;
+        dateBuilder.hour = 8;
+        dateBuilder.minute = 6;
+        dateBuilder.second = 9;
+        
+        dateBuilder.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:offsetHours];
+        NSDate* expectedDate = [calendar dateFromComponents:dateBuilder];
+        
+        NSDate* testDate = [NSDate fromRFC3339String:testDateString timeZone:[NSTimeZone timeZoneForSecondsFromGMT:offsetHours]];
+        
+        expect([testDate isEqualToRFC3339Date:expectedDate]).to.beTruthy();
+    });
+});
+
 SpecEnd
 

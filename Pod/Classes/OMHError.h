@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Open mHealth
+ * Copyright 2016 Open mHealth
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,8 @@
 FOUNDATION_EXPORT NSString *const OMHErrorDomain;
 
 typedef NS_ENUM(NSInteger, OMHErrorCode) {
-  OMHErrorCodeUnsupportedType = 1000,
-  OMHErrorCodeUnsupportedValues = 1001,
+    OMHErrorCodeUnsupportedType = 1000,
+    OMHErrorCodeUnsupportedValues = 1001,
     OMHErrorCodeIncorrectType = 1002
 };
 

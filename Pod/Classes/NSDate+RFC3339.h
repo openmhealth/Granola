@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Open mHealth
+ * Copyright 2016 Open mHealth
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,13 @@
 
 - (NSString *)RFC3339String;
 
+- (NSString *)RFC3339String:(NSTimeZone*)timeZone;
+
 + (NSDate*)fromRFC3339String:(NSString*)dateString;
+
++ (NSDate*)fromRFC3339String:(NSString*)dateString timeZone:(NSTimeZone*)timeZone;
+
+- (BOOL)isEqualToRFC3339Date:(NSDate *)otherDate;
 
 @end
 
