@@ -123,9 +123,15 @@ Over time, as curated schemas are developed that correspond to the HealthKit dat
 
 ### Time zones
 
-The serializer uses the time zone of the device to set the UTC offset in timestamps. For an iOS app using Granola, this means that serialized data contains timestamps with the UTC offset of the device running it. Although these timestamps are correct, some data, especially older data, that is being serialized may be offset incorrectly if it was originally created by HealthKit in a different time zone than the device is in when Granola serializes it. For example, if a data point was originally created by HealthKit in San Francisco on June 1st, 2015 at 8:00am (-07:00), but then serialized three months later in New York, the timestamp would read 2015-06-01T11:00-04:00. These are technically the same point in time, however they are offset differently.
+Granola uses the time zone specified for the `HKMetadataKeyTimeZone` key to serialize timestamps when it is present. If time zone metadata is not provided, Granola uses the default time zone of the application for the UTC offset in timestamps. Although these timestamps are correct, some data, especially older data, that is being serialized may be offset incorrectly if it was originally created by HealthKit in a different time zone than the device is in when Granola serializes it. For example, if a data point was originally created by HealthKit in San Francisco on June 1st, 2015 at 8:00am (-07:00), but then serialized three months later in New York, the timestamp would read 2015-06-01T11:00-04:00. These are technically the same point in time, however they are offset differently.
 
 In a future update, we plan to allow developers to specify the prefered time zone for serializing data points to give them control over how timestamps are serialized. 
+
+### Comparing dates created from RFC3339 strings
+
+The `NSDate+RFC3339` extension contains a method to deserialize RFC3339 strings into `NSDate` objects. The `NSDateFormatter` class has a strange behavior in that it only operates at the millisecond level and truncates number information after a certain point [see here](http://stackoverflow.com/questions/23684727/nsdateformatter-milliseconds-bug). This leads to strange behavior when comparing dates that use the nanoseconds property with dates created using the `fromRFC3339String` method to transform from the string representation to the NSDate representation. We found nanosecond differences in comparing some dates created with the `fromRFC3339String` method and what was expected. NSDate's `isEqualToDate` method would, in turn, return false, even when it should have been true. 
+
+In exploring this, we found that transforming dates created with the `fromRFC3339String` method back into strings and compare them allowed the comparison to be done at the millisecond level and used the correct rounding to address the issue. We built this into a comparison method, `isEqualToRFC3339Date`, which we recommend using this method when comparing a date created with `fromRFC3339String` to another NSDate object.
 
 ## Contact
 
