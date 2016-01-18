@@ -1195,7 +1195,7 @@ describe(@"HKQuantityTypeIdentifierBodyTemperature with date_time with no locati
                  @"pathsToValues": @{
                          @"header.schema_id.name": @"body-temperature",
                          @"header.schema_id.namespace":@"omh",
-                         @"body.body_temperature.value": value,
+                         @"body.body_temperature.value": @37.833333,
                          @"body.body_temperature.unit": @"F",
                          @"body.effective_time_frame.date_time": [sampledAt RFC3339String],
                          }

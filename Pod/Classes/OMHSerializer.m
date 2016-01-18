@@ -502,7 +502,7 @@
                      @"value": [NSNumber numberWithDouble:value],
                      @"unit": @"C"
                      },
-             @"effective_time_frame": [self populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+             @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
              
              };
 }

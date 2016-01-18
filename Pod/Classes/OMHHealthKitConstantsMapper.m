@@ -302,7 +302,7 @@
                                         HKQuantityTypeIdentifierBodyFatPercentage: @"OMHSerializerBodyFatPercentage",
                                         HKQuantityTypeIdentifierBodyMass : @"OMHSerializerWeight",
                                         HKQuantityTypeIdentifierBodyMassIndex: @"OMHSerializerBodyMassIndex",
-                                        HKQuantityTypeIdentifierBodyTemperature: @"OMHSerializerBodyMassIndex",
+                                        HKQuantityTypeIdentifierBodyTemperature: @"OMHSerializerBodyTemperature",
                                         HKQuantityTypeIdentifierDietaryBiotin: @"OMHSerializerGenericQuantitySample",
                                         HKQuantityTypeIdentifierDietaryCaffeine: @"OMHSerializerGenericQuantitySample",
                                         HKQuantityTypeIdentifierDietaryCalcium: @"OMHSerializerGenericQuantitySample",
