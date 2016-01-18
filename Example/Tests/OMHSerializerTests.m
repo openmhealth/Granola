@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Open mHealth
+ * Copyright 2016 Open mHealth
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1175,6 +1175,68 @@ describe(@"HKQuantityTypeIdentifierRespiratoryRate with time_interval with metad
                          @"body.metadata.value":@[@YES]
                          }
                  };
+    });
+});
+
+describe(@"HKQuantityTypeIdentifierBodyTemperature with date_time with no location", ^{
+    itShouldBehaveLike(@"AnySerializerForSupportedSample", ^{
+        NSNumber* value = [NSNumber numberWithDouble:100.1];
+        NSDate* sampledAt = [NSDate date];
+        HKUnit *unit = [HKUnit degreeFahrenheitUnit];
+        
+        HKSample* sample =
+        [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierHeartRate
+                                   attrs:@{ @"value": value,
+                                            @"unit": unit,
+                                            @"start": sampledAt,
+                                            @"end": sampledAt }];
+        return @{
+                 @"sample": sample,
+                 @"pathsToValues": @{
+                         @"header.schema_id.name": @"body-temperature",
+                         @"header.schema_id.namespace":@"omh",
+                         @"body.body_temperature.value": value,
+                         @"body.body_temperature.unit": @"F",
+                         @"body.effective_time_frame.date_time": [sampledAt RFC3339String],
+                         }
+                 };
+    });
+});
+
+describe(@"Sample with HKMetadataKeyTimeZone metadata", ^{
+    it(@"Should use the time zone value associated with the HKMetadataKeyTimeZone key",^{
+        NSCalendar* calendar = [[NSCalendar alloc]
+                                    initWithCalendarIdentifier:NSGregorianCalendar];
+        
+        NSDateComponents* dateBuilder = [NSDateComponents new];
+        
+        dateBuilder.year = 2015;
+        dateBuilder.day = 28;
+        dateBuilder.month = 6;
+        dateBuilder.hour = 8;
+        dateBuilder.minute = 6;
+        dateBuilder.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
+        
+        NSDate* start = [calendar dateFromComponents:dateBuilder];
+        
+        dateBuilder.hour = 9;
+        
+        NSDate* end = [calendar dateFromComponents:dateBuilder];
+        
+        HKSample* sample = [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierDietaryBiotin
+                                                      attrs:@{@"start":start,
+                                                              @"end":end,
+                                                              @"metadata":@{
+                                                                      HKMetadataKeyTimeZone:@"Asia/Kuwait"
+                                                                      }
+                                                              }];
+        
+        id jsonObject = deserializedJsonForSample(sample);
+        
+        expect([jsonObject
+                valueForKeyPath:@"body.effective_time_frame.time_interval.start_date_time"]).to.contain(@"2015-06-28T11:06:00.000+03:00");
+        expect([jsonObject
+                valueForKeyPath:@"body.effective_time_frame.time_interval.end_date_time"]).to.contain(@"2015-06-28T12:06:00.000+03:00");
     });
 });
 

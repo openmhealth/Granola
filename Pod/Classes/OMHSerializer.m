@@ -101,7 +101,7 @@
     //otherwise, it defaults to using the OMH schema for the 'asleep' state.
     if ([sampleTypeIdentifier isEqualToString:HKCategoryTypeIdentifierSleepAnalysis]){
         HKCategorySample* categorySample = (HKCategorySample*)sample;
-        if(categorySample.value == 0){
+        if(categorySample.value == HKCategoryValueSleepAnalysisInBed){
             serializerClassName = @"OMHSerializerGenericCategorySample";
         }
     }
@@ -475,6 +475,39 @@
 }
 - (NSString*)schemaName {
     return @"respiratory-rate";
+}
+- (NSString*)schemaVersion {
+    return @"1.0";
+}
+- (NSString*)schemaNamespace{
+    return @"omh";
+}
+@end
+
+/**
+ Serializer component to map data from HKQuantitySample samples of the HKQuantityTypeIdentifierRespiratoryRate type to the properties in
+ the  body of the Open mHealth [respiratory-rate schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_respiratory-rate)
+ This serialization mapper constructs the full json data point that adheres to the Open mHealth data-point and respiratory-rate schemas.
+ */
+@interface OMHSerializerBodyTemperature : OMHSerializer; @end;
+@implementation OMHSerializerBodyTemperature
++ (BOOL)canSerialize:(HKQuantitySample*)sample error:(NSError**)error {
+    return YES;
+}
+- (id)bodyData {
+    HKUnit* unit = [HKUnit degreeCelsiusUnit];
+    float value = [((HKQuantitySample*)self.sample).quantity doubleValueForUnit:unit];
+    return @{
+             @"body_temperature": @{
+                     @"value": [NSNumber numberWithDouble:value],
+                     @"unit": @"C"
+                     },
+             @"effective_time_frame": [self populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+             
+             };
+}
+- (NSString*)schemaName {
+    return @"body-temperature";
 }
 - (NSString*)schemaVersion {
     return @"1.0";
