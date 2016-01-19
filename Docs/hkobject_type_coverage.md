@@ -40,15 +40,16 @@
 |HKQuantityTypeIdentifierDietaryVitaminD|:white_check_mark:|[granola:hk-quantity-sample:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-quantity-sample)|
 |HKQuantityTypeIdentifierDietaryVitaminE|:white_check_mark:|[granola:hk-quantity-sample:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-quantity-sample)|
 |HKQuantityTypeIdentifierDietaryVitaminK|:white_check_mark:|[granola:hk-quantity-sample:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-quantity-sample)|
+|HKQuantityTypeIdentifierDietaryWater|:white_check_mark:|[granola:hk-quantity-sample:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-quantity-sample)|
 |HKQuantityTypeIdentifierDietaryZinc|:white_check_mark:|[granola:hk-quantity-sample:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-quantity-sample)|
 |*__Body Measurements__*|||
 |HKQuantityTypeIdentifierBodyMassIndex|:white_check_mark:|[omh:body-mass-index:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_body-mass-index)|
-|HKQuantityTypeIdentifierBodyFatPercentage|:white_check_mark:|[granola:hk-quantity-sample:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-quantity-sample)|
+|HKQuantityTypeIdentifierBodyFatPercentage|:white_check_mark:|[omh:body-fat-percentage:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_body-fat-percentage)|
 |HKQuantityTypeIdentifierHeight|:white_check_mark:|[omh:body-height:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_body-height)|
 |HKQuantityTypeIdentifierBodyMass|:white_check_mark:|[omh:body-weight:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_body-weight)|
 |HKQuantityTypeIdentifierLeanBodyMass|:white_check_mark:|[granola:hk-quantity-sample:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-quantity-sample)|
 |*__Results Identifiers__*|||
-|HKQuantityTypeIdentifierOxygenSaturation|:white_check_mark:|[granola:hk-quantity-sample:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-quantity-sample)|
+|HKQuantityTypeIdentifierOxygenSaturation|:white_check_mark:|[omh:oxygen-saturation:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_oxygen-saturation)|
 |HKQuantityTypeIdentifierPeripheralPerfusionIndex|:white_check_mark:|[granola:hk-quantity-sample:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-quantity-sample)|
 |HKQuantityTypeIdentifierBloodGlucose|:white_check_mark:|[omh:blood-glucose:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_blood-glucose)|
 |HKQuantityTypeIdentifierNumberOfTimesFallen|:white_check_mark:|[granola:hk-quantity-sample:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-quantity-sample)|
@@ -58,6 +59,7 @@
 |HKQuantityTypeIdentifierForcedVitalCapacity|:white_check_mark:|[granola:hk-quantity-sample:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-quantity-sample)|
 |HKQuantityTypeIdentifierForcedExpiratoryVolume1|:white_check_mark:|[granola:hk-quantity-sample:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-quantity-sample)|
 |HKQuantityTypeIdentifierPeakExpiratoryFlowRate|:white_check_mark:|[granola:hk-quantity-sample:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-quantity-sample)|
+|HKQuantityTypeIdentifierUVExposure|:white_check_mark:|[granola:hk-quantity-sample:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-quantity-sample)|
 |*__Correlation Identifiers__*|||
 |HKCorrelationTypeIdentifierBloodPressure|:white_check_mark:|[omh:blood-pressure:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_blood-pressure)|
 |HKCorrelationTypeIdentifierFood|:white_check_mark:|[granola:hk-correlation:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-correlation)|
@@ -70,17 +72,27 @@
 |HKQuantityTypeIdentifierStepCount|:white_check_mark:|[omh:step-count:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_step-count)|
 |HKQuantityTypeIdentifierDistanceWalkingRunning|:white_check_mark:|[granola:hk-quantity-sample:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-quantity-sample)|
 |HKQuantityTypeIdentifierDistanceCycling|:white_check_mark:|[granola:hk-quantity-sample:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-quantity-sample)|
+|HKQuantityTypeIdentifierBasalEnergyBurned|:white_check_mark:|[omh:calories-burned:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_calories-burned)|
 |HKQuantityTypeIdentifierActiveEnergyBurned|:white_check_mark:|[omh:calories-burned:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_calories-burned)|
 |HKQuantityTypeIdentifierFlightsClimbed|:white_check_mark:|[granola:hk-quantity-sample:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-quantity-sample)|
 |HKQuantityTypeIdentifierNikeFuel|:white_check_mark:|[granola:hk-quantity-sample:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-quantity-sample)|
+|HKCategoryTypeIdentifierAppleStandHour|:white_check_mark:|[granola:hk-category-sample:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-category-sample)|
 |*__Vital Signs Identifiers__*|||
 |HKQuantityTypeIdentifierHeartRate|:white_check_mark:|[omh:heart-rate:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_heart-rate)|
 |HKQuantityTypeIdentifierBodyTemperature|:white_check_mark:|[granola:hk-quantity-sample:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-quantity-sample)|
+|HKQuantityTypeIdentifierBasalBodyTemperature|:white_check_mark:|[granola:hk-quantity-sample:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-quantity-sample)|
 |HKQuantityTypeIdentifierBloodPressureSystolic|:white_check_mark:|[granola:hk-quantity-sample:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-quantity-sample)|
 |HKQuantityTypeIdentifierBloodPressureDiastolic|:white_check_mark:|[granola:hk-quantity-sample:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-quantity-sample)|
-|HKQuantityTypeIdentifierRespiratoryRate|:white_check_mark:|[granola:hk-quantity-sample:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-quantity-sample)|
+|HKQuantityTypeIdentifierRespiratoryRate|:white_check_mark:|[omh:respiratory-rate:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_respiratory-rate)|
+|*__Sexual and Reproductive Health Identifiers__*|||
+|HKCategoryTypeIdentifierCervicalMucusQuality|:white_check_mark:|[granola:hk-category-sample:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-category-sample)|
+|HKCategoryTypeIdentifierOvulationTestResult|:white_check_mark:|[granola:hk-category-sample:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-category-sample)|
+|HKCategoryTypeIdentifierMenstrualFlow|:white_check_mark:|[granola:hk-category-sample:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-category-sample)|
+|HKCategoryTypeIdentifierIntermenstrualBleeding|:white_check_mark:|[granola:hk-category-sample:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-category-sample)|
+|HKCategoryTypeIdentifierSexualActivity|:white_check_mark:|[granola:hk-category-sample:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-category-sample)|
 |*__Characteristics Identifiers__*|||
 |HKCharacteristicTypeIdentifierBiologicalSex|||
 |HKCharacteristicTypeIdentifierBloodType|||
 |HKCharacteristicTypeIdentifierDateOfBirth|||
+|HKCharacteristicTypeIdentifierFitzpatrickSkinType|||
 

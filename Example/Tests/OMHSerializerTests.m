@@ -588,7 +588,6 @@ describe(@"HKQuantityTypeIdentifierDietaryBiotin with meta_data", ^{
                                                               @"end":end,
                                                               @"metadata":@{
                                                                       HKMetadataKeyWasTakenInLab:@YES,
-                                                                      HKMetadataKeyTimeZone:@"CST",
                                                                       HKMetadataKeyReferenceRangeLowerLimit:referenceLowValue
                                                                       }
                                                               }];
@@ -602,8 +601,8 @@ describe(@"HKQuantityTypeIdentifierDietaryBiotin with meta_data", ^{
                          @"body.unit_value.unit":unitString,
                          @"body.effective_time_frame.time_interval.start_date_time":[start RFC3339String],
                          @"body.effective_time_frame.time_interval.end_date_time":[end RFC3339String],
-                         @"body.metadata.key":@[HKMetadataKeyWasTakenInLab.description,HKMetadataKeyTimeZone.description, HKMetadataKeyReferenceRangeLowerLimit.description],
-                         @"body.metadata.value":@[@YES,@"CST",referenceLowValue]
+                         @"body.metadata.key":@[HKMetadataKeyWasTakenInLab.description, HKMetadataKeyReferenceRangeLowerLimit.description],
+                         @"body.metadata.value":@[@YES, referenceLowValue]
                          }
                  };
         
@@ -678,7 +677,8 @@ describe(HKCorrelationTypeIdentifierFood,^{
                          @"body.quantity_samples.effective_time_frame.date_time": @[[sampleDate RFC3339String],[sampleDate RFC3339String]],
                          @"body.quantity_samples.unit_value.value": @[carbValue,calorieValue],
                          @"body.quantity_samples.unit_value.unit": @[carbUnitString,calorieUnitString],
-                         @"body.quantity_samples.quantity_type": @[[HKQuantityTypeIdentifierDietaryCarbohydrates description],[HKQuantityTypeIdentifierDietaryEnergyConsumed description]]
+                         @"body.quantity_samples.quantity_type": @[[HKQuantityTypeIdentifierDietaryCarbohydrates description],
+                                                                   [HKQuantityTypeIdentifierDietaryEnergyConsumed description]]
                          
                          
                          }
