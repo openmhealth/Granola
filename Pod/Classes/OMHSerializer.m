@@ -1,4 +1,4 @@
-/*
+ /*
  * Copyright 2016 Open mHealth
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -43,6 +43,7 @@
                                       HKQuantityTypeIdentifierBodyFatPercentage,
                                       HKQuantityTypeIdentifierOxygenSaturation,
                                       HKQuantityTypeIdentifierRespiratoryRate,
+                                      HKQuantityTypeIdentifierBodyTemperature,
                                       HKCategoryTypeIdentifierSleepAnalysis, //Samples with Asleep value use this serializer, samples with InBed value use generic category serializer
                                       HKCorrelationTypeIdentifierBloodPressure
                                       ];
@@ -522,7 +523,7 @@
                      @"value": [NSNumber numberWithDouble:value],
                      @"unit": @"C"
                      },
-             @"effective_time_frame": [OMHSerializer populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
+             @"effective_time_frame": [self populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
              
              };
 }

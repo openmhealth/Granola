@@ -1182,12 +1182,12 @@ describe(@"HKQuantityTypeIdentifierBodyTemperature with date_time with no locati
     itShouldBehaveLike(@"AnySerializerForSupportedSample", ^{
         NSNumber* value = [NSNumber numberWithDouble:100.1];
         NSDate* sampledAt = [NSDate date];
-        HKUnit *unit = [HKUnit degreeFahrenheitUnit];
+        NSString* unitString = @"degF";
         
         HKSample* sample =
-        [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierHeartRate
+        [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierBodyTemperature
                                    attrs:@{ @"value": value,
-                                            @"unit": unit,
+                                            @"unitString": unitString,
                                             @"start": sampledAt,
                                             @"end": sampledAt }];
         return @{
@@ -1195,8 +1195,8 @@ describe(@"HKQuantityTypeIdentifierBodyTemperature with date_time with no locati
                  @"pathsToValues": @{
                          @"header.schema_id.name": @"body-temperature",
                          @"header.schema_id.namespace":@"omh",
-                         @"body.body_temperature.value": @37.833333,
-                         @"body.body_temperature.unit": @"F",
+                         @"body.body_temperature.value": [NSNumber numberWithFloat:((100.1 + 459.67) / 1.8) - 273.15],
+                         @"body.body_temperature.unit": @"C",
                          @"body.effective_time_frame.date_time": [sampledAt RFC3339String],
                          }
                  };
