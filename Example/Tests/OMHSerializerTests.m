@@ -1269,6 +1269,30 @@ describe(@"HKQuantityTypeIdentifierBodyTemperature with date_time with location 
     });
 });
 
+describe(@"HKQuantityTypeIdentifierBodyTemperature with a measurement location not compatible with OMH", ^{
+    it(@"Should not serialize the measurement location as a property in the OMH schema", ^{
+        NSNumber* value = [NSNumber numberWithDouble:100.1];
+        NSDate* sampledAt = [NSDate date];
+        NSString* unitString = @"degF";
+        
+        HKSample* sample =
+        [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierBodyTemperature
+                                   attrs:@{ @"value": value,
+                                            @"unitString": unitString,
+                                            @"start": sampledAt,
+                                            @"end": sampledAt,
+                                            @"metadata":@{
+                                                    HKMetadataKeyBodyTemperatureSensorLocation:[NSNumber numberWithInt:HKBodyTemperatureSensorLocationGastroIntestinal]
+                                                    }
+                                            }];
+        
+        id jsonObject = deserializedJsonForSample(sample);
+        
+        NSString* location = [jsonObject valueForKeyPath:@"body.measurement_location"];
+        
+        expect(location).to.beNil();
+    });
+});
 
 
 describe(@"Sample with HKMetadataKeyTimeZone metadata", ^{

@@ -518,14 +518,56 @@
 - (id)bodyData {
     HKUnit* unit = [HKUnit degreeCelsiusUnit];
     float value = [((HKQuantitySample*)self.sample).quantity doubleValueForUnit:unit];
-    return @{
+    
+    
+    NSMutableDictionary* serializedValues = [NSMutableDictionary dictionaryWithDictionary:@{
              @"body_temperature": @{
                      @"value": [NSNumber numberWithDouble:value],
                      @"unit": @"C"
                      },
              @"effective_time_frame": [self populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
-             
-             };
+             }];
+    
+    NSNumber* bodyTemperatureLocation = self.sample.metadata[HKMetadataKeyBodyTemperatureSensorLocation];
+    if (bodyTemperatureLocation!=nil){
+        NSString* measurementLocationString = [self getBodyTemperatureLocationFromConstant:bodyTemperatureLocation];
+        if(measurementLocationString!=nil){
+            [serializedValues setObject:measurementLocationString forKey:@"measurement_location"];
+        }
+    }
+    
+    return serializedValues;
+}
+- (NSString*) getBodyTemperatureLocationFromConstant:(NSNumber*)temperatureLocationConstant {
+    
+    switch ([temperatureLocationConstant intValue]) {
+        case HKBodyTemperatureSensorLocationArmpit:
+            return @"axillary";
+        case HKBodyTemperatureSensorLocationBody:
+            return nil;
+        case HKBodyTemperatureSensorLocationEar:
+            return @"tympanic";
+        case HKBodyTemperatureSensorLocationEarDrum:
+            return @"tympanic";
+        case HKBodyTemperatureSensorLocationFinger:
+            return @"finger";
+        case HKBodyTemperatureSensorLocationForehead:
+            return @"forehead";
+        case HKBodyTemperatureSensorLocationGastroIntestinal:
+            return nil;
+        case HKBodyTemperatureSensorLocationMouth:
+            return @"oral";
+        case HKBodyTemperatureSensorLocationOther:
+            return nil;
+        case HKBodyTemperatureSensorLocationRectum:
+            return @"rectal";
+        case HKBodyTemperatureSensorLocationTemporalArtery:
+            return @"temporal artery";
+        case HKBodyTemperatureSensorLocationToe:
+            return @"toe";
+        default:
+            return nil;
+    }
 }
 - (NSString*)schemaName {
     return @"body-temperature";
