@@ -531,7 +531,7 @@
     return @"body-temperature";
 }
 - (NSString*)schemaVersion {
-    return @"1.0";
+    return @"2.0";
 }
 - (NSString*)schemaNamespace{
     return @"omh";
