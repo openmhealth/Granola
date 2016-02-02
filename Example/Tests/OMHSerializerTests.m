@@ -450,7 +450,8 @@ describe(@"HKQuantityTypeIdentifierBloodGlucose with date as metadata", ^{
                          @"body.blood_glucose.unit": unitString,
                          @"body.effective_time_frame.time_interval.start_date_time": [sample.startDate RFC3339String],
                          @"body.effective_time_frame.time_interval.end_date_time": [sample.endDate RFC3339String],
-                         @"body.metadata.key":@[@"HKMetaDataKeyDateCreated"], //Because metadata value validation iterates over an array, these values must be in array form
+                         @"body.metadata.key":@[@"HKMetaDataKeyDateCreated"],   //Because metadata value validation iterates over an array,
+                                                                                //these values must be in array form
                          @"body.metadata.value":@[[metadataDate RFC3339String]]
                          
                          }
@@ -1251,7 +1252,8 @@ describe(@"HKQuantityTypeIdentifierBodyTemperature with date_time with location 
                                             @"start": sampledAt,
                                             @"end": sampledAt,
                                             @"metadata":@{
-                                                    HKMetadataKeyBodyTemperatureSensorLocation:[NSNumber numberWithInt:HKBodyTemperatureSensorLocationForehead]
+                                                    HKMetadataKeyBodyTemperatureSensorLocation:[NSNumber numberWithInt:
+                                                                                                HKBodyTemperatureSensorLocationForehead]
                                                     }
                                             }];
         return @{
@@ -1269,28 +1271,65 @@ describe(@"HKQuantityTypeIdentifierBodyTemperature with date_time with location 
     });
 });
 
-describe(@"HKQuantityTypeIdentifierBodyTemperature with a measurement location not compatible with OMH", ^{
-    it(@"Should not serialize the measurement location as a property in the OMH schema", ^{
+describe(@"HKQuantityTypeIdentifierBodyTemperature measurement location serialization", ^{
+    
+    __block HKSample* sample;
+    
+    id (^createBodyTemperatureSampleWithLocation)(int temperatureLocationId) = ^(int temperatureLocationId) {
+        
         NSNumber* value = [NSNumber numberWithDouble:100.1];
         NSDate* sampledAt = [NSDate date];
         NSString* unitString = @"degF";
+        if(temperatureLocationId>=0){
+            return [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierBodyTemperature
+                                              attrs:@{ @"value": value,
+                                                       @"unitString": unitString,
+                                                       @"start": sampledAt,
+                                                       @"end": sampledAt,
+                                                       @"metadata":@{
+                                                               HKMetadataKeyBodyTemperatureSensorLocation:[NSNumber numberWithInt:
+                                                                                                           temperatureLocationId]
+                                                               }
+                                                       }];
+        }
+        else{
+            return [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierBodyTemperature
+                                              attrs:@{ @"value": value,
+                                                       @"unitString": unitString,
+                                                       @"start": sampledAt,
+                                                       @"end": sampledAt
+                                                       }];
+        }
         
-        HKSample* sample =
-        [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierBodyTemperature
-                                   attrs:@{ @"value": value,
-                                            @"unitString": unitString,
-                                            @"start": sampledAt,
-                                            @"end": sampledAt,
-                                            @"metadata":@{
-                                                    HKMetadataKeyBodyTemperatureSensorLocation:[NSNumber numberWithInt:HKBodyTemperatureSensorLocationGastroIntestinal]
-                                                    }
-                                            }];
+    };
+    
+    it(@"Should not serialize the location as an OMH schema property when value is not compatible", ^{
         
-        id jsonObject = deserializedJsonForSample(sample);
+        id jsonObject = deserializedJsonForSample(createBodyTemperatureSampleWithLocation(HKBodyTemperatureSensorLocationGastroIntestinal));
         
         NSString* location = [jsonObject valueForKeyPath:@"body.measurement_location"];
         
         expect(location).to.beNil();
+    });
+    
+    it(@"Should serialize the measurement location as an OMH schema property when value is compatible", ^{
+        
+        id jsonObject = deserializedJsonForSample(createBodyTemperatureSampleWithLocation(HKBodyTemperatureSensorLocationMouth));
+        
+        NSString* location = [jsonObject valueForKeyPath:@"body.measurement_location"];
+        
+        expect(location).notTo.beNil();
+        expect(location).to.equal(@"oral");
+    });
+    
+    it(@"Should not serialize the location as an OMH schema property when value is absent", ^{
+       
+        id jsonObject = deserializedJsonForSample(createBodyTemperatureSampleWithLocation(-1));
+        
+        NSString* location = [jsonObject valueForKeyPath:@"body.measurement_location"];
+        
+        expect(location).to.beNil();
+        
     });
 });
 
