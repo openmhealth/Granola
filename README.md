@@ -20,10 +20,19 @@ to ensure the data is intuitive and clinically meaningful.
 
 ### CocoaPods
 
-Granola is available through [CocoaPods](http://cocoapods.org). To install it, simply add the following line to your `Podfile`:
+Granola is available through [CocoaPods](http://cocoapods.org), a dependency manager for Objective-C. If you don't already have CocoaPods installed, you can install it with the following command:
+```ruby
+$ gem install cocoapods
+```
 
+To integrate Granola with your Xcode project, simply add the following line to your `Podfile`:
 ```ruby
 pod "Granola"
+```
+
+and then run the following command:
+```ruby
+$ pod install
 ```
 
 ***
@@ -147,6 +156,23 @@ Also, feel free to tweet at Open mHealth ([@openmhealth](http://twitter.com/open
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+To setup Granola for development, first pull the code. Then install CocoaPods:
+```ruby
+$ gem install cocoapods
+```
+
+After that, change into the Example directory:
+```ruby
+$ cd Example
+```
+
+and type:
+```ruby
+pod install
+```
+
+Then open the .xcworkspace file instead of the .xcodeproj file. This will allow you to make changes to the code and run and add tests for any changes you make.
 
 
 ## License
