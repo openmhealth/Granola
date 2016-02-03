@@ -167,7 +167,8 @@
                  HKQuantityTypeIdentifierOxygenSaturation,
                  HKQuantityTypeIdentifierBodyFatPercentage,
                  HKQuantityTypeIdentifierRespiratoryRate,
-                 HKQuantityTypeIdentifierBodyTemperature
+                 HKQuantityTypeIdentifierBodyTemperature,
+                 HKQuantityTypeIdentifierBasalBodyTemperature
                  ] includes:sampleTypeIdentifier]) {
         
         NSString* defaultUnitString = nil;
@@ -189,7 +190,7 @@
             defaultUnitString = @"L";
         } else if (sampleTypeIdentifier == HKQuantityTypeIdentifierOxygenSaturation || sampleTypeIdentifier == HKQuantityTypeIdentifierBodyFatPercentage) {
             defaultUnitString = @"%";
-        } else if (sampleTypeIdentifier == HKQuantityTypeIdentifierBodyTemperature) {
+        } else if (sampleTypeIdentifier == HKQuantityTypeIdentifierBodyTemperature || sampleTypeIdentifier == HKQuantityTypeIdentifierBasalBodyTemperature) {
             defaultUnitString = @"degC";
         } else {
             defaultUnitString = @"count";

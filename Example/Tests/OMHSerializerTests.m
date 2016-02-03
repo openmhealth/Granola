@@ -180,6 +180,8 @@ describe(@"OMHSerializer", ^{
                                                                                 HKCategoryTypeIdentifierMenstrualFlow,
                                                                                 HKCategoryTypeIdentifierOvulationTestResult,
                                                                                 HKCategoryTypeIdentifierSexualActivity,
+                                                                                HKQuantityTypeIdentifierBasalBodyTemperature,
+                                                                                HKQuantityTypeIdentifierBodyTemperature,
                                                                                 HKCorrelationTypeIdentifierFood,
                                                                                 HKWorkoutTypeIdentifier
                                                                                 ]];
@@ -1215,9 +1217,9 @@ describe(@"HKQuantityTypeIdentifierRespiratoryRate with time_interval with metad
 
 describe(@"HKQuantityTypeIdentifierBodyTemperature with date_time with no location", ^{
     itShouldBehaveLike(@"AnySerializerForSupportedSample", ^{
-        NSNumber* value = [NSNumber numberWithDouble:100.1];
+        NSNumber* value = [NSNumber numberWithDouble:37.1];
         NSDate* sampledAt = [NSDate date];
-        NSString* unitString = @"degF";
+        NSString* unitString = @"degC";
         
         HKSample* sample =
         [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierBodyTemperature
@@ -1231,7 +1233,7 @@ describe(@"HKQuantityTypeIdentifierBodyTemperature with date_time with no locati
                          @"header.schema_id.name": @"body-temperature",
                          @"header.schema_id.namespace":@"omh",
                          @"header.schema_id.version": @"2.0",
-                         @"body.body_temperature.value": [NSNumber numberWithFloat:((100.1 + 459.67) / 1.8) - 273.15],
+                         @"body.body_temperature.value": [NSNumber numberWithFloat:37.1],
                          @"body.body_temperature.unit": @"C",
                          @"body.effective_time_frame.date_time": [sampledAt RFC3339String],
                          }
@@ -1239,9 +1241,31 @@ describe(@"HKQuantityTypeIdentifierBodyTemperature with date_time with no locati
     });
 });
 
-describe(@"HKQuantityTypeIdentifierBodyTemperature with date_time with location compatible with OMH", ^{
-    itShouldBehaveLike(@"AnySerializerForSupportedSample", ^{
-        NSNumber* value = [NSNumber numberWithDouble:100.1];
+describe(@"HKQuantityTypeIdentifierBodyTemperature temperature units serialization", ^{
+   
+    it(@"Should have correct unit value for degrees celcius", ^{
+        
+        NSNumber* value = [NSNumber numberWithFloat:38.1];
+        NSDate* sampledAt = [NSDate date];
+        NSString* unitString = @"degC";
+        
+        HKSample* sample =
+        [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierBodyTemperature
+                                   attrs:@{ @"value": value,
+                                            @"unitString": unitString,
+                                            @"start": sampledAt,
+                                            @"end": sampledAt,
+                                            }];
+        
+        id jsonObject = deserializedJsonForSample(sample);
+        
+        expect([jsonObject valueForKeyPath:@"body.body_temperature.unit"]).to.equal(@"C");
+        expect([jsonObject valueForKeyPath:@"body.body_temperature.value"]).to.equal([NSNumber numberWithFloat:38.1]);
+    });
+    
+    it(@"Should have correct unit value for degrees fahrenheit", ^{
+        
+        NSNumber* value = [NSNumber numberWithFloat:99.8];
         NSDate* sampledAt = [NSDate date];
         NSString* unitString = @"degF";
         
@@ -1251,29 +1275,37 @@ describe(@"HKQuantityTypeIdentifierBodyTemperature with date_time with location 
                                             @"unitString": unitString,
                                             @"start": sampledAt,
                                             @"end": sampledAt,
-                                            @"metadata":@{
-                                                    HKMetadataKeyBodyTemperatureSensorLocation:[NSNumber numberWithInt:
-                                                                                                HKBodyTemperatureSensorLocationForehead]
-                                                    }
                                             }];
-        return @{
-                 @"sample": sample,
-                 @"pathsToValues": @{
-                         @"header.schema_id.name": @"body-temperature",
-                         @"header.schema_id.namespace":@"omh",
-                         @"header.schema_id.version":@"2.0",
-                         @"body.body_temperature.value": [NSNumber numberWithFloat:((100.1 + 459.67) / 1.8) - 273.15],
-                         @"body.body_temperature.unit": @"C",
-                         @"body.effective_time_frame.date_time": [sampledAt RFC3339String],
-                         @"body.measurement_location" : @"forehead"
-                         }
-                 };
+        
+        id jsonObject = deserializedJsonForSample(sample);
+        
+        expect([jsonObject valueForKeyPath:@"body.body_temperature.unit"]).to.equal(@"C");
+        expect([jsonObject valueForKeyPath:@"body.body_temperature.value"]).to.equal([NSNumber numberWithFloat:((99.8 + 459.67) / 1.8) - 273.15]);
     });
+    
+    it(@"Should have correct unit value for degrees kelvin", ^{
+        
+        NSNumber* value = [NSNumber numberWithDouble:310.8];
+        NSDate* sampledAt = [NSDate date];
+        NSString* unitString = @"K";
+        
+        HKSample* sample =
+        [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierBodyTemperature
+                                   attrs:@{ @"value": value,
+                                            @"unitString": unitString,
+                                            @"start": sampledAt,
+                                            @"end": sampledAt,
+                                            }];
+        
+        id jsonObject = deserializedJsonForSample(sample);
+        
+        expect([jsonObject valueForKeyPath:@"body.body_temperature.unit"]).to.equal(@"C");
+        expect([jsonObject valueForKeyPath:@"body.body_temperature.value"]).to.equal([NSNumber numberWithFloat:((310.8 * 1.0) - 273.15)]);
+    });
+    
 });
 
 describe(@"HKQuantityTypeIdentifierBodyTemperature measurement location serialization", ^{
-    
-    __block HKSample* sample;
     
     id (^createBodyTemperatureSampleWithLocation)(int temperatureLocationId) = ^(int temperatureLocationId) {
         
@@ -1329,6 +1361,90 @@ describe(@"HKQuantityTypeIdentifierBodyTemperature measurement location serializ
         NSString* location = [jsonObject valueForKeyPath:@"body.measurement_location"];
         
         expect(location).to.beNil();
+        
+    });
+});
+
+describe(@"HKQuantityTypeIdentifierBasalBodyTemperature serialization", ^{
+    itShouldBehaveLike(@"AnySerializerForSupportedSample", ^{
+        NSNumber* value = [NSNumber numberWithDouble:36.9];
+        NSDate* sampledAt = [NSDate date];
+        NSString* unitString = @"degC";
+        
+        HKSample* sample =
+        [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierBasalBodyTemperature
+                                   attrs:@{ @"value": value,
+                                            @"unitString": unitString,
+                                            @"start": sampledAt,
+                                            @"end": sampledAt }];
+        return @{
+                 @"sample": sample,
+                 @"pathsToValues": @{
+                         @"header.schema_id.name": @"body-temperature",
+                         @"header.schema_id.namespace":@"omh",
+                         @"header.schema_id.version": @"2.0",
+                         @"body.body_temperature.value": [NSNumber numberWithFloat:36.9],
+                         @"body.body_temperature.unit": @"C",
+                         @"body.effective_time_frame.date_time": [sampledAt RFC3339String],
+                         }
+                 };
+    });
+});
+
+describe(@"HKQuantityTypeIdentifierBasalBodyTemperature serialization", ^{
+    it(@"Should be a basic body temperature when not self-reported", ^{
+        NSNumber* value = [NSNumber numberWithDouble:37.1];
+        NSDate* sampledAt = [NSDate date];
+        NSString* unitString = @"degC";
+        
+        HKSample* sample =
+        [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierBasalBodyTemperature
+                                   attrs:@{ @"value": value,
+                                            @"unitString": unitString,
+                                            @"start": sampledAt,
+                                            @"end": sampledAt }];
+        
+        id jsonObject = deserializedJsonForSample(sample);
+        
+        NSError* validationError = nil;
+        BOOL valid = [OMHSchemaStore validateObject:[jsonObject valueForKeyPath:@"body"]
+                                againstSchemaAtPath:[NSString stringWithFormat:@"omh/body-temperature-2.x"]
+                                          withError:&validationError];
+        expect(valid).to.beTruthy();
+
+        expect([jsonObject valueForKeyPath:@"header.schema_id.name"]).to.equal(@"body-temperature");
+        expect([jsonObject valueForKeyPath:@"body.measurement_location"]).to.beNil();
+        expect([jsonObject valueForKeyPath:@"body.temporal_relationship_to_sleep"]).to.beNil();
+    });
+    
+    it(@"Should be a body temperature taken at waking when self-reported", ^{
+        NSNumber* value = [NSNumber numberWithDouble:37.1];
+        NSDate* sampledAt = [NSDate date];
+        NSString* unitString = @"degC";
+        
+        HKSample* sample =
+        [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierBasalBodyTemperature
+                                   attrs:@{ @"value": value,
+                                            @"unitString": unitString,
+                                            @"start": sampledAt,
+                                            @"end": sampledAt,
+                                            @"metadata": @{
+                                                    HKMetadataKeyWasUserEntered:@true
+                                                    }
+                                            }];
+        
+        id jsonObject = deserializedJsonForSample(sample);
+        
+        NSError* validationError = nil;
+        BOOL valid = [OMHSchemaStore validateObject:[jsonObject valueForKeyPath:@"body"]
+                                againstSchemaAtPath:[NSString stringWithFormat:@"omh/body-temperature-2.x"]
+                                          withError:&validationError];
+        expect(valid).to.beTruthy();
+
+        expect([jsonObject valueForKeyPath:@"header.schema_id.name"]).to.equal(@"body-temperature");
+        expect([jsonObject valueForKeyPath:@"body.measurement_location"]).to.beNil();
+        expect([jsonObject valueForKeyPath:@"body.temporal_relationship_to_sleep"]).notTo.beNil();
+        expect([jsonObject valueForKeyPath:@"body.temporal_relationship_to_sleep"]).to.equal(@"on waking");
         
     });
 });

@@ -44,6 +44,7 @@
                                       HKQuantityTypeIdentifierOxygenSaturation,
                                       HKQuantityTypeIdentifierRespiratoryRate,
                                       HKQuantityTypeIdentifierBodyTemperature,
+                                      HKQuantityTypeIdentifierBasalBodyTemperature,
                                       HKCategoryTypeIdentifierSleepAnalysis, //Samples with Asleep value use this serializer, samples with InBed value use generic category serializer
                                       HKCorrelationTypeIdentifierBloodPressure
                                       ];
@@ -506,8 +507,8 @@
 @end
 
 /**
- Serializer component to map data from HKQuantitySample samples of the HKQuantityTypeIdentifierRespiratoryRate type to the properties in
- the  body of the Open mHealth [respiratory-rate schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_respiratory-rate)
+ Serializer component to map data from HKQuantitySample samples of the HKQuantityTypeIdentifierBodyTemperature type to the properties in
+ the  body of the Open mHealth [body-temperature schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_body-temperature)
  This serialization mapper constructs the full json data point that adheres to the Open mHealth data-point and respiratory-rate schemas.
  */
 @interface OMHSerializerBodyTemperature : OMHSerializer; @end;
@@ -527,6 +528,13 @@
                      },
              @"effective_time_frame": [self populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
              }];
+    
+    if([self.sample.sampleType.description isEqualToString:HKQuantityTypeIdentifierBasalBodyTemperature]) {
+        BOOL userEntered = [self.sample.metadata objectForKey:HKMetadataKeyWasUserEntered];
+        if(userEntered == true){
+            [serializedValues setObject:@"on waking" forKey:@"temporal_relationship_to_sleep"];
+        }
+    }
     
     NSNumber* bodyTemperatureLocation = self.sample.metadata[HKMetadataKeyBodyTemperatureSensorLocation];
     if (bodyTemperatureLocation!=nil){

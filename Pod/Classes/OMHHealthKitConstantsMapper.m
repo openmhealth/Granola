@@ -293,7 +293,7 @@
     if (allQuantityTypeIdsToClasses == nil) {
         allQuantityTypeIdsToClasses = @{
                                         HKQuantityTypeIdentifierActiveEnergyBurned: @"OMHSerializerEnergyBurned",
-                                        HKQuantityTypeIdentifierBasalBodyTemperature: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierBasalBodyTemperature: @"OMHSerializerBodyTemperature",
                                         HKQuantityTypeIdentifierBasalEnergyBurned: @"OMHSerializerEnergyBurned",
                                         HKQuantityTypeIdentifierBloodAlcoholContent: @"OMHSerializerGenericQuantitySample",
                                         HKQuantityTypeIdentifierBloodGlucose : @"OMHSerializerBloodGlucose",
