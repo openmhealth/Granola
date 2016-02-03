@@ -293,7 +293,7 @@
     if (allQuantityTypeIdsToClasses == nil) {
         allQuantityTypeIdsToClasses = @{
                                         HKQuantityTypeIdentifierActiveEnergyBurned: @"OMHSerializerEnergyBurned",
-                                        HKQuantityTypeIdentifierBasalBodyTemperature: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierBasalBodyTemperature: @"OMHSerializerBodyTemperature",
                                         HKQuantityTypeIdentifierBasalEnergyBurned: @"OMHSerializerEnergyBurned",
                                         HKQuantityTypeIdentifierBloodAlcoholContent: @"OMHSerializerGenericQuantitySample",
                                         HKQuantityTypeIdentifierBloodGlucose : @"OMHSerializerBloodGlucose",
@@ -302,7 +302,7 @@
                                         HKQuantityTypeIdentifierBodyFatPercentage: @"OMHSerializerBodyFatPercentage",
                                         HKQuantityTypeIdentifierBodyMass : @"OMHSerializerWeight",
                                         HKQuantityTypeIdentifierBodyMassIndex: @"OMHSerializerBodyMassIndex",
-                                        HKQuantityTypeIdentifierBodyTemperature: @"OMHSerializerBodyMassIndex",
+                                        HKQuantityTypeIdentifierBodyTemperature: @"OMHSerializerBodyTemperature",
                                         HKQuantityTypeIdentifierDietaryBiotin: @"OMHSerializerGenericQuantitySample",
                                         HKQuantityTypeIdentifierDietaryCaffeine: @"OMHSerializerGenericQuantitySample",
                                         HKQuantityTypeIdentifierDietaryCalcium: @"OMHSerializerGenericQuantitySample",

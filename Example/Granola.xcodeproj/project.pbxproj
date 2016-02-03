@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		2E945AD21B753D1400A1FEB0 /* NSDate+RFC3339Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E945AD11B753D1400A1FEB0 /* NSDate+RFC3339Tests.m */; };
+		2EAAF0371C44CB1300897920 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EAAF0361C44CB1300897920 /* AppDelegate.swift */; };
+		2EAAF0391C44CB1300897920 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EAAF0381C44CB1300897920 /* ViewController.swift */; };
+		2EAAF03C1C44CB1300897920 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2EAAF03A1C44CB1300897920 /* Main.storyboard */; };
+		2EAAF03E1C44CB1300897920 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2EAAF03D1C44CB1300897920 /* Assets.xcassets */; };
+		2EAAF0411C44CB1300897920 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2EAAF03F1C44CB1300897920 /* LaunchScreen.storyboard */; };
 		6003F5B0195388D20070C39A /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F5AF195388D20070C39A /* XCTest.framework */; };
 		6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -24,6 +29,13 @@
 		0CABD26178AD457AEB783167 /* libPods-Granola.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Granola.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1497BA18A434AE1495648DE8 /* Granola.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Granola.podspec; path = ../Granola.podspec; sourceTree = "<group>"; };
 		2E945AD11B753D1400A1FEB0 /* NSDate+RFC3339Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+RFC3339Tests.m"; sourceTree = "<group>"; };
+		2EAAF0341C44CB1300897920 /* Granola Test Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Granola Test Swift.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2EAAF0361C44CB1300897920 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		2EAAF0381C44CB1300897920 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		2EAAF03B1C44CB1300897920 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		2EAAF03D1C44CB1300897920 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2EAAF0401C44CB1300897920 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		2EAAF0421C44CB1300897920 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* Granola.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Granola.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -46,6 +58,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		2EAAF0311C44CB1300897920 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6003F5AB195388D20070C39A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -60,6 +79,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2EAAF0351C44CB1300897920 /* Granola Test Swift */ = {
+			isa = PBXGroup;
+			children = (
+				2EAAF0361C44CB1300897920 /* AppDelegate.swift */,
+				2EAAF0381C44CB1300897920 /* ViewController.swift */,
+				2EAAF03A1C44CB1300897920 /* Main.storyboard */,
+				2EAAF03D1C44CB1300897920 /* Assets.xcassets */,
+				2EAAF03F1C44CB1300897920 /* LaunchScreen.storyboard */,
+				2EAAF0421C44CB1300897920 /* Info.plist */,
+			);
+			path = "Granola Test Swift";
+			sourceTree = "<group>";
+		};
 		3CBAC3C90B6EE47B545DBAFB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -74,6 +106,7 @@
 			children = (
 				60FF7A9C1954A5C5007DD14C /* Podspec Metadata */,
 				6003F5B5195388D20070C39A /* Tests */,
+				2EAAF0351C44CB1300897920 /* Granola Test Swift */,
 				6003F58C195388D20070C39A /* Frameworks */,
 				6003F58B195388D20070C39A /* Products */,
 				3CBAC3C90B6EE47B545DBAFB /* Pods */,
@@ -85,6 +118,7 @@
 			children = (
 				6003F58A195388D20070C39A /* Granola.app */,
 				6003F5AE195388D20070C39A /* Granola.xctest */,
+				2EAAF0341C44CB1300897920 /* Granola Test Swift.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -140,6 +174,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		2EAAF0331C44CB1300897920 /* Granola Test Swift */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2EAAF0431C44CB1300897920 /* Build configuration list for PBXNativeTarget "Granola Test Swift" */;
+			buildPhases = (
+				2EAAF0301C44CB1300897920 /* Sources */,
+				2EAAF0311C44CB1300897920 /* Frameworks */,
+				2EAAF0321C44CB1300897920 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Granola Test Swift";
+			productName = "Granola Test Swift";
+			productReference = 2EAAF0341C44CB1300897920 /* Granola Test Swift.app */;
+			productType = "com.apple.product-type.application";
+		};
 		6003F5AD195388D20070C39A /* Granola */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6003F5C2195388D20070C39A /* Build configuration list for PBXNativeTarget "Granola" */;
@@ -167,9 +218,13 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = OMH;
+				LastSwiftUpdateCheck = 0710;
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Open mHealth";
 				TargetAttributes = {
+					2EAAF0331C44CB1300897920 = {
+						CreatedOnToolsVersion = 7.1.1;
+					};
 					6003F5AD195388D20070C39A = {
 						TestTargetID = 6003F589195388D20070C39A;
 					};
@@ -189,11 +244,22 @@
 			projectRoot = "";
 			targets = (
 				6003F5AD195388D20070C39A /* Granola */,
+				2EAAF0331C44CB1300897920 /* Granola Test Swift */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		2EAAF0321C44CB1300897920 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2EAAF0411C44CB1300897920 /* LaunchScreen.storyboard in Resources */,
+				2EAAF03E1C44CB1300897920 /* Assets.xcassets in Resources */,
+				2EAAF03C1C44CB1300897920 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6003F5AC195388D20070C39A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -254,6 +320,15 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		2EAAF0301C44CB1300897920 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2EAAF0391C44CB1300897920 /* ViewController.swift in Sources */,
+				2EAAF0371C44CB1300897920 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6003F5AA195388D20070C39A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -268,6 +343,22 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		2EAAF03A1C44CB1300897920 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2EAAF03B1C44CB1300897920 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		2EAAF03F1C44CB1300897920 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2EAAF0401C44CB1300897920 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
 		6003F5B8195388D20070C39A /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -279,6 +370,43 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		2EAAF0441C44CB1300897920 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "Granola Test Swift/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "omh.Granola-Test-Swift";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		2EAAF0451C44CB1300897920 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "Granola Test Swift/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "omh.Granola-Test-Swift";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		6003F5BD195388D20070C39A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -394,6 +522,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		2EAAF0431C44CB1300897920 /* Build configuration list for PBXNativeTarget "Granola Test Swift" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2EAAF0441C44CB1300897920 /* Debug */,
+				2EAAF0451C44CB1300897920 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		6003F585195388D10070C39A /* Build configuration list for PBXProject "Granola" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
