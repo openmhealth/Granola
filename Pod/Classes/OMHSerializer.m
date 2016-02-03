@@ -192,6 +192,7 @@
     NSDictionary *serializedBodyDictionaryWithoutMetadata = [self bodyData];
     NSMutableDictionary *serializedBodyDictionaryWithMetadata = [NSMutableDictionary dictionaryWithDictionary:serializedBodyDictionaryWithoutMetadata];
     [serializedBodyDictionaryWithMetadata addEntriesFromDictionary:[OMHSerializer serializeMetadataArray:self.sample.metadata]];
+    
     return @{
              @"header": @{
                      @"id": self.sample.UUID.UUIDString,
@@ -243,8 +244,8 @@
 }
 - (id)bodyData {
     HKUnit* unit = [HKUnit unitFromString:@"count"];
-    double value =
-    [[(HKQuantitySample*)self.sample quantity] doubleValueForUnit:unit];
+    double value = [[(HKQuantitySample*)self.sample quantity] doubleValueForUnit:unit];
+    
     return @{
              @"step_count": [NSNumber numberWithDouble:value],
              @"effective_time_frame": [self populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
@@ -275,8 +276,8 @@
 - (id)bodyData {
     NSString* unitString = @"cm";
     HKUnit* unit = [HKUnit unitFromString:unitString];
-    double value =
-    [[(HKQuantitySample*)self.sample quantity] doubleValueForUnit:unit];
+    double value = [[(HKQuantitySample*)self.sample quantity] doubleValueForUnit:unit];
+    
     return @{
              @"body_height": @{
                      @"value": [NSNumber numberWithDouble:value],
@@ -310,8 +311,8 @@
 - (id)bodyData {
     NSString* unitString = @"lb";
     HKUnit* unit = [HKUnit unitFromString:unitString];
-    double value =
-    [[(HKQuantitySample*)self.sample quantity] doubleValueForUnit:unit];
+    double value = [[(HKQuantitySample*)self.sample quantity] doubleValueForUnit:unit];
+    
     return @{
              @"body_weight": @{
                      @"value": [NSNumber numberWithDouble:value],
@@ -344,8 +345,8 @@
 }
 - (id)bodyData {
     HKUnit* unit = [HKUnit unitFromString:@"count/min"];
-    double value =
-    [[(HKQuantitySample*)self.sample quantity] doubleValueForUnit:unit];
+    double value = [[(HKQuantitySample*)self.sample quantity] doubleValueForUnit:unit];
+    
     return @{
              @"heart_rate": @{
                      @"value": [NSNumber numberWithDouble:value],
@@ -379,8 +380,8 @@
 - (id)bodyData {
     NSString* unitString = @"mg/dL";
     HKUnit* unit = [HKUnit unitFromString:unitString];
-    double value =
-    [[(HKQuantitySample*)self.sample quantity] doubleValueForUnit:unit];
+    double value = [[(HKQuantitySample*)self.sample quantity] doubleValueForUnit:unit];
+    
     return @{
              @"blood_glucose": @{
                      @"value": [NSNumber numberWithDouble:value],
@@ -414,8 +415,8 @@
 - (id)bodyData {
     NSString* unitString = @"kcal";
     HKUnit* unit = [HKUnit unitFromString:unitString];
-    double value =
-    [[(HKQuantitySample*)self.sample quantity] doubleValueForUnit:unit];
+    double value = [[(HKQuantitySample*)self.sample quantity] doubleValueForUnit:unit];
+    
     return @{
              @"kcal_burned": @{
                      @"value": [NSNumber numberWithDouble:value],
@@ -449,8 +450,8 @@
 - (id)bodyData {
     NSString* unitString = @"%";
     HKUnit* unit = [HKUnit unitFromString:unitString];
-    float value =
-    [[(HKQuantitySample*)self.sample quantity] doubleValueForUnit:unit];
+    float value = [[(HKQuantitySample*)self.sample quantity] doubleValueForUnit:unit];
+    
     return @{
              @"oxygen_saturation": @{
                      @"value": [NSNumber numberWithDouble:value],
@@ -484,8 +485,7 @@
 - (id)bodyData {
     NSString* unitString = @"count/min";
     HKUnit* unit = [HKUnit unitFromString:unitString];
-    float value =
-    [[(HKQuantitySample*)self.sample quantity] doubleValueForUnit:unit];
+    float value = [[(HKQuantitySample*)self.sample quantity] doubleValueForUnit:unit];
     return @{
              @"respiratory_rate": @{
                      @"value": [NSNumber numberWithDouble:value],
@@ -507,8 +507,9 @@
 @end
 
 /**
- Serializer component to map data from HKQuantitySample samples of the HKQuantityTypeIdentifierBodyTemperature type to the properties in
- the  body of the Open mHealth [body-temperature schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_body-temperature)
+ Serializer component to map data from HKQuantitySample samples of the HKQuantityTypeIdentifierBodyTemperature and
+ HKQuantityTypeIdentifierBasalBodyTemperature types to the properties in the body of the Open mHealth
+ [body-temperature schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_body-temperature)
  This serialization mapper constructs the full json data point that adheres to the Open mHealth data-point and respiratory-rate schemas.
  */
 @interface OMHSerializerBodyTemperature : OMHSerializer; @end;
@@ -532,6 +533,9 @@
     if([self.sample.sampleType.description isEqualToString:HKQuantityTypeIdentifierBasalBodyTemperature]) {
         BOOL userEntered = [self.sample.metadata objectForKey:HKMetadataKeyWasUserEntered];
         if(userEntered == true){
+            /*  Basal body temperature should be taken during sleep or immediately upon waking. It is not possible to tell whether a
+                measurement was taken during sleep, however if the measurement was self-entered by the user then we assume they took that 
+                measurement first thing in the morning, at waking. */
             [serializedValues setObject:@"on waking" forKey:@"temporal_relationship_to_sleep"];
         }
     }
@@ -635,8 +639,7 @@
 
 /**
  Serializer component to map data from HKQuantitySample samples of the HKQuantityTypeIdentifierBodyFatPercentage type to the properties in
- the  body of the Open mHealth [body-fat-percentage schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_body-fat-percentage)
- This serialization mapper constructs the full json data point that adheres to the Open mHealth data-point and body-fat-percentage schemas.
+ the  body of the Open mHealth [body-fat-percentage schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_body-fat-percentage). This serialization mapper constructs the full json data point that adheres to the Open mHealth data-point and body-fat-percentage schemas.
  */
 @interface OMHSerializerBodyFatPercentage : OMHSerializer; @end;
 @implementation OMHSerializerBodyFatPercentage
@@ -922,7 +925,9 @@
         return [OMHHealthKitConstantsMapper stringForHKCervicalMucusQualityValue:(int)categoryValue];
     }
     else if ([categoryType.description isEqualToString:HKCategoryTypeIdentifierIntermenstrualBleeding]) {
-        // Samples of this type represent the presence of intermenstrual bleeding and as such does not have a categorical value. HealthKit specifies that the value field for this type is "HKCategoryValueNotApplicable" which is a nonsensical value, so we use the name of the represented measure as the value.
+        /*  Samples of this type represent the presence of intermenstrual bleeding and as such does not have a categorical value. HealthKit
+            specifies that the value field for this type is "HKCategoryValueNotApplicable" which is a nonsensical value, so we use the name 
+            of the represented measure as the value. */
         return @"Intermenstrual bleeding";
     }
     else if ([categoryType.description isEqualToString:HKCategoryTypeIdentifierMenstrualFlow]) {
@@ -932,7 +937,10 @@
         return [OMHHealthKitConstantsMapper stringForHKOvulationTestResultValue:(int)categoryValue];
     }
     else if ([categoryType.description isEqualToString:HKCategoryTypeIdentifierSexualActivity]) {
-        // Samples of this type represent times during which sexual activity occurred. This means that during the time frame of each sample, sexual activity was occurring. As such, this measure does not have a categorical value. HealthKit specifies that the value field for this type is "HKCategoryValueNotApplicable" which is a nonsensical value, so we use the name of the represented measure as the value.
+        /*  Samples of this type represent times during which sexual activity occurred. This means that during the time frame of each 
+            sample, sexual activity was occurring. As such, this measure does not have a categorical value. HealthKit specifies that the 
+            value field for this type is "HKCategoryValueNotApplicable" which is a nonsensical value, so we use the name of the represented 
+            measure as the value. */
         return @"Sexual activity";
     }
     else{

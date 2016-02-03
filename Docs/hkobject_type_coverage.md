@@ -79,8 +79,8 @@
 |HKCategoryTypeIdentifierAppleStandHour|:white_check_mark:|[granola:hk-category-sample:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-category-sample)|
 |*__Vital Signs Identifiers__*|||
 |HKQuantityTypeIdentifierHeartRate|:white_check_mark:|[omh:heart-rate:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_heart-rate)|
-|HKQuantityTypeIdentifierBodyTemperature|:white_check_mark:|[granola:hk-quantity-sample:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-quantity-sample)|
-|HKQuantityTypeIdentifierBasalBodyTemperature|:white_check_mark:|[granola:hk-quantity-sample:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-quantity-sample)|
+|HKQuantityTypeIdentifierBodyTemperature|:white_check_mark:|[omh:body-temperature:2.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_body-temperature)|
+|HKQuantityTypeIdentifierBasalBodyTemperature|:white_check_mark:|[omh:body-temperature:2.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_body-temperature)|
 |HKQuantityTypeIdentifierBloodPressureSystolic|:white_check_mark:|[granola:hk-quantity-sample:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-quantity-sample)|
 |HKQuantityTypeIdentifierBloodPressureDiastolic|:white_check_mark:|[granola:hk-quantity-sample:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-quantity-sample)|
 |HKQuantityTypeIdentifierRespiratoryRate|:white_check_mark:|[omh:respiratory-rate:1.x](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_respiratory-rate)|
