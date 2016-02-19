@@ -68,7 +68,7 @@ describe(@"NSDate RFC3339 Formatter RFC3339String", ^{
         dateBuilder.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
         
         NSDate* date = [calendar dateFromComponents:dateBuilder];
-        NSString* testDateString = [date RFC3339String:[NSTimeZone timeZoneForSecondsFromGMT:offsetHours]];
+        NSString* testDateString = [date RFC3339StringAtTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:offsetHours]];
         expect(testDateString).to.equal(expectedDateString);
     });
     
@@ -81,7 +81,7 @@ describe(@"NSDate RFC3339 Formatter RFC3339String", ^{
         dateBuilder.timeZone = timezone;
         
         NSDate* date = [calendar dateFromComponents:dateBuilder];
-        NSString* testDateString = [date RFC3339String:timezone];
+        NSString* testDateString = [date RFC3339StringAtTimeZone:timezone];
         expect(testDateString).to.equal(expectedDateString);
     });
     
@@ -95,7 +95,7 @@ describe(@"NSDate RFC3339 Formatter RFC3339String", ^{
            NSTimeZone* timezone = [NSTimeZone timeZoneWithName:@"Asia/Kolkata"];
            
            NSDate* date = [calendar dateFromComponents:dateBuilder];
-           NSString* testDateString = [date RFC3339String:timezone];
+           NSString* testDateString = [date RFC3339StringAtTimeZone:timezone];
            expect(testDateString).to.equal(expectedDateString);
        }
     );

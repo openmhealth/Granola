@@ -140,14 +140,14 @@
         NSTimeZone* timeZone = [NSTimeZone timeZoneWithName:timeZoneString];
         if ([startDate isEqualToDate:endDate]) {
             return @{
-                     @"date_time":[startDate RFC3339String:timeZone]
+                     @"date_time":[startDate RFC3339StringAtTimeZone:timeZone]
                      };
         }
         else {
             return  @{
                       @"time_interval": @{
-                              @"start_date_time": [startDate RFC3339String:timeZone],
-                              @"end_date_time": [endDate RFC3339String:timeZone]
+                              @"start_date_time": [startDate RFC3339StringAtTimeZone:timeZone],
+                              @"end_date_time": [endDate RFC3339StringAtTimeZone:timeZone]
                               }
                       };
         }

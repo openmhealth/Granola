@@ -35,7 +35,7 @@
     return [[[self class] RFC3339Formatter:[NSTimeZone defaultTimeZone]] stringFromDate:self];
 }
 
-- (NSString *)RFC3339String:(NSTimeZone*)timeZone {
+- (NSString *)RFC3339StringAtTimeZone:(NSTimeZone*)timeZone {
     return [[[self class] RFC3339Formatter:timeZone] stringFromDate:self];
 }
 
