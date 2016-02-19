@@ -20,7 +20,6 @@
 
 SpecBegin(NSDate)
 
-__block NSString* offsetString;
 __block NSInteger offsetHours;
 __block NSCalendar* calendar;
 __block NSDateComponents* dateBuilder;
@@ -105,37 +104,37 @@ describe(@"NSDate RFC3339 Formatter RFC3339String", ^{
 
 describe(@"NSDate RFC3339 Formatter fromRFC3339String", ^{
     
-    it(@"should create correct date when time zone information is not provided", ^{
+    it(@"should create correct date when at second level precision", ^{
        
-        NSString* testDateString = @"2015-06-28T14:06:09.100+06:00";
+        NSString* testDateString = @"2016-02-19T05:35:10.000Z";
 
-        dateBuilder.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
-        NSDate* expectedDate = [calendar dateFromComponents:dateBuilder];
+        NSDate* expectedDate = [NSDate dateWithTimeIntervalSince1970:[@1455860110 doubleValue]];
         
         NSDate* testDate = [NSDate fromRFC3339String:testDateString];
         
-        expect([testDate isEqualToRFC3339Date:expectedDate]).to.beTruthy();
+        expect(testDate).to.equal(expectedDate);
     });
     
-    it(@"should create correct date when no milliseconds or nanoseconds are provided", ^{
+    it(@"should create correct date at millisecond level precision", ^{
         
-        NSString* testDateString = @"2015-06-28T08:06:09.000+06:00";
+        NSString* testDateString = @"2016-02-19T05:35:10.282Z";
         
-        NSDateComponents* dateBuilder = [NSDateComponents new];
-        
-        dateBuilder.year = 2015;
-        dateBuilder.day = 28;
-        dateBuilder.month = 6;
-        dateBuilder.hour = 8;
-        dateBuilder.minute = 6;
-        dateBuilder.second = 9;
-        
-        dateBuilder.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:offsetHours];
-        NSDate* expectedDate = [calendar dateFromComponents:dateBuilder];
+        NSDate* expectedDate = [NSDate dateWithTimeIntervalSince1970:[@1455860110.282 doubleValue]];
         
         NSDate* testDate = [NSDate fromRFC3339String:testDateString];
         
-        expect([testDate isEqualToRFC3339Date:expectedDate]).to.beTruthy();
+        expect(testDate).to.equal(expectedDate);
+    });
+    
+    it(@"should create correct date when string contains non-UTC offset", ^{
+        
+        NSString* testDateString = @"2016-02-19T12:35:10.282+07:00";
+        
+        NSDate* expectedDate = [NSDate dateWithTimeIntervalSince1970:[@1455860110.282 doubleValue]];
+        
+        NSDate* testDate = [NSDate fromRFC3339String:testDateString];
+        
+        expect(testDate).to.equal(expectedDate);
     });
 });
 

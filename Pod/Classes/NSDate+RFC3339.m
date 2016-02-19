@@ -43,10 +43,5 @@
     return [[self RFC3339Formatter:[NSTimeZone defaultTimeZone]] dateFromString:dateString];
 }
 
-- (BOOL)isEqualToRFC3339Date:(NSDate *)otherDate {
-    NSString* otherDateString = [otherDate RFC3339String];
-    return [otherDateString isEqualToString:[self RFC3339String]];
-}
-
 @end
 

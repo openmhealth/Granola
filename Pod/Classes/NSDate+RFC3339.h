@@ -18,6 +18,8 @@
 
 /**
  Extension for the `NSDate` class to provide support for RFC3339 formatting.
+ 
+ @warning Due to the limited precision of the `NSDate` class, we can only support millsecond-level precision for RFC3339 timestamps. In translating an `NSDate` to an RFC3339 string or vice versa, values with greater than millisecond-level precision may lose fidelity and have values that deviate from the expected value by a number of microseconds or nanoseconds.
  */
 @interface NSDate (RFC3339)
 
@@ -45,22 +47,6 @@
  @return An `NSDate` that refers to the same _moment in time_ that the input string represented.
  */
 + (NSDate*)fromRFC3339String:(NSString*)dateString;
-
-/**
- Compares this object with another `NSDate` object that was created using the `NSDate+RFC3339` extension.
- 
- `NSDateFormatter` has a strange behavior in that it only operates at the millisecond level and truncates number information after a certain point (see http://stackoverflow.com/questions/23684727/nsdateformatter-milliseconds-bug). This leads to strange behavior when creating dates using the nanoseconds property and using the RFC3339DateFormatter to transform between the string representation and the date representation. We found nanosecond differences in comparing some dates created with the `fromRFC3339String` method and what was expected.
- 
- In exploring this, we found that transforming dates created with the `fromRFC3339String` method back into strings and compare them allowed the comparison to be done at the millisecond level and used the correct rounding to address the issue.
- 
- We recommend using this method when comparing a date created with the `fromRFC3339String` to another date.
- 
- @param otherDate An `NSDate` that was created using the `NSDate+RFC3339` extension.
- 
- @return Whether some other `NSDate` object refers to the same point in time as this one.
-
- */
-- (BOOL)isEqualToRFC3339Date:(NSDate *)otherDate;
 
 @end
 
