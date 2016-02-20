@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Open mHealth
+ * Copyright 2016 Open mHealth
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,18 +39,34 @@
         metadata = attrs[@"metadata"];
     }
     HKSample* sample = nil;
-    if (sampleTypeIdentifier == HKCategoryTypeIdentifierSleepAnalysis) {
+    if ([sampleTypeIdentifier hasPrefix:@"HKCategoryTypeIdentifier"]) {
         HKCategoryType* type =
         [HKObjectType categoryTypeForIdentifier:sampleTypeIdentifier];
-        int value = HKCategoryValueSleepAnalysisAsleep;
-        if(attrs[@"value"]){
-            NSString *valueStr = (NSString*)attrs[@"value"];
-            value = [valueStr integerValue];
+        NSNumber *defaultValue = [NSNumber numberWithInt:0];
+        
+        // Apple starts their category enums at different values, for some reproductive health enums, it starts at 1 instead of 0
+        if ([type.description isEqualToString:HKCategoryTypeIdentifierCervicalMucusQuality] || [type.description isEqualToString:HKCategoryTypeIdentifierOvulationTestResult] || [type.description isEqualToString:HKCategoryTypeIdentifierMenstrualFlow]){
+            
+            defaultValue = [NSNumber numberWithInt:1];
+        }
+        
+        NSNumber *value = or(attrs[@"value"], defaultValue);
+        
+        if ([type.description isEqualToString:HKCategoryTypeIdentifierMenstrualFlow]) {
+            
+            // Menstrual flow category samples require an HKMetadataKeyMenstrualCycleStart entry. Without it, HealthKit will throw an exception.
+            NSMutableDictionary *menstrualStartMetadata = [NSMutableDictionary dictionaryWithDictionary: @{ HKMetadataKeyMenstrualCycleStart : @true}];
+            
+            if (metadata !=nil){
+                [menstrualStartMetadata addEntriesFromDictionary:metadata];
+            }
+
+            metadata = menstrualStartMetadata;
         }
         
         sample =
         [HKCategorySample categorySampleWithType:type
-                                           value:value
+                                           value:[value integerValue]
                                        startDate:start
                                          endDate:end
                                         metadata:metadata];
@@ -143,9 +159,16 @@
                  HKQuantityTypeIdentifierBloodPressureDiastolic,
                  HKQuantityTypeIdentifierBodyMassIndex,
                  HKQuantityTypeIdentifierDietaryBiotin,
+                 HKQuantityTypeIdentifierDietaryWater,
                  HKQuantityTypeIdentifierInhalerUsage,
                  HKQuantityTypeIdentifierDietaryCarbohydrates,
-                 HKQuantityTypeIdentifierDietaryEnergyConsumed
+                 HKQuantityTypeIdentifierDietaryEnergyConsumed,
+                 HKQuantityTypeIdentifierUVExposure,
+                 HKQuantityTypeIdentifierOxygenSaturation,
+                 HKQuantityTypeIdentifierBodyFatPercentage,
+                 HKQuantityTypeIdentifierRespiratoryRate,
+                 HKQuantityTypeIdentifierBodyTemperature,
+                 HKQuantityTypeIdentifierBasalBodyTemperature
                  ] includes:sampleTypeIdentifier]) {
         
         NSString* defaultUnitString = nil;
@@ -153,7 +176,7 @@
             defaultUnitString = @"cm";
         } else if (sampleTypeIdentifier == HKQuantityTypeIdentifierBodyMass) {
             defaultUnitString = @"lb";
-        } else if (sampleTypeIdentifier == HKQuantityTypeIdentifierHeartRate) {
+        } else if (sampleTypeIdentifier == HKQuantityTypeIdentifierHeartRate || sampleTypeIdentifier == HKQuantityTypeIdentifierRespiratoryRate) {
             defaultUnitString = @"count/min";
         } else if (sampleTypeIdentifier == HKQuantityTypeIdentifierBloodGlucose) {
             defaultUnitString = @"mg/dL";
@@ -163,8 +186,13 @@
             defaultUnitString = @"mmHg";
         } else if (sampleTypeIdentifier == HKQuantityTypeIdentifierDietaryBiotin) {
             defaultUnitString = @"mcg";
-        }
-        else {
+        } else if (sampleTypeIdentifier == HKQuantityTypeIdentifierDietaryWater) {
+            defaultUnitString = @"L";
+        } else if (sampleTypeIdentifier == HKQuantityTypeIdentifierOxygenSaturation || sampleTypeIdentifier == HKQuantityTypeIdentifierBodyFatPercentage) {
+            defaultUnitString = @"%";
+        } else if (sampleTypeIdentifier == HKQuantityTypeIdentifierBodyTemperature || sampleTypeIdentifier == HKQuantityTypeIdentifierBasalBodyTemperature) {
+            defaultUnitString = @"degC";
+        } else {
             defaultUnitString = @"count";
         };
         NSString* unitString = or(attrs[@"unitString"], defaultUnitString);

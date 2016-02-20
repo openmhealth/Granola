@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Open mHealth
+ * Copyright 2016 Open mHealth
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,14 +71,12 @@
     NSArray* components = [fname componentsSeparatedByString:@"/"];
     NSString* dirname =
     [NSString stringWithFormat:@"schema/%@", components.firstObject];
-    NSString* filename =
-    [NSString stringWithFormat:@"%@-1.x", components.lastObject];
     NSBundle* bundle = [NSBundle bundleForClass:[self class]];
     NSURL* schemaURI =
-    [bundle URLForResource:filename
+    [bundle URLForResource:components.lastObject
              withExtension:@"json"
               subdirectory:dirname];
-    NSAssert(schemaURI, @"No schema %@ in %@", filename, dirname);
+    NSAssert(schemaURI, @"No schema %@ in %@", components.lastObject, dirname);
     return schemaURI;
 }
 
@@ -88,46 +86,51 @@
     if (schemaPartialPaths == nil)
     {
         schemaPartialPaths = @[
-                               @"omh/schema-id",
-                               @"omh/date-time",
-                               @"omh/unit-value",
-                               @"omh/duration-unit-value",
-                               @"omh/part-of-day",
-                               @"omh/time-interval",
-                               @"omh/time-frame",
-                               @"omh/header",
-                               @"omh/data-point",
-                               @"omh/step-count",
-                               @"omh/length-unit-value",
-                               @"omh/mass-unit-value",
-                               @"omh/descriptive-statistic",
-                               @"omh/body-height",
-                               @"omh/body-weight",
-                               @"omh/activity-name",
-                               @"omh/area-unit-value",
-                               @"omh/temporal-relationship-to-sleep",
-                               @"omh/blood-specimen-type",
-                               @"omh/temporal-relationship-to-meal",
-                               @"omh/blood-glucose",
-                               @"omh/position-during-measurement",
-                               @"omh/systolic-blood-pressure",
-                               @"omh/diastolic-blood-pressure",
-                               @"omh/blood-pressure",
-                               @"omh/temporal-relationship-to-physical-activity",
-                               @"omh/heart-rate",
-                               @"omh/body-mass-index",
-                               @"omh/sleep-duration",
-                               @"omh/physical-activity",
-                               @"omh/kcal-unit-value",
-                               @"omh/calories-burned",
-                               @"granola/hk-metadata",
-                               @"granola/hk-quantity-type",
-                               @"granola/hk-quantity-sample",
-                               @"granola/hk-category-type",
-                               @"granola/hk-category-sample",
-                               @"granola/hk-correlation-type",
-                               @"granola/hk-correlation",
-                               @"granola/hk-workout"];
+                               @"omh/schema-id-1.x",
+                               @"omh/date-time-1.x",
+                               @"omh/unit-value-1.x",
+                               @"omh/duration-unit-value-1.x",
+                               @"omh/part-of-day-1.x",
+                               @"omh/time-interval-1.x",
+                               @"omh/time-frame-1.x",
+                               @"omh/header-1.x",
+                               @"omh/data-point-1.x",
+                               @"omh/step-count-1.x",
+                               @"omh/length-unit-value-1.x",
+                               @"omh/mass-unit-value-1.x",
+                               @"omh/temperature-unit-value-1.x",
+                               @"omh/descriptive-statistic-1.x",
+                               @"omh/body-height-1.x",
+                               @"omh/body-weight-1.x",
+                               @"omh/activity-name-1.x",
+                               @"omh/area-unit-value-1.x",
+                               @"omh/temporal-relationship-to-sleep-1.x",
+                               @"omh/blood-specimen-type-1.x",
+                               @"omh/temporal-relationship-to-meal-1.x",
+                               @"omh/blood-glucose-1.x",
+                               @"omh/position-during-measurement-1.x",
+                               @"omh/systolic-blood-pressure-1.x",
+                               @"omh/diastolic-blood-pressure-1.x",
+                               @"omh/blood-pressure-1.x",
+                               @"omh/temporal-relationship-to-physical-activity-1.x",
+                               @"omh/heart-rate-1.x",
+                               @"omh/body-mass-index-1.x",
+                               @"omh/sleep-duration-1.x",
+                               @"omh/physical-activity-1.x",
+                               @"omh/kcal-unit-value-1.x",
+                               @"omh/calories-burned-1.x",
+                               @"omh/body-fat-percentage-1.x",
+                               @"omh/oxygen-saturation-1.x",
+                               @"omh/respiratory-rate-1.x",
+                               @"omh/body-temperature-2.x",
+                               @"granola/hk-metadata-1.x",
+                               @"granola/hk-quantity-type-1.x",
+                               @"granola/hk-quantity-sample-1.x",
+                               @"granola/hk-category-type-1.x",
+                               @"granola/hk-category-sample-1.x",
+                               @"granola/hk-correlation-type-1.x",
+                               @"granola/hk-correlation-1.x",
+                               @"granola/hk-workout-1.x"];
     }
     
     return schemaPartialPaths;

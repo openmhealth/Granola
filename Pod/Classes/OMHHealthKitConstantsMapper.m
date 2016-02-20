@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Open mHealth
+ * Copyright 2016 Open mHealth
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -137,13 +137,18 @@
             return @"HKWorkoutActivityTypeYoga";
         case HKWorkoutActivityTypeOther:
             return @"HKWorkoutActivityTypeOther";
-        default:
-            return @"";
+        default:{
+            NSException *e = [NSException
+                              exceptionWithName:@"HKWorkoutActivityTypeInvalidValue"
+                              reason:@"HKWorkoutActivityType can only have a value from the HKWorkoutActivityType enum"
+                              userInfo:nil];
+            @throw e;
+        }
     }
 }
 
-+ (NSString*) stringForHKSleepAnalysisValue:(int) enumValue{
-    switch (enumValue){
++ (NSString*) stringForHKSleepAnalysisValue:(int) enumValue {
+    switch (enumValue) {
         case HKCategoryValueSleepAnalysisInBed:
             return @"InBed";
             break;
@@ -152,94 +157,213 @@
             break;
         default:{
             NSException *e = [NSException
-                              exceptionWithName:@"KCategoryValueSleepAnalysisInvalidValue"
-                              reason:@"KCategoryValueSleepAnalysis can only have a HKCategoryValueSleepAnalysisInBed or HKCategoryValueSleepAnalysisAsleep value"
+                              exceptionWithName:@"HKCategoryValueSleepAnalysisInvalidValue"
+                              reason:@"HKCategoryValueSleepAnalysis can only have a HKCategoryValueSleepAnalysisInBed or HKCategoryValueSleepAnalysisAsleep value"
                               userInfo:nil];
             @throw e;
         }
-            
+    }
+}
+
++ (NSString*) stringForHKAppleStandHourValue:(int) enumValue {
+    switch (enumValue) {
+        case HKCategoryValueAppleStandHourIdle:
+            return @"Idle";
+        case HKCategoryValueAppleStandHourStood:
+            return @"Standing";
+        default:{
+            NSException *e = [NSException
+                              exceptionWithName:@"HKCategoryValueAppleStandHourInvalidValue"
+                              reason:@"HKCategoryValueAppleStandHour can only have a HKCategoryValueAppleStandHourIdle or HKCategoryValueAppleStandHourStood value"
+                              userInfo:nil];
+            @throw e;
+        }
+    }
+}
+
++ (NSString*) stringForHKCervicalMucusQualityValue:(int) enumValue {
+    switch (enumValue) {
+        case HKCategoryValueCervicalMucusQualityCreamy:
+            return @"Creamy";
+        case HKCategoryValueCervicalMucusQualityDry:
+            return @"Dry";
+        case HKCategoryValueCervicalMucusQualityEggWhite:
+            return @"Egg white";
+        case HKCategoryValueCervicalMucusQualitySticky:
+            return @"Sticky";
+        case HKCategoryValueCervicalMucusQualityWatery:
+            return @"Watery";
+        default:{
+            NSException *e = [NSException
+                              exceptionWithName:@"HKCategoryValueCervicalMucusQualityInvalidValue"
+                              reason:@"HKCategoryValueCervicalMucusQuality can only have a value specified in the HKCategoryValueCervicalMucusQuality enum"
+                              userInfo:nil];
+            @throw e;
+        }
+    }
+}
+
++ (NSString*) stringForHKMenstrualFlowValue:(int) enumValue {
+    switch (enumValue) {
+        case HKCategoryValueMenstrualFlowUnspecified:
+            return @"Unspecified";
+        case HKCategoryValueMenstrualFlowLight:
+            return @"Light";
+        case HKCategoryValueMenstrualFlowMedium:
+            return @"Medium";
+        case HKCategoryValueMenstrualFlowHeavy:
+            return @"Heavy";
+        default:{
+            NSException *e = [NSException
+                              exceptionWithName:@"HKCategoryValueMenstrualFlowInvalidValue"
+                              reason:@"HKCategoryValueMenstrualFlow can only have a value specified in the HKCategoryValueMenstrualFlow enum"
+                              userInfo:nil];
+            @throw e;
+        }
+    }
+}
+
++ (NSString*) stringForHKOvulationTestResultValue:(int) enumValue {
+    switch (enumValue) {
+        case HKCategoryValueOvulationTestResultNegative:
+            return @"Negative";
+        case HKCategoryValueOvulationTestResultPositive:
+            return @"Positive";
+        case HKCategoryValueOvulationTestResultIndeterminate:
+            return @"Indeterminate";
+        default:{
+            NSException *e = [NSException
+                              exceptionWithName:@"HKCategoryValueOvulationTestResultInvalidValue"
+                              reason:@"HKCategoryValueOvulationTestResult can only have a value specified in the HKCategoryValueOvulationTestResult enum"
+                              userInfo:nil];
+            @throw e;
+        }
     }
 }
 
 +  (NSDictionary*)allSupportedTypeIdentifiersToClasses {
-    static NSDictionary* allTypeIdsToClasses = nil;
-    if (allTypeIdsToClasses == nil) {
-        allTypeIdsToClasses = @{
-                                HKQuantityTypeIdentifierActiveEnergyBurned: @"OMHSerializerEnergyBurned",
-                                HKQuantityTypeIdentifierBasalEnergyBurned: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierBloodAlcoholContent: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierBloodGlucose : @"OMHSerializerBloodGlucose",
-                                HKQuantityTypeIdentifierBloodPressureDiastolic: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierBloodPressureSystolic: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierBodyFatPercentage: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierBodyMass : @"OMHSerializerWeight",
-                                HKQuantityTypeIdentifierBodyMassIndex: @"OMHSerializerBodyMassIndex",
-                                HKQuantityTypeIdentifierBodyTemperature: @"OMHSerializerBodyMassIndex",
-                                HKQuantityTypeIdentifierDietaryBiotin: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietaryCaffeine: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietaryCalcium: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietaryCarbohydrates: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietaryChloride: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietaryCholesterol: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietaryChromium: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietaryCopper: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietaryEnergyConsumed: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietaryFatMonounsaturated: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietaryFatPolyunsaturated: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietaryFatSaturated: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietaryFatTotal: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietaryFiber: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietaryFolate: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietaryIodine: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietaryIron: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietaryMagnesium: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietaryManganese: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietaryMolybdenum: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietaryNiacin: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietaryPantothenicAcid: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietaryPhosphorus: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietaryPotassium: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietaryProtein: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietaryRiboflavin: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietarySelenium: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietarySodium: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietarySugar: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietaryThiamin: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietaryVitaminA: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietaryVitaminB12: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietaryVitaminB6: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietaryVitaminC: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietaryVitaminD: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietaryVitaminE: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietaryVitaminK: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDietaryZinc: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDistanceCycling: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierDistanceWalkingRunning: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierElectrodermalActivity: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierFlightsClimbed: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierForcedExpiratoryVolume1: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierForcedVitalCapacity: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierHeight : @"OMHSerializerHeight",
-                                HKQuantityTypeIdentifierHeartRate : @"OMHSerializerHeartRate",
-                                HKQuantityTypeIdentifierInhalerUsage: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierLeanBodyMass: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierNikeFuel: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierNumberOfTimesFallen: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierOxygenSaturation: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierPeakExpiratoryFlowRate: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierPeripheralPerfusionIndex: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierRespiratoryRate: @"OMHSerializerGenericQuantitySample",
-                                HKQuantityTypeIdentifierStepCount : @"OMHSerializerStepCount",
-                                HKCategoryTypeIdentifierSleepAnalysis : @"OMHSerializerSleepAnalysis", //Samples with Asleep value use this serializer, samples with InBed value use generic category serializer
-                                HKCorrelationTypeIdentifierBloodPressure: @"OMHSerializerBloodPressure",
-                                HKCorrelationTypeIdentifierFood: @"OMHSerializerGenericCorrelation",
-                                HKWorkoutTypeIdentifier: @"OMHSerializerGenericWorkout"
-                                };
+    static NSDictionary* typeIdsToClasses = nil;
+    if (typeIdsToClasses == nil) {
+        typeIdsToClasses = @{ HKWorkoutTypeIdentifier: @"OMHSerializerGenericWorkout"};
     }
+    
+    NSMutableDictionary *allTypeIdsToClasses = [NSMutableDictionary dictionaryWithDictionary:typeIdsToClasses];
+    
+    [allTypeIdsToClasses addEntriesFromDictionary:[self allSupportedCategoryTypeIdentifiersToClasses]];
+    [allTypeIdsToClasses addEntriesFromDictionary:[self allSupportedCorrelationTypeIdentifiersToClass]];
+    [allTypeIdsToClasses addEntriesFromDictionary:[self allSupportedQuantityTypeIdentifiersToClass]];
+    
     return allTypeIdsToClasses;
         
 }
 
++ (NSDictionary*)allSupportedCategoryTypeIdentifiersToClasses {
+    
+    static NSDictionary* allCategoryTypeIdsToClasses = nil;
+    if (allCategoryTypeIdsToClasses == nil) {
+        allCategoryTypeIdsToClasses = @{
+                                HKCategoryTypeIdentifierSleepAnalysis : @"OMHSerializerSleepAnalysis", //Samples with Asleep value use this serializer, samples with InBed value use generic category serializer
+                                HKCategoryTypeIdentifierAppleStandHour : @"OMHSerializerGenericCategorySample",
+                                HKCategoryTypeIdentifierCervicalMucusQuality : @"OMHSerializerGenericCategorySample",
+                                HKCategoryTypeIdentifierIntermenstrualBleeding: @"OMHSerializerGenericCategorySample",
+                                HKCategoryTypeIdentifierMenstrualFlow: @"OMHSerializerGenericCategorySample",
+                                HKCategoryTypeIdentifierOvulationTestResult: @"OMHSerializerGenericCategorySample",
+                                HKCategoryTypeIdentifierSexualActivity: @"OMHSerializerGenericCategorySample"
+                                };
+    }
+    return allCategoryTypeIdsToClasses;
+
+}
+
++ (NSDictionary*)allSupportedCorrelationTypeIdentifiersToClass {
+    
+    static NSDictionary* allCorrelationTypeIdsToClasses = nil;
+    if (allCorrelationTypeIdsToClasses == nil) {
+        allCorrelationTypeIdsToClasses = @{
+                                           HKCorrelationTypeIdentifierBloodPressure: @"OMHSerializerBloodPressure",
+                                           HKCorrelationTypeIdentifierFood: @"OMHSerializerGenericCorrelation"
+                                        };
+    }
+    return allCorrelationTypeIdsToClasses;
+}
+
++ (NSDictionary*)allSupportedQuantityTypeIdentifiersToClass {
+    
+    static NSDictionary* allQuantityTypeIdsToClasses = nil;
+    if (allQuantityTypeIdsToClasses == nil) {
+        allQuantityTypeIdsToClasses = @{
+                                        HKQuantityTypeIdentifierActiveEnergyBurned: @"OMHSerializerEnergyBurned",
+                                        HKQuantityTypeIdentifierBasalBodyTemperature: @"OMHSerializerBodyTemperature",
+                                        HKQuantityTypeIdentifierBasalEnergyBurned: @"OMHSerializerEnergyBurned",
+                                        HKQuantityTypeIdentifierBloodAlcoholContent: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierBloodGlucose : @"OMHSerializerBloodGlucose",
+                                        HKQuantityTypeIdentifierBloodPressureDiastolic: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierBloodPressureSystolic: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierBodyFatPercentage: @"OMHSerializerBodyFatPercentage",
+                                        HKQuantityTypeIdentifierBodyMass : @"OMHSerializerWeight",
+                                        HKQuantityTypeIdentifierBodyMassIndex: @"OMHSerializerBodyMassIndex",
+                                        HKQuantityTypeIdentifierBodyTemperature: @"OMHSerializerBodyTemperature",
+                                        HKQuantityTypeIdentifierDietaryBiotin: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietaryCaffeine: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietaryCalcium: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietaryCarbohydrates: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietaryChloride: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietaryCholesterol: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietaryChromium: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietaryCopper: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietaryEnergyConsumed: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietaryFatMonounsaturated: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietaryFatPolyunsaturated: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietaryFatSaturated: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietaryFatTotal: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietaryFiber: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietaryFolate: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietaryIodine: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietaryIron: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietaryMagnesium: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietaryManganese: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietaryMolybdenum: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietaryNiacin: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietaryPantothenicAcid: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietaryPhosphorus: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietaryPotassium: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietaryProtein: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietaryRiboflavin: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietarySelenium: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietarySodium: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietarySugar: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietaryThiamin: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietaryVitaminA: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietaryVitaminB12: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietaryVitaminB6: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietaryVitaminC: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietaryVitaminD: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietaryVitaminE: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietaryVitaminK: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietaryWater: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDietaryZinc: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDistanceCycling: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierDistanceWalkingRunning: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierElectrodermalActivity: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierFlightsClimbed: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierForcedExpiratoryVolume1: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierForcedVitalCapacity: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierHeight : @"OMHSerializerHeight",
+                                        HKQuantityTypeIdentifierHeartRate : @"OMHSerializerHeartRate",
+                                        HKQuantityTypeIdentifierInhalerUsage: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierLeanBodyMass: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierNikeFuel: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierNumberOfTimesFallen: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierOxygenSaturation: @"OMHSerializerOxygenSaturation",
+                                        HKQuantityTypeIdentifierPeakExpiratoryFlowRate: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierPeripheralPerfusionIndex: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierRespiratoryRate: @"OMHSerializerRespiratoryRate",
+                                        HKQuantityTypeIdentifierStepCount : @"OMHSerializerStepCount",
+                                        HKQuantityTypeIdentifierUVExposure: @"OMHSerializerGenericQuantitySample"
+                                        };
+    }
+    return allQuantityTypeIdsToClasses;
+}
 
 @end
 
