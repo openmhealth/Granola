@@ -72,10 +72,10 @@
 }
 
 /**
- Serializes HealthKit samples into Open mHealth compliant json data points.
+ Serializes HealthKit samples into Open mHealth compliant JSON data points.
  @param sample the HealthKit sample to be serialized
  @param error an NSError that is passed by reference and can be checked to identify specific errors
- @return a formatted json string containing the sample's data in a format that adheres to the appropriate Open mHealth schema
+ @return a formatted JSON string containing the sample's data in a format that adheres to the appropriate Open mHealth schema
  */
 - (NSString*)jsonForSample:(HKSample*)sample error:(NSError**)error {
     NSParameterAssert(sample);
@@ -232,10 +232,7 @@
 @end
 
 /**
- Serializer component to map data from HKQuantitySample samples of the HKQuantityTypeIdentifierStepCount type to the properties in the
- body of the Open mHealth [step-count schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_step-count). 
- This serialization mapper is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKQuantityTypeIdentifierStepCount
- type sample, which constructs the full json data point that adheres to the Open mHealth data-point and step-count schemas.
+ This serializer maps data from HKQuantityTypeIdentifierStepCount samples to JSON that conforms to the Open mHealth [step-count schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_step-count).
  */
 @interface OMHSerializerStepCount : OMHSerializer; @end;
 @implementation OMHSerializerStepCount
@@ -263,10 +260,7 @@
 @end
 
 /**
- Serializer component to map data from HKQuantitySample samples of the HKQuantityTypeIdentifierHeight type to the properties in the
- body of the Open mHealth [body-height schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_body-height). 
- This serialization mapper is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKQuantityTypeIdentifierHeight 
- type sample, which constructs the full json data point that adheres to the Open mHealth data-point and body-height schemas.
+ This serializer maps data from HKQuantityTypeIdentifierHeight samples to JSON that conforms to the Open mHealth [body-height schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_body-height).
  */
 @interface OMHSerializerHeight : OMHSerializer; @end;
 @implementation OMHSerializerHeight
@@ -298,10 +292,7 @@
 @end
 
 /**
- Serializer component to map data from HKQuantitySample samples of the HKQuantityTypeIdentifierBodyMass type to the properties in the
- body of the Open mHealth [body-weight schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_body-weight). 
- This serialization mapper is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKQuantityTypeIdentifierBodyMass 
- type sample, which constructs the full json data point that adheres to the Open mHealth data-point and body-weight schemas.
+ This serializer maps data from HKQuantityTypeIdentifierBodyMass samples to JSON that conforms to the Open mHealth [body-weight schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_body-weight).
  */
 @interface OMHSerializerWeight : OMHSerializer; @end;
 @implementation OMHSerializerWeight
@@ -333,10 +324,7 @@
 @end
 
 /**
- Serializer component to map data from HKQuantitySample samples of the HKQuantityTypeIdentifierHeartRate type to the properties in the
- body of the Open mHealth [heart-rate schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_heart-rate).
- This serialization mapper is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKQuantityTypeIdentifierHeartRate 
- type sample, which constructs the full json data point that adheres to the Open mHealth data-point and heart-rate schemas.
+ This serializer maps data from HKQuantityTypeIdentifierHeartRate samples to JSON that conforms to the Open mHealth [heart-rate schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_heart-rate).
  */
 @interface OMHSerializerHeartRate : OMHSerializer; @end;
 @implementation OMHSerializerHeartRate
@@ -367,10 +355,7 @@
 @end
 
 /**
- Serializer component to map data from HKQuantitySample samples of the HKQuantityTypeIdentifierBloodGlucose type to the properties in the
- body of the Open mHealth [blood-glucose schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_blood-glucose). 
- This serialization mapper is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKQuantityTypeIdentifierBloodGlucose 
- type sample, which constructs the full json data point that adheres to the Open mHealth data-point and blood-glucose schemas.
+ This serializer maps data from HKQuantityTypeIdentifierBloodGlucose samples to JSON that conforms to the Open mHealth [blood-glucose schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_blood-glucose).
  */
 @interface OMHSerializerBloodGlucose : OMHSerializer; @end;
 @implementation OMHSerializerBloodGlucose
@@ -402,10 +387,7 @@
 @end
 
 /**
- Serializer component to map data from HKQuantitySample samples of the HKQuantityTypeIdentifierActiveEnergyBurned type to the properties in 
- the body of the Open mHealth [calories-burned schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_calories-burned). 
- This serialization mapper is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKQuantityTypeIdentifierActiveEnergyBurned
- type sample, which constructs the full json data point that adheres to the Open mHealth data-point and calories-burned schemas.
+ This serializer maps data from HKQuantityTypeIdentifierActiveEnergyBurned samples to JSON that conforms to the Open mHealth [calories-burned schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_calories-burned).
  */
 @interface OMHSerializerEnergyBurned : OMHSerializer; @end;
 @implementation OMHSerializerEnergyBurned
@@ -438,9 +420,7 @@
 @end
 
 /**
- Serializer component to map data from HKQuantitySample samples of the HKQuantityTypeIdentifierOxygenSaturation type to the properties in 
- the  body of the Open mHealth [oxygen-saturation schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_oxygen-saturation)
- This serialization mapper constructs the full json data point that adheres to the Open mHealth data-point and oxygen-saturation schemas.
+ This serializer maps data from HKQuantityTypeIdentifierOxygenSaturation samples to JSON that conforms to the Open mHealth [oxygen-saturation schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_oxygen-saturation).
  */
 @interface OMHSerializerOxygenSaturation : OMHSerializer; @end;
 @implementation OMHSerializerOxygenSaturation
@@ -473,9 +453,7 @@
 @end
 
 /**
- Serializer component to map data from HKQuantitySample samples of the HKQuantityTypeIdentifierRespiratoryRate type to the properties in
- the  body of the Open mHealth [respiratory-rate schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_respiratory-rate)
- This serialization mapper constructs the full json data point that adheres to the Open mHealth data-point and respiratory-rate schemas.
+ This serializer maps data from HKQuantityTypeIdentifierRespiratoryRate samples to JSON that conforms to the Open mHealth [respiratory-rate schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_respiratory-rate).
  */
 @interface OMHSerializerRespiratoryRate : OMHSerializer; @end;
 @implementation OMHSerializerRespiratoryRate
@@ -507,10 +485,7 @@
 @end
 
 /**
- Serializer component to map data from HKQuantitySample samples of the HKQuantityTypeIdentifierBodyTemperature and
- HKQuantityTypeIdentifierBasalBodyTemperature types to the properties in the body of the Open mHealth
- [body-temperature schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_body-temperature)
- This serialization mapper constructs the full json data point that adheres to the Open mHealth data-point and respiratory-rate schemas.
+ This serializer maps data from HKQuantityTypeIdentifierBodyTemperature samples to JSON that conforms to the Open mHealth [body-temperature schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_body-temperature).
  */
 @interface OMHSerializerBodyTemperature : OMHSerializer; @end;
 @implementation OMHSerializerBodyTemperature
@@ -593,12 +568,7 @@
 @end
 
 /**
- Serializer component to map data from HKCategory samples of the HKCategoryValueSleepAnalysis type with the value HKCategoryValueSleepAnalysisAsleep
- to the properties in the body of the Open mHealth 
- [sleep-duration schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_sleep-duration). This serialization 
- mapper is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKCategoryValueSleepAnalysis type sample, 
- which constructs the full json data point that adheres to the Open mHealth data-point and sleep-duration schemas. HKCategoryValueSleepAnalysis
- samples with the value, HKCategoryValueSleepAnalysisInBed, will be mapped using OMHSerializerGenericCategorySample.
+ This serializer maps data from HKCategoryValueSleepAnalysis samples with the HKCategoryValueSleepAnalysisAsleep value to JSON that conforms to the Open mHealth [sleep-duration schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_sleep-duration).
  */
 @interface OMHSerializerSleepAnalysis : OMHSerializer; @end;
 @implementation OMHSerializerSleepAnalysis
@@ -638,8 +608,7 @@
 @end
 
 /**
- Serializer component to map data from HKQuantitySample samples of the HKQuantityTypeIdentifierBodyFatPercentage type to the properties in
- the  body of the Open mHealth [body-fat-percentage schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_body-fat-percentage). This serialization mapper constructs the full json data point that adheres to the Open mHealth data-point and body-fat-percentage schemas.
+ This serializer maps data from HKCategoryValueSleepAnalysis samples with the HKQuantityTypeIdentifierBodyFatPercentage value to JSON that conforms to the Open mHealth [body-fat-percentage schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_body-fat-percentage).
  */
 @interface OMHSerializerBodyFatPercentage : OMHSerializer; @end;
 @implementation OMHSerializerBodyFatPercentage
@@ -673,10 +642,7 @@
 
 
 /**
- Serializer component to map data from HKCorrelation samples of the HKCorrelationTypeIdentifierBloodPressure type to the properties in the
- body of the Open mHealth [blood-pressure schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_blood-pressure). 
- This serialization mapper is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKCorrelationTypeIdentifierBloodPressure 
- type sample, which constructs the full json data point that adheres to the Open mHealth data-point and blood-pressure schemas.
+ This serializer maps data from HKCorrelationTypeIdentifierBloodPressure samples to JSON that conforms to the Open mHealth [blood-pressure schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_blood-pressure). 
  */
 @interface OMHSerializerBloodPressure : OMHSerializer; @end;
 @implementation OMHSerializerBloodPressure
@@ -742,10 +708,7 @@
 @end
 
 /**
- Serializer component to map data from HKQuantitySamples of the HKQuantityTypeIdentifierBodyMassIndex type to the properties in the
- body of the Open mHealth [body-mass-index schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_body-mass-index). 
- This serialization mapper is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKQuantityTypeIdentifierBodyMassIndex 
- type sample, [which constructs the full json data point that adheres to the Open mHealth data-point and body-mass-index schemas.
+ This serializer maps data from HKQuantityTypeIdentifierBodyMassIndex samples to JSON that conforms to the Open mHealth [body-mass-index schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_body-mass-index).
  */
 @interface OMHSerializerBodyMassIndex : OMHSerializer; @end;
 @implementation OMHSerializerBodyMassIndex
@@ -782,10 +745,9 @@
 @end
 
 /**
- Serializer component to map data from HKQuantitySample to the properties in the body of the Open mHealth 
- [hk-quantity-sample schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-quantity-sample). This
- serialization mapper is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKQuantitySample, which 
- constructs the full json data point that adheres to the Open mHealth data-point and hk-quantity-sample schemas.
+ This serializer maps data from HKQuantitySamples to JSON that conforms to the generic, Granola-specific [hk-quantity-sample schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-quantity-sample). 
+ 
+ This serializer is used for all quantity types that are not supported by Open mHealth curated schemas. The [supportedTypeIdentifiersWithOMHSchema]([OMHSerializer supportedTypeIdentifiersWithOMHSchema]) method provides a list of schemas that _are_ supported by Open mHealth curated schemas.
  */
 @interface OMHSerializerGenericQuantitySample : OMHSerializer; @end;
 @implementation OMHSerializerGenericQuantitySample
@@ -861,10 +823,9 @@
 @end
 
 /**
- Serializer component to map data from HKCategorySamples to the properties in the body of the Open mHealth 
- [hk-category-sample schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-category-sample).
- This serialization mapper is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKCategorySample, which
- constructs the full json data point that adheres to the Open mHealth data-point and hk-category-sample schemas.
+ This serializer maps data from HKCategorySamples to JSON that conforms to the generic, Granola-specific [hk-category-sample schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-category-sample).
+ 
+ This serializer is used for all quantity types that are not supported by Open mHealth curated schemas. The [supportedTypeIdentifiersWithOMHSchema]([OMHSerializer supportedTypeIdentifiersWithOMHSchema]) method provides a list of schemas that _are_ supported by Open mHealth curated schemas.
  */
 @interface OMHSerializerGenericCategorySample : OMHSerializer; @end;
 @implementation OMHSerializerGenericCategorySample
@@ -965,10 +926,9 @@
 @end
 
 /**
- Serializer component to map data from HKCorrelation to the properties in the body of the Open mHealth 
- [hk-correlation schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-correlation). This 
- serialization mapper is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKCorrelation sample, which 
- constructs the full json data point that adheres to the Open mHealth data-point and hk-correlation schemas.
+ This serializer maps data from HKCorrelation samples to JSON that conforms to the generic, Granola-specific [hk-correlation schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-correlation).
+ 
+ This serializer is used for all quantity types that are not supported by Open mHealth curated schemas. The [supportedTypeIdentifiersWithOMHSchema]([OMHSerializer supportedTypeIdentifiersWithOMHSchema]) method provides a list of schemas that _are_ supported by Open mHealth curated schemas.
  */
 @interface OMHSerializerGenericCorrelation : OMHSerializer; @end;
 @implementation OMHSerializerGenericCorrelation
@@ -1063,10 +1023,9 @@
 @end
 
 /**
- Serializer component to map data from HKWorkout to the properties in the body of the Open mHealth 
- [hk-workout schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-workout). This serialization
- mapper is instantiated during [OMHSerializer jsonForSample:(*HKSample) error:(HKError)] using a HKWorkout sample, which constructs the full
- json data point that adheres to the Open mHealth data-point and hk-workout schemas.
+ This serializer maps data from HKWorkout samples to JSON that conforms to the generic, Granola-specific [hk-workout schema](http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/granola_hk-workout).
+ 
+ This serializer is used for all quantity types that are not supported by Open mHealth curated schemas. The [supportedTypeIdentifiersWithOMHSchema]([OMHSerializer supportedTypeIdentifiersWithOMHSchema]) method provides a list of schemas that _are_ supported by Open mHealth curated schemas.
  */
 @interface OMHSerializerGenericWorkout : OMHSerializer; @end
 @implementation OMHSerializerGenericWorkout

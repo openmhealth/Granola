@@ -18,9 +18,18 @@
 
 FOUNDATION_EXPORT NSString *const OMHErrorDomain;
 
+/**
+ Error types for Granola used to identify different problematic conditions within the library.
+ */
 typedef NS_ENUM(NSInteger, OMHErrorCode) {
+    
+    /** Indicates that the sample type is a valid type, but not currently supported by Granola.*/
     OMHErrorCodeUnsupportedType = 1000,
+    
+    /** Indicates that the input value is not supported by the specific method in Granola.*/
     OMHErrorCodeUnsupportedValues = 1001,
+    
+    /** Indicates that the sample type is the incorrect type for the specific method or serializer.*/
     OMHErrorCodeIncorrectType = 1002
 };
 

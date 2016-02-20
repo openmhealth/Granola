@@ -31,7 +31,7 @@
 - (NSString *)RFC3339String;
 
 /**
- Generates an RFC3339 formatted string representation of the object. This method uses the default timezone in generating the RFC3339 timestamp.
+ Generates an RFC3339 formatted string representation of the object. This method uses the `timeZone` parameter as the offset for the RFC3339 timestamp.
  
  @param timeZone The timezone to use in rendering the RFC3339 timestamp.
  

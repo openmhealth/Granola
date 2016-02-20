@@ -15,16 +15,16 @@
  */
 
 /**
- Temp.
+ Provides mappings between HealthKit domain constants and Open mHealth representations. This includes mappings from sample values that are represented by constants in HealthKit (e.g., workout activities and category values) and mappings from HealthKit sample types to the appropriate JSON serializer.
  */
 @interface OMHHealthKitConstantsMapper : NSObject
 
 /**
- Translates `HKWorkoutActivityType` constant values into more semantically meaningful string representations.
+ Translates `HKWorkoutActivityType` constants into more semantically meaningful string representations.
  
  Used in generating values for workout types in serializing `HKWorkout` objects to JSON.
 
- @param enumValue The constant value from the `HKWorkoutActivityType` enum.
+ @param enumValue The numeric value from the `HKWorkoutActivityType` enum.
  
  @return A string representation of the constant.
  
@@ -34,11 +34,11 @@
 + (NSString*) stringForHKWorkoutActivityType:(int) enumValue;
 
 /**
- Translates `HKCategoryValueSleepAnalysis` constant values into more semantically meaningful string representations.
+ Translates `HKCategoryValueSleepAnalysis` constants into more semantically meaningful string representations.
  
  Used in generating values for sleep analysis in serializing samples of `HKCategoryValueSleepAnalysis` type, with the value _inBed_, into JSON.
  
- @param enumValue The constant value from the `HKCategoryValueSleepAnalysis` enum.
+ @param enumValue The numeric value from the `HKCategoryValueSleepAnalysis` enum.
  
  @return A string representation of the constant.
  
@@ -48,9 +48,9 @@
 + (NSString*) stringForHKSleepAnalysisValue:(int) enumValue;
 
 /**
- Translates `HKCategoryValueAppleStandHour` constant values into more semantically meaningful string representations.
+ Translates `HKCategoryValueAppleStandHour` constants into more semantically meaningful string representations.
  
- @param enumValue The constant value from the `HKCategoryValueAppleStandHour` enum.
+ @param enumValue The numeric value from the `HKCategoryValueAppleStandHour` enum.
  
  @return A string representation of the constant.
  
@@ -60,9 +60,9 @@
 + (NSString*) stringForHKAppleStandHourValue:(int) enumValue;
 
  /**
- Translates `HKCategoryValueCervicalMucusQuality` constant values into more semantically meaningful string representations.
+ Translates `HKCategoryValueCervicalMucusQuality` constants into more semantically meaningful string representations.
  
- @param enumValue The constant value from the `HKCategoryValueCervicalMucusQuality` enum.
+ @param enumValue The numeric value from the `HKCategoryValueCervicalMucusQuality` enum.
  
  @return A string representation of the constant.
  
@@ -73,9 +73,9 @@
 
 
 /**
- Translates `HKCategoryValueMenstrualFlow` constant values into more semantically meaningful string representations.
+ Translates `HKCategoryValueMenstrualFlow` constants into more semantically meaningful string representations.
  
- @param enumValue The constant value from the `HKCategoryValueMenstrualFlow` enum.
+ @param enumValue The numeric value from the `HKCategoryValueMenstrualFlow` enum.
  
  @return A string representation of the constant.
  
@@ -99,28 +99,34 @@
 /**
  Describes the mappings between all HealthKit type identifiers suppported by Granola and the specific serializer class used by Granola to serialize samples of that type into JSON. The type identifiers are keys in the dictionary with their corresponding serializer class name as the value.
  
- @return A dictionary containing tuples of the HealthKit types support by Granola with the name of the serializer class they use.
+ This dictionary is an aggregation of all the type-specific dictionaries returned by allSupportedCategoryTypeIdentifiersToClasses, allSupportedCorrelationTypeIdentifiersToClass, and allSupportedQuantityTypeIdentifiersToClass, along with the HKWorkout type identifier and its associated serializer class.
+ 
+ @return A dictionary containing tuples of the HealthKit types supported by Granola with the name of the serializer class they use.
+ 
+ @see allSupportedCategoryTypeIdentifiersToClasses
+ @see allSupportedCorrelationTypeIdentifiersToClass
+ @see allSupportedQuantityTypeIdentifiersToClass
  */
 + (NSDictionary*) allSupportedTypeIdentifiersToClasses;
 
 /**
  Describes the mappings between HealthKit category type identifiers suppported by Granola and the specific serializer class used by Granola to serialize samples of that type into JSON. The type identifiers are keys in the dictionary with their corresponding serializer class name as the value.
  
- @return A dictionary containing tuples of the HealthKit category types support by Granola with the name of the serializer class they use.
+ @return A dictionary containing tuples of the HealthKit category types supported by Granola with the name of the serializer class they use.
  */
 + (NSDictionary*) allSupportedCategoryTypeIdentifiersToClasses;
 
 /**
  Describes the mappings between HealthKit correlation type identifiers suppported by Granola and the specific serializer class used by Granola to serialize samples of that type into JSON. The type identifiers are keys in the dictionary with their corresponding serializer class name as the value.
  
- @return A dictionary containing tuples of the HealthKit correlation types support by Granola with the name of the serializer class they use.
+ @return A dictionary containing tuples of the HealthKit correlation types supported by Granola with the name of the serializer class they use.
  */
 + (NSDictionary*) allSupportedCorrelationTypeIdentifiersToClass;
 
 /**
  Describes the mappings between HealthKit quantity type identifiers suppported by Granola and the specific serializer class used by Granola to serialize samples of that type into JSON. The type identifiers are keys in the dictionary with their corresponding serializer class name as the value.
  
- @return A dictionary containing tuples of the HealthKit quantity types support by Granola with the name of the serializer class they use.
+ @return A dictionary containing tuples of the HealthKit quantity types supported by Granola with the name of the serializer class they use.
  */
 + (NSDictionary*) allSupportedQuantityTypeIdentifiersToClass;
 
