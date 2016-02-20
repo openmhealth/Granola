@@ -506,7 +506,7 @@
              }];
     
     if([self.sample.sampleType.description isEqualToString:HKQuantityTypeIdentifierBasalBodyTemperature]) {
-        BOOL userEntered = [self.sample.metadata objectForKey:HKMetadataKeyWasUserEntered];
+        BOOL userEntered = (BOOL)[self.sample.metadata objectForKey:HKMetadataKeyWasUserEntered];
         if(userEntered == true){
             /*  Basal body temperature should be taken during sleep or immediately upon waking. It is not possible to tell whether a
                 measurement was taken during sleep, however if the measurement was self-entered by the user then we assume they took that 
