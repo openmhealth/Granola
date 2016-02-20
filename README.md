@@ -136,12 +136,6 @@ Granola uses the time zone specified for the `HKMetadataKeyTimeZone` key to seri
 
 In a future update, we plan to allow developers to specify the prefered time zone for serializing data points to give them control over how timestamps are serialized. 
 
-### Comparing dates created from RFC3339 strings
-
-The `NSDate+RFC3339` extension contains a method to deserialize RFC3339 strings into `NSDate` objects. The `NSDateFormatter` class has a strange behavior in that it only operates at the millisecond level and truncates number information after a certain point [see here](http://stackoverflow.com/questions/23684727/nsdateformatter-milliseconds-bug). This leads to strange behavior when comparing dates that use the nanoseconds property with dates created using the `fromRFC3339String` method to transform from the string representation to the NSDate representation. We found nanosecond differences in comparing some dates created with the `fromRFC3339String` method and what was expected. NSDate's `isEqualToDate` method would, in turn, return false, even when it should have been true. 
-
-In exploring this, we found that transforming dates created with the `fromRFC3339String` method back into strings and compare them allowed the comparison to be done at the millisecond level and used the correct rounding to address the issue. We built this into a comparison method, `isEqualToRFC3339Date`, which we recommend using this method when comparing a date created with `fromRFC3339String` to another NSDate object.
-
 ## Contact
 
 Have a question? Please [open an issue](https://github.com/openmhealth/Granola/issues/new)!
