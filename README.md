@@ -107,7 +107,7 @@ Upon running your code, the console would render the data sample as Open mHealth
 
 ### HKObjectType support
 
-The serializer has support for all HealthKit samples (`HKSample`), either through curated Open mHealth schemas or through generic HealthKit schemas. The list of supported types along with their associated schemas is viewable [here](Docs/hkobject_type_coverage.md). The `HKObjectType` identifiers are pulled from the
+The serializer has support for all HealthKit samples (`HKSample`), either through curated Open mHealth schemas or through generic HealthKit schemas. You can take a look at the [mapping table of supported types and their associated schemas](Docs/hkobject_type_coverage.md) to understand how data gets mapped. The `HKObjectType` identifiers are pulled from the
 [HealthKit Constant Reference](https://developer.apple.com/library/ios/documentation/HealthKit/Reference/HealthKit_Constants/#//apple_ref/doc/uid/TP40014710-CH2-DontLinkElementID_3). 
 
 You can retrieve a map (`NSDictionary`) of the supported types in Granola and the class name of the specific serializer they use by calling the static method:
