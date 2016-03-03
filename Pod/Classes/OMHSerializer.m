@@ -783,7 +783,21 @@
     HKQuantitySample *quantitySample = (HKQuantitySample*)self.sample;
     HKQuantity *quantity = [quantitySample quantity];
     NSMutableDictionary *serializedUnitValues = [NSMutableDictionary new];
-    if ([quantity isCompatibleWithUnit:[HKUnit unitFromString:@"count"]]) {
+    
+    if ([[OMHSerializer parseUnitFromQuantity:quantity] isEqualToString:@"%"]) {
+        
+        // Types that use "%" units are compatible with the "count" unit (in the next condition), so this condition to pre-empts that.
+        NSNumber* value = [NSNumber numberWithDouble:[quantity doubleValueForUnit:[HKUnit percentUnit]]];
+        
+        [serializedUnitValues addEntriesFromDictionary:@{
+                                                         @"unit_value":@{
+                                                                 @"value": @([value floatValue] * 100),
+                                                                 @"unit": @"%"
+                                                                 }
+                                                         }
+         ];
+    }
+    else if ([quantity isCompatibleWithUnit:[HKUnit unitFromString:@"count"]]) {
         [serializedUnitValues addEntriesFromDictionary:@{
                                                          @"count": [NSNumber numberWithDouble:[quantity doubleValueForUnit:[HKUnit unitFromString:@"count"]]]
                                                          }

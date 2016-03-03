@@ -652,6 +652,32 @@ describe(@"HKQuantityTypeIdentifierInhalerUsage with date_time", ^{
     });
 });
 
+describe(@"Generic quantity sample with percent unit", ^{
+    itShouldBehaveLike(@"AnySerializerForSupportedSample",^{
+        NSDate *start = [NSDate date];
+        NSDate *end = start;
+        NSNumber *value = [NSNumber numberWithDouble:.127];
+        NSString *unitString = @"%";
+        HKSample *sample = [OMHSampleFactory typeIdentifier:HKQuantityTypeIdentifierBloodAlcoholContent
+                                                      attrs:@{@"value":value,
+                                                              @"unitString":unitString,
+                                                              @"start":start,
+                                                              @"end":end}];
+        return @{
+                 @"sample":sample,
+                 @"pathsToValues": @{
+                         @"header.schema_id.name": @"hk-quantity-sample",
+                         @"header.schema_id.namespace":@"granola",
+                         @"header.schema_id.version": @"1.0",
+                         @"body.quantity_type":[HKQuantityTypeIdentifierBloodAlcoholContent description],
+                         @"body.unit_value.value":@12.7,
+                         @"body.unit_value.unit":@"%",
+                         @"body.effective_time_frame.date_time":[start RFC3339String]
+                         }
+                 };
+    });
+});
+
 describe(HKCorrelationTypeIdentifierFood,^{
     itShouldBehaveLike(@"AnySerializerForSupportedSample", ^{
         NSDate *sampleDate = [NSDate date];

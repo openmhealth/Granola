@@ -168,7 +168,8 @@
                  HKQuantityTypeIdentifierBodyFatPercentage,
                  HKQuantityTypeIdentifierRespiratoryRate,
                  HKQuantityTypeIdentifierBodyTemperature,
-                 HKQuantityTypeIdentifierBasalBodyTemperature
+                 HKQuantityTypeIdentifierBasalBodyTemperature,
+                 HKQuantityTypeIdentifierBloodAlcoholContent
                  ] includes:sampleTypeIdentifier]) {
         
         NSString* defaultUnitString = nil;
@@ -188,7 +189,8 @@
             defaultUnitString = @"mcg";
         } else if (sampleTypeIdentifier == HKQuantityTypeIdentifierDietaryWater) {
             defaultUnitString = @"L";
-        } else if (sampleTypeIdentifier == HKQuantityTypeIdentifierOxygenSaturation || sampleTypeIdentifier == HKQuantityTypeIdentifierBodyFatPercentage) {
+        } else if (sampleTypeIdentifier == HKQuantityTypeIdentifierOxygenSaturation || sampleTypeIdentifier == HKQuantityTypeIdentifierBodyFatPercentage
+                   || sampleTypeIdentifier == HKQuantityTypeIdentifierBloodAlcoholContent) {
             defaultUnitString = @"%";
         } else if (sampleTypeIdentifier == HKQuantityTypeIdentifierBodyTemperature || sampleTypeIdentifier == HKQuantityTypeIdentifierBasalBodyTemperature) {
             defaultUnitString = @"degC";
