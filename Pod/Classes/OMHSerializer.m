@@ -430,11 +430,11 @@
 - (id)bodyData {
     NSString* unitString = @"%";
     HKUnit* unit = [HKUnit unitFromString:unitString];
-    float value = [[(HKQuantitySample*)self.sample quantity] doubleValueForUnit:unit];
+    double value = [[(HKQuantitySample*)self.sample quantity] doubleValueForUnit:unit];
     
     return @{
              @"oxygen_saturation": @{
-                     @"value": [NSNumber numberWithDouble:value],
+                     @"value": [NSNumber numberWithDouble:value*100],
                      @"unit": unitString
                      },
              @"effective_time_frame": [self populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
@@ -618,11 +618,10 @@
 - (id)bodyData {
     NSString* unitString = @"%";
     HKUnit* unit = [HKUnit unitFromString:unitString];
-    float value =
-    [[(HKQuantitySample*)self.sample quantity] doubleValueForUnit:unit];
+    double value = [[(HKQuantitySample*)self.sample quantity] doubleValueForUnit:unit];
     return @{
              @"body_fat_percentage": @{
-                     @"value": [NSNumber numberWithDouble:value],
+                     @"value": [NSNumber numberWithDouble:value*100],
                      @"unit": unitString
                      },
              @"effective_time_frame": [self populateTimeFrameProperty:self.sample.startDate endDate:self.sample.endDate]
