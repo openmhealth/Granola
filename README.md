@@ -20,7 +20,7 @@ to ensure the data is intuitive and clinically meaningful.
 
 ### CocoaPods
 
-Granola is available through [CocoaPods](http://cocoapods.org), a dependency manager for Objective-C. If you don't already have CocoaPods installed, you can install it with the following command:
+Granola is available through [CocoaPods](http://cocoapods.org), a dependency manager for Swift and Objective-C. If you don't already have CocoaPods installed, you can install it with the following command:
 ```ruby
 $ gem install cocoapods
 ```
@@ -49,6 +49,8 @@ you've gained permission.
 
 Now, let's say you want to see what a "steps" sample data point looks like
 serialized to JSON.
+
+Objective-C:
 
 ```objective-c
 // Granola includes OMHSerializer for serializing HealthKit data
@@ -80,6 +82,47 @@ HKSampleQuery* query =
 [self.healthStore executeQuery:query];
 ```
 
+Swift:
+
+```swift
+import Granola
+
+// (initialize your HKHealthStore instance, request permissions with it)
+// ...
+
+// create a query for steps data
+
+let stepsSampleType = HKSampleType.quantityTypeForIdentifier(HKQuantityTypeIdentifierStepCount)!
+
+let query = HKSampleQuery(sampleType: stepsSampleType, predicate: nil, limit: Int(HKObjectQueryNoLimit), sortDescriptors: nil) {
+    query, results, error in
+
+    guard let samples = results as? [HKQuantitySample] else {
+        fatalError("An error occured fetching the user's steps. The error was: \(error?.localizedDescription)");
+    }
+
+    if samples.isEmpty {
+        print("No results found!")
+        return
+    }
+
+    // create and use a serializer instance
+    let serializer = OMHSerializer()
+
+    do {
+        // pick a sample to serialize
+        let sample = samples.first
+        let jsonString = try serializer.jsonForSample(samples.first)
+        print("sample json: \(jsonString)")
+    } catch {
+        print("Error when serializing sample!", error)
+        return
+    }
+}
+// run the query with your authorized HKHealthStore instance
+healthStore.executeQuery(query)
+```
+
 Upon running your code, the console would render the data sample as Open mHealth compliant JSON:
 
 ```json
@@ -108,21 +151,48 @@ Upon running your code, the console would render the data sample as Open mHealth
 ### HKObjectType support
 
 The serializer has support for all HealthKit samples (`HKSample`), either through curated Open mHealth schemas or through generic HealthKit schemas. You can take a look at the [mapping table of supported types and their associated schemas](Docs/hkobject_type_coverage.md) to understand how data gets mapped. The `HKObjectType` identifiers are pulled from the
-[HealthKit Constant Reference](https://developer.apple.com/library/ios/documentation/HealthKit/Reference/HealthKit_Constants/#//apple_ref/doc/uid/TP40014710-CH2-DontLinkElementID_3). 
+[HealthKit Constant Reference](https://developer.apple.com/library/ios/documentation/HealthKit/Reference/HealthKit_Constants/#//apple_ref/doc/uid/TP40014710-CH2-DontLinkElementID_3).
 
-You can retrieve a map (`NSDictionary`) of the supported types in Granola and the class name of the specific serializer they use by calling the static method:
-```objective-c 
+You can retrieve a map (`NSDictionary`) of the supported types in Granola and the class name of the specific serializer they use by calling the static method `allSupportedTypeIdentifiersToClasses`:
+
+Objective-C:
+
+```objective-c
 [OMHHealthKitConstantsMapper allSupportedTypeIdentifiersToClasses]
-``` 
+```
 
-You can also retrieve a list of those types, without their associated serializers, using the method:
-```objective-c 
+Swift:
+
+```swift
+OMHHealthKitConstantsMapper.allSupportedTypeIdentifiersToClasses()
+```
+
+You can also retrieve a list of those types, without their associated serializers by using the `supportedTypeIdentifiers` method:
+
+Objective-C:
+
+```objective-c
 [OMHSerializer supportedTypeIdentifiers]
-``` 
+```
 
-And retrieve a list of types that serialize with Open mHealth curated schemas (instead of the generic type schemas) by using the method:
-```objective-c 
+Swift:
+
+```swift
+OMHSerializer.supportedTypeIdentifiers()
+```
+
+And retrieve a list of types that serialize with Open mHealth curated schemas (instead of the generic type schemas) by using the `supportedTypeIdentifiersWithOMHSchema` method:
+
+Objective-C:
+
+```objective-c
 [OMHSerializer supportedTypeIdentifiersWithOMHSchema]
+```
+
+Swift:
+
+```swift
+OMHSerializer.supportedTypeIdentifiersWithOMHSchema()
 ```
 
 Over time, as curated schemas are developed that correspond to the HealthKit data represented by the generic schemas, the generic mappings will be replaced by mappings to the curated schemas.
@@ -179,4 +249,3 @@ Granola is available under the Apache 2 license. See the [LICENSE](/LICENSE) fil
 Brent Hargrave ([@brenthargrave](http://twitter.com/brenthargrave))  
 Chris Schaefbauer (chris.schaefbauer@openmhealth.org)  
 Emerson Farrugia (emerson@openmhealth.org)  
-
