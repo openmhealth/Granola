@@ -359,7 +359,12 @@
                                         HKQuantityTypeIdentifierPeripheralPerfusionIndex: @"OMHSerializerGenericQuantitySample",
                                         HKQuantityTypeIdentifierRespiratoryRate: @"OMHSerializerRespiratoryRate",
                                         HKQuantityTypeIdentifierStepCount : @"OMHSerializerStepCount",
-                                        HKQuantityTypeIdentifierUVExposure: @"OMHSerializerGenericQuantitySample"
+                                        HKQuantityTypeIdentifierUVExposure: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierUVExposure: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierInsulinDelivery: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierRestingHeartRate: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierWalkingHeartRateAverage: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierHeartRateVariabilitySDNN: @"OMHSerializerGenericQuantitySample"
                                         };
     }
     return allQuantityTypeIdsToClasses;
