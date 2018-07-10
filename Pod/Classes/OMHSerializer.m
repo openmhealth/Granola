@@ -138,34 +138,20 @@
     
     if (timeZoneString != nil) {
         NSTimeZone* timeZone = [NSTimeZone timeZoneWithName:timeZoneString];
-        if ([startDate isEqualToDate:endDate]) {
-            return @{
-                     @"date_time":[startDate RFC3339StringAtTimeZone:timeZone]
-                     };
-        }
-        else {
-            return  @{
-                      @"time_interval": @{
-                              @"start_date_time": [startDate RFC3339StringAtTimeZone:timeZone],
-                              @"end_date_time": [endDate RFC3339StringAtTimeZone:timeZone]
-                              }
-                      };
-        }
-    }
-    
-    if ([startDate isEqualToDate:endDate]) {
-        return @{
-                 @"date_time":[startDate RFC3339String]
-                 };
-    }
-    else {
         return  @{
                   @"time_interval": @{
-                          @"start_date_time": [startDate RFC3339String],
-                          @"end_date_time": [endDate RFC3339String]
+                          @"start_date_time": [startDate RFC3339StringAtTimeZone:timeZone],
+                          @"end_date_time": [endDate RFC3339StringAtTimeZone:timeZone]
                           }
                   };
     }
+    
+    return  @{
+              @"time_interval": @{
+                      @"start_date_time": [startDate RFC3339String],
+                      @"end_date_time": [endDate RFC3339String]
+                      }
+              };
 }
 
 + (NSDictionary*) serializeMetadataArray:(NSDictionary*)metadata {
@@ -818,7 +804,8 @@
     NSDictionary *partialSerializedDictionary =
     @{
       @"quantity_type":[quantitySample quantityType].description,
-      @"effective_time_frame":[self populateTimeFrameProperty:quantitySample.startDate endDate:quantitySample.endDate]
+      @"effective_time_frame":[self populateTimeFrameProperty:quantitySample.startDate endDate:quantitySample.endDate],
+      @"id": self.sample.UUID.UUIDString
       } ;
     NSMutableDictionary *fullSerializedDictionary = [partialSerializedDictionary mutableCopy];
     [fullSerializedDictionary addEntriesFromDictionary:serializedUnitValues];
@@ -883,7 +870,8 @@
     return @{
              @"effective_time_frame":[self populateTimeFrameProperty:categorySample.startDate endDate:categorySample.endDate],
              @"category_type": [categorySample categoryType].description,
-             @"category_value": schemaMappedValue
+             @"category_value": schemaMappedValue,
+             @"id": self.sample.UUID.UUIDString
              };
 }
 
