@@ -180,15 +180,6 @@
     [serializedBodyDictionaryWithMetadata addEntriesFromDictionary:[OMHSerializer serializeMetadataArray:self.sample.metadata]];
     
     return @{
-             @"header": @{
-                     @"id": self.sample.UUID.UUIDString,
-                     @"creation_date_time": [self.sample.startDate RFC3339String],
-                     @"schema_id": @{
-                             @"namespace": [self schemaNamespace],
-                             @"name": [self schemaName],
-                             @"version": [self schemaVersion]
-                             },
-                     },
              @"body":serializedBodyDictionaryWithMetadata
              };
     
