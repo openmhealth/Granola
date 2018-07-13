@@ -257,11 +257,17 @@
          ];
     }
     
+    NSString *deviceName = @"";
+    if (self.sample.device && self.sample.device.name){
+        deviceName = self.sample.device.name;
+    }
+    
     NSDictionary *partialSerializedDictionary =
     @{
       @"quantity_type":[quantitySample quantityType].description,
       @"effective_time_frame":[self populateTimeFrameProperty:quantitySample.startDate endDate:quantitySample.endDate],
-      @"id": self.sample.UUID.UUIDString
+      @"id": self.sample.UUID.UUIDString,
+      @"device": deviceName
       } ;
     NSMutableDictionary *fullSerializedDictionary = [partialSerializedDictionary mutableCopy];
     [fullSerializedDictionary addEntriesFromDictionary:serializedUnitValues];
@@ -320,11 +326,17 @@
     //Error checking for correct types is done in the canSerialize method.
     NSString *schemaMappedValue = [self getCategoryValueForTypeWithValue:categorySample.categoryType categoryValue:categorySample.value];
     
+    NSString *deviceName = @"";
+    if (self.sample.device && self.sample.device.name){
+        deviceName = self.sample.device.name;
+    }
+    
     return @{
              @"effective_time_frame":[self populateTimeFrameProperty:categorySample.startDate endDate:categorySample.endDate],
              @"category_type": [categorySample categoryType].description,
              @"category_value": schemaMappedValue,
-             @"id": self.sample.UUID.UUIDString
+             @"id": self.sample.UUID.UUIDString,
+             @"device": deviceName
              };
 }
 
@@ -534,4 +546,3 @@
     return @"granola";
 }
 @end
-
