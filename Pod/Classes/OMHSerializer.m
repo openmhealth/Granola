@@ -109,22 +109,14 @@
 
 - (NSDictionary*) populateTimeFrameProperty:(NSDate*)startDate endDate:(NSDate*)endDate {
     
-    NSString* timeZoneString = [self.sample.metadata objectForKey:HKMetadataKeyTimeZone];
-    
-    if (timeZoneString != nil) {
-        NSTimeZone* timeZone = [NSTimeZone timeZoneWithName:timeZoneString];
-        return  @{
-                  @"time_interval": @{
-                          @"start_date_time": [startDate RFC3339StringAtTimeZone:timeZone],
-                          @"end_date_time": [endDate RFC3339StringAtTimeZone:timeZone]
-                          }
-                  };
-    }
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    df.dateFormat = @"yyyy-MM-dd HH:mm:ss.SSSZ";
+    NSLog(@"%@",[df stringFromDate:startDate]);
     
     return  @{
               @"time_interval": @{
-                      @"start_date_time": [startDate RFC3339String],
-                      @"end_date_time": [endDate RFC3339String]
+                      @"start_date_time": [df stringFromDate:startDate],
+                      @"end_date_time": [df stringFromDate:endDate]
                       }
               };
 }
@@ -546,3 +538,4 @@
     return @"granola";
 }
 @end
+
