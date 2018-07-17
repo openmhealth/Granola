@@ -110,7 +110,6 @@
     
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
     df.dateFormat = @"yyyy-MM-dd HH:mm:ss.SSSZ";
-    NSLog(@"%@",[df stringFromDate:startDate]);
     
     return  @{
               @"time_interval": @{
