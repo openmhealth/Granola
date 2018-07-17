@@ -15,7 +15,6 @@
  */
 
 #import "OMHSerializer.h"
-#import "NSDate+RFC3339.h"
 #import <ObjectiveSugar/ObjectiveSugar.h>
 #import "OMHHealthKitConstantsMapper.h"
 
@@ -127,7 +126,9 @@
         for (id key in metadata) {
             if ([[metadata valueForKey:key] isKindOfClass:[NSDate class]]){
                 NSDate *dateMetadataValue = [metadata valueForKey:key];
-                [serializedArray addObject:@{@"key":key,@"value":[dateMetadataValue RFC3339String]}];
+                NSDateFormatter *df = [[NSDateFormatter alloc] init];
+                df.dateFormat = @"yyyy-MM-dd HH:mm:ss.SSSZ";
+                [serializedArray addObject:@{@"key":key,@"value":[df stringFromDate:dateMetadataValue]}];
             }
             else{
                 [serializedArray addObject:@{@"key":key,@"value":[metadata valueForKey:key]}];
