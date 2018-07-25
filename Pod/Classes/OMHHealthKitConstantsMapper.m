@@ -247,7 +247,7 @@
         typeIdsToClasses = @{ HKWorkoutTypeIdentifier: @"OMHSerializerGenericWorkout"};
     }
     
-    NSMutableDictionary *allTypeIdsToClasses = [NSMutableDictionary dictionaryWithDictionary:typeIdsToClasses];
+    NSMutableDictionary *allTypeIdsToClasses = [NSMutableDictionary dictionary];
     
     [allTypeIdsToClasses addEntriesFromDictionary:[self allSupportedCategoryTypeIdentifiersToClasses]];
     [allTypeIdsToClasses addEntriesFromDictionary:[self allSupportedCorrelationTypeIdentifiersToClass]];
