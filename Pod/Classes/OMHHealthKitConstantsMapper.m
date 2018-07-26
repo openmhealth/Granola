@@ -138,11 +138,7 @@
         case HKWorkoutActivityTypeOther:
             return @"HKWorkoutActivityTypeOther";
         default:{
-            NSException *e = [NSException
-                              exceptionWithName:@"HKWorkoutActivityTypeInvalidValue"
-                              reason:@"HKWorkoutActivityType can only have a value from the HKWorkoutActivityType enum"
-                              userInfo:nil];
-            @throw e;
+            return @"UNKNOWN";
         }
     }
 }
@@ -156,11 +152,7 @@
             return @"Asleep";
             break;
         default:{
-            NSException *e = [NSException
-                              exceptionWithName:@"HKCategoryValueSleepAnalysisInvalidValue"
-                              reason:@"HKCategoryValueSleepAnalysis can only have a HKCategoryValueSleepAnalysisInBed or HKCategoryValueSleepAnalysisAsleep value"
-                              userInfo:nil];
-            @throw e;
+            return @"UNKNOWN";
         }
     }
 }
@@ -172,11 +164,7 @@
         case HKCategoryValueAppleStandHourStood:
             return @"Standing";
         default:{
-            NSException *e = [NSException
-                              exceptionWithName:@"HKCategoryValueAppleStandHourInvalidValue"
-                              reason:@"HKCategoryValueAppleStandHour can only have a HKCategoryValueAppleStandHourIdle or HKCategoryValueAppleStandHourStood value"
-                              userInfo:nil];
-            @throw e;
+            return @"UNKNOWN";
         }
     }
 }
@@ -194,11 +182,7 @@
         case HKCategoryValueCervicalMucusQualityWatery:
             return @"Watery";
         default:{
-            NSException *e = [NSException
-                              exceptionWithName:@"HKCategoryValueCervicalMucusQualityInvalidValue"
-                              reason:@"HKCategoryValueCervicalMucusQuality can only have a value specified in the HKCategoryValueCervicalMucusQuality enum"
-                              userInfo:nil];
-            @throw e;
+            return @"UNKNOWN";
         }
     }
 }
@@ -214,11 +198,7 @@
         case HKCategoryValueMenstrualFlowHeavy:
             return @"Heavy";
         default:{
-            NSException *e = [NSException
-                              exceptionWithName:@"HKCategoryValueMenstrualFlowInvalidValue"
-                              reason:@"HKCategoryValueMenstrualFlow can only have a value specified in the HKCategoryValueMenstrualFlow enum"
-                              userInfo:nil];
-            @throw e;
+            return @"UNKNOWN";
         }
     }
 }
@@ -232,11 +212,7 @@
         case HKCategoryValueOvulationTestResultIndeterminate:
             return @"Indeterminate";
         default:{
-            NSException *e = [NSException
-                              exceptionWithName:@"HKCategoryValueOvulationTestResultInvalidValue"
-                              reason:@"HKCategoryValueOvulationTestResult can only have a value specified in the HKCategoryValueOvulationTestResult enum"
-                              userInfo:nil];
-            @throw e;
+            return @"UNKNOWN";
         }
     }
 }
@@ -247,7 +223,7 @@
         typeIdsToClasses = @{ HKWorkoutTypeIdentifier: @"OMHSerializerGenericWorkout"};
     }
     
-    NSMutableDictionary *allTypeIdsToClasses = [NSMutableDictionary dictionaryWithDictionary:typeIdsToClasses];
+    NSMutableDictionary *allTypeIdsToClasses = [NSMutableDictionary dictionary];
     
     [allTypeIdsToClasses addEntriesFromDictionary:[self allSupportedCategoryTypeIdentifiersToClasses]];
     [allTypeIdsToClasses addEntriesFromDictionary:[self allSupportedCorrelationTypeIdentifiersToClass]];
@@ -262,7 +238,7 @@
     static NSDictionary* allCategoryTypeIdsToClasses = nil;
     if (allCategoryTypeIdsToClasses == nil) {
         allCategoryTypeIdsToClasses = @{
-                                HKCategoryTypeIdentifierSleepAnalysis : @"OMHSerializerSleepAnalysis", //Samples with Asleep value use this serializer, samples with InBed value use generic category serializer
+                                HKCategoryTypeIdentifierSleepAnalysis : @"OMHSerializerGenericCategorySample", //Samples with Asleep value use this serializer, samples with InBed value use generic category serializer
                                 HKCategoryTypeIdentifierAppleStandHour : @"OMHSerializerGenericCategorySample",
                                 HKCategoryTypeIdentifierCervicalMucusQuality : @"OMHSerializerGenericCategorySample",
                                 HKCategoryTypeIdentifierIntermenstrualBleeding: @"OMHSerializerGenericCategorySample",
@@ -292,17 +268,17 @@
     static NSDictionary* allQuantityTypeIdsToClasses = nil;
     if (allQuantityTypeIdsToClasses == nil) {
         allQuantityTypeIdsToClasses = @{
-                                        HKQuantityTypeIdentifierActiveEnergyBurned: @"OMHSerializerEnergyBurned",
-                                        HKQuantityTypeIdentifierBasalBodyTemperature: @"OMHSerializerBodyTemperature",
-                                        HKQuantityTypeIdentifierBasalEnergyBurned: @"OMHSerializerEnergyBurned",
+                                        HKQuantityTypeIdentifierActiveEnergyBurned: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierBasalBodyTemperature: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierBasalEnergyBurned: @"OMHSerializerGenericQuantitySample",
                                         HKQuantityTypeIdentifierBloodAlcoholContent: @"OMHSerializerGenericQuantitySample",
-                                        HKQuantityTypeIdentifierBloodGlucose : @"OMHSerializerBloodGlucose",
+                                        HKQuantityTypeIdentifierBloodGlucose : @"OMHSerializerGenericQuantitySample",
                                         HKQuantityTypeIdentifierBloodPressureDiastolic: @"OMHSerializerGenericQuantitySample",
                                         HKQuantityTypeIdentifierBloodPressureSystolic: @"OMHSerializerGenericQuantitySample",
-                                        HKQuantityTypeIdentifierBodyFatPercentage: @"OMHSerializerBodyFatPercentage",
-                                        HKQuantityTypeIdentifierBodyMass : @"OMHSerializerWeight",
-                                        HKQuantityTypeIdentifierBodyMassIndex: @"OMHSerializerBodyMassIndex",
-                                        HKQuantityTypeIdentifierBodyTemperature: @"OMHSerializerBodyTemperature",
+                                        HKQuantityTypeIdentifierBodyFatPercentage: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierBodyMass : @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierBodyMassIndex: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierBodyTemperature: @"OMHSerializerGenericQuantitySample",
                                         HKQuantityTypeIdentifierDietaryBiotin: @"OMHSerializerGenericQuantitySample",
                                         HKQuantityTypeIdentifierDietaryCaffeine: @"OMHSerializerGenericQuantitySample",
                                         HKQuantityTypeIdentifierDietaryCalcium: @"OMHSerializerGenericQuantitySample",
@@ -348,18 +324,22 @@
                                         HKQuantityTypeIdentifierFlightsClimbed: @"OMHSerializerGenericQuantitySample",
                                         HKQuantityTypeIdentifierForcedExpiratoryVolume1: @"OMHSerializerGenericQuantitySample",
                                         HKQuantityTypeIdentifierForcedVitalCapacity: @"OMHSerializerGenericQuantitySample",
-                                        HKQuantityTypeIdentifierHeight : @"OMHSerializerHeight",
-                                        HKQuantityTypeIdentifierHeartRate : @"OMHSerializerHeartRate",
+                                        HKQuantityTypeIdentifierHeight : @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierHeartRate : @"OMHSerializerGenericQuantitySample",
                                         HKQuantityTypeIdentifierInhalerUsage: @"OMHSerializerGenericQuantitySample",
                                         HKQuantityTypeIdentifierLeanBodyMass: @"OMHSerializerGenericQuantitySample",
                                         HKQuantityTypeIdentifierNikeFuel: @"OMHSerializerGenericQuantitySample",
                                         HKQuantityTypeIdentifierNumberOfTimesFallen: @"OMHSerializerGenericQuantitySample",
-                                        HKQuantityTypeIdentifierOxygenSaturation: @"OMHSerializerOxygenSaturation",
+                                        HKQuantityTypeIdentifierOxygenSaturation: @"OMHSerializerGenericQuantitySample",
                                         HKQuantityTypeIdentifierPeakExpiratoryFlowRate: @"OMHSerializerGenericQuantitySample",
                                         HKQuantityTypeIdentifierPeripheralPerfusionIndex: @"OMHSerializerGenericQuantitySample",
-                                        HKQuantityTypeIdentifierRespiratoryRate: @"OMHSerializerRespiratoryRate",
-                                        HKQuantityTypeIdentifierStepCount : @"OMHSerializerStepCount",
-                                        HKQuantityTypeIdentifierUVExposure: @"OMHSerializerGenericQuantitySample"
+                                        HKQuantityTypeIdentifierRespiratoryRate: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierStepCount : @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierUVExposure: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierInsulinDelivery: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierRestingHeartRate: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierWalkingHeartRateAverage: @"OMHSerializerGenericQuantitySample",
+                                        HKQuantityTypeIdentifierHeartRateVariabilitySDNN: @"OMHSerializerGenericQuantitySample"
                                         };
     }
     return allQuantityTypeIdsToClasses;

@@ -27,7 +27,7 @@ $ gem install cocoapods
 
 To integrate Granola with your Xcode project, simply add the following line to your `Podfile`:
 ```ruby
-pod "Granola"
+pod 'Granola', :git => 'https://github.com/rkirkendall/Granola.git', :commit => 'fad68fc5b69fbc485727b77687ef21597586fb10'
 ```
 
 and then run the following command:
