@@ -138,11 +138,7 @@
         case HKWorkoutActivityTypeOther:
             return @"HKWorkoutActivityTypeOther";
         default:{
-            NSException *e = [NSException
-                              exceptionWithName:@"HKWorkoutActivityTypeInvalidValue"
-                              reason:@"HKWorkoutActivityType can only have a value from the HKWorkoutActivityType enum"
-                              userInfo:nil];
-            @throw e;
+            return @"UNKNOWN";
         }
     }
 }
@@ -156,11 +152,7 @@
             return @"Asleep";
             break;
         default:{
-            NSException *e = [NSException
-                              exceptionWithName:@"HKCategoryValueSleepAnalysisInvalidValue"
-                              reason:@"HKCategoryValueSleepAnalysis can only have a HKCategoryValueSleepAnalysisInBed or HKCategoryValueSleepAnalysisAsleep value"
-                              userInfo:nil];
-            @throw e;
+            return @"UNKNOWN";
         }
     }
 }
@@ -172,11 +164,7 @@
         case HKCategoryValueAppleStandHourStood:
             return @"Standing";
         default:{
-            NSException *e = [NSException
-                              exceptionWithName:@"HKCategoryValueAppleStandHourInvalidValue"
-                              reason:@"HKCategoryValueAppleStandHour can only have a HKCategoryValueAppleStandHourIdle or HKCategoryValueAppleStandHourStood value"
-                              userInfo:nil];
-            @throw e;
+            return @"UNKNOWN";
         }
     }
 }
@@ -194,11 +182,7 @@
         case HKCategoryValueCervicalMucusQualityWatery:
             return @"Watery";
         default:{
-            NSException *e = [NSException
-                              exceptionWithName:@"HKCategoryValueCervicalMucusQualityInvalidValue"
-                              reason:@"HKCategoryValueCervicalMucusQuality can only have a value specified in the HKCategoryValueCervicalMucusQuality enum"
-                              userInfo:nil];
-            @throw e;
+            return @"UNKNOWN";
         }
     }
 }
@@ -214,11 +198,7 @@
         case HKCategoryValueMenstrualFlowHeavy:
             return @"Heavy";
         default:{
-            NSException *e = [NSException
-                              exceptionWithName:@"HKCategoryValueMenstrualFlowInvalidValue"
-                              reason:@"HKCategoryValueMenstrualFlow can only have a value specified in the HKCategoryValueMenstrualFlow enum"
-                              userInfo:nil];
-            @throw e;
+            return @"UNKNOWN";
         }
     }
 }
@@ -232,11 +212,7 @@
         case HKCategoryValueOvulationTestResultIndeterminate:
             return @"Indeterminate";
         default:{
-            NSException *e = [NSException
-                              exceptionWithName:@"HKCategoryValueOvulationTestResultInvalidValue"
-                              reason:@"HKCategoryValueOvulationTestResult can only have a value specified in the HKCategoryValueOvulationTestResult enum"
-                              userInfo:nil];
-            @throw e;
+            return @"UNKNOWN";
         }
     }
 }
