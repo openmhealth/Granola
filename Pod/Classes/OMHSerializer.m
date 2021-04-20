@@ -176,6 +176,11 @@
                 NSDate *dateMetadataValue = [metadata valueForKey:key];
                 [serializedArray addObject:@{@"key":key,@"value":[dateMetadataValue RFC3339String]}];
             }
+            else if([[metadata valueForKey:key] isKindOfClass:[HKQuantity class]]){
+                HKQuantity* quantityMetaData = [metadata valueForKey:key];
+                NSString *StringObject= [NSString stringWithFormat:@"%@", quantityMetaData];
+                [serializedArray addObject:@{@"key":key,@"value":StringObject}];
+            }
             else{
                 [serializedArray addObject:@{@"key":key,@"value":[metadata valueForKey:key]}];
             }
